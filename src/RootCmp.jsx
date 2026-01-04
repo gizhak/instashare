@@ -21,9 +21,10 @@ export function RootCmp() {
     return (
         <div className="main-container">
             <AppHeader />
-            <UserMsg />
+
 
             <main>
+                <UserMsg />
                 <Routes>
                     <Route path="" element={<HomePage />} />
                     <Route path="about" element={<AboutUs />}>
@@ -41,8 +42,11 @@ export function RootCmp() {
                         <Route path="signup" element={<Signup />} />
                     </Route>
                 </Routes>
+
+
+                <AppFooter />
             </main>
-            <AppFooter />
+
         </div>
     )
 }
