@@ -14,4 +14,8 @@
 
   --success: rgb(41, 189, 73);
   --error: rgb(216, 59, 59);
+
+  --inst-text: #F5F5F5;
+  --inst-a: #A8A8A8;
+  --inst-background: #0C1014;
 }
