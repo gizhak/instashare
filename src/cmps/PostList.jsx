@@ -10,15 +10,17 @@ export function PostList({ posts, openPost }) {
 		return post.owner?._id === user._id;
 	}
 
+	function openPost() {}
+
 	return (
 		<section>
-			<ul className="post-list">
+			<div className="post-list-grid">
 				{posts.map((post) => (
-					<li key={post._id}>
-						<PostPreview post={post} onClick={openPost} />
-					</li>
+					<div className="post" key={post._id}>
+						<PostPreview post={post} openPost={openPost} />
+					</div>
 				))}
-			</ul>
+			</div>
 		</section>
 	);
 }

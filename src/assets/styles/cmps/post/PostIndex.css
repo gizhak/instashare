@@ -1,0 +1,7 @@
+.post-index header {
+	height: 24px;
+}
+
+.post-index {
+	margin-inline: clamp(0px, calc((100vw - 720px) / 2), 190px);
+}

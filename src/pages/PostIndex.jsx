@@ -18,7 +18,43 @@ import { PostList } from '../cmps/PostList';
 
 export function PostIndex() {
 	const [filterBy, setFilterBy] = useState(postService.getDefaultFilter());
-	const posts = useSelector((storeState) => storeState.postModule.posts);
+	//const posts = useSelector((storeState) => storeState.postModule.posts);
+
+	const posts = [
+		{
+			_id: 's101',
+			txt: 'Lake trip with the best 🩷',
+			imgUrl:
+				'https://static.vecteezy.com/system/resources/thumbnails/057/068/323/small/single-fresh-red-strawberry-on-table-green-background-food-fruit-sweet-macro-juicy-plant-image-photo.jpg',
+			by: {
+				_id: 'u101',
+				fullname: 'sunflower_power77',
+				imgUrl: 'http://some-img',
+			},
+		},
+		{
+			_id: 's1012',
+			txt: 'Lake  🩷',
+			imgUrl:
+				'https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg',
+			by: {
+				_id: 'u101',
+				fullname: 'sunflower_power77',
+				imgUrl: 'http://some-img',
+			},
+		},
+		{
+			_id: 's1012',
+			txt: 'Lake  🩷',
+			imgUrl:
+				'https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg',
+			by: {
+				_id: 'u101',
+				fullname: 'sunflower_power77',
+				imgUrl: 'http://some-img',
+			},
+		},
+	];
 
 	useEffect(() => {
 		loadPosts(filterBy);
@@ -57,18 +93,17 @@ export function PostIndex() {
 	// 	}
 	// }
 
-	function openPost() {}
-
 	return (
 		<section className="post-index">
 			<header>
-				<h2>Posts</h2>
-				{userService.getLoggedinUser() && (
+				{/* <h2>Posts</h2> */}
+				{/* {userService.getLoggedinUser() && (
 					<button onClick={onAddPost}>Add a Post</button>
-				)}
+				)} */}
 			</header>
 			{/* <PostFilter filterBy={filterBy} setFilterBy={setFilterBy} /> */}
-			<PostList posts={posts} openPost={openPost} />
+
+			<PostList posts={posts} />
 		</section>
 	);
 }
