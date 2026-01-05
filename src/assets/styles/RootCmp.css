@@ -1,7 +1,12 @@
 .main-container {
     display: grid;
-    grid-template-columns: 245px 1fr;
+    grid-template-columns: 8vw 1fr;
+    transition: grid-template-columns 0.8s ease;
     height: 100vh;
+}
+
+.main-container:has(.app-header:hover) {
+    grid-template-columns: 20vw 1fr;
 }
 
 main {
