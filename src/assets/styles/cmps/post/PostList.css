@@ -1,25 +1,14 @@
 .post-list-grid {
 	display: grid;
-	grid-template-columns: repeat(4, 1fr);
+	grid-template-columns: repeat(3, 1fr);
 	grid-auto-rows: 1fr;
-	gap: 1px;
-	border-radius: 2px;
-	margin: 10px;
-}
-
-
-/* Medium screens */
-@media (max-width: 1024px) {
-	.post-list-grid {
-		grid-template-columns: repeat(3, 1fr);
-	}
-}
-
-/* Mobile */
-@media (max-width: 600px) {
-	.post-list-grid {
-		grid-template-columns: repeat(3, 1fr);
-	}
+	gap: 2px;
+	border-radius: 5px;
+	margin-top: 3rem;
+	overflow-y: auto;
+	padding-bottom: 20px;
+	scrollbar-width: thin;
+	scrollbar-color: var(--inst-scrollbar) transparent;
 }
 
 /* Instagram-like rectangles */
@@ -27,7 +16,6 @@
 	position: relative;
 	width: 100%;
 	aspect-ratio: 4 / 5;
-	/* key change */
 	background: #ddd;
 	overflow: hidden;
 }
@@ -37,4 +25,26 @@
 	height: 100%;
 	object-fit: cover;
 	display: block;
+}
+
+/* Medium screens */
+@media (max-width: 1024px) {
+	.post-list-grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+	.post-list-grid {
+		grid-template-columns: repeat(3, 1fr);
+		gap: 2px;
+		margin-top: 1rem;
+		padding: 10px;
+	}
+
+	.post {
+		width: 100%;
+		aspect-ratio: 1;
+	}
 }

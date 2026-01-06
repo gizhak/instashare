@@ -13,6 +13,8 @@ export const postService = {
 };
 window.cs = postService;
 
+_createPosts();
+
 async function query(filterBy = { txt: '', likesCount: 0 }) {
 	var posts = await storageService.query(STORAGE_KEY);
 	const { txt, likesCount, sortField, sortDir } = filterBy;
@@ -89,4 +91,25 @@ async function addPostComment(postId, txt) {
 	await storageService.put(STORAGE_KEY, post);
 
 	return msg;
+}
+
+async function _createPosts() {
+	let posts = await storageService.query(STORAGE_KEY);
+
+	if (!posts || !posts.length) {
+		console.log('Creating demo posts from JSON...');
+
+		try {
+			const response = await fetch('/data/post.json');
+			const postsData = await response.json();
+
+			for (const post of postsData) {
+				await storageService.post(STORAGE_KEY, post);
+			}
+
+			console.log('Demo posts created!');
+		} catch (err) {
+			console.error('Failed to load demo posts:', err);
+		}
+	}
 }

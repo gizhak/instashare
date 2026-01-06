@@ -3,6 +3,8 @@
         "_id": "s101",
         "txt": "Lake trip with the best 🩷",
         "imgUrl": "https://static.vecteezy.com/system/resources/thumbnails/057/068/323/small/single-fresh-red-strawberry-on-table-green-background-food-fruit-sweet-macro-juicy-plant-image-photo.jpg",
+        "likesCount": 8734,
+        "commentsCount": 58,
         "by": {
             "_id": "u101",
             "fullname": "sunflower_power77",
@@ -13,6 +15,8 @@
         "_id": "s102",
         "txt": "Delicious homemade pizza! 🍕",
         "imgUrl": "https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg",
+        "likesCount": 8734,
+        "commentsCount": 58,
         "by": {
             "_id": "u102",
             "fullname": "pizza_lover99",
@@ -23,6 +27,8 @@
         "_id": "s103",
         "txt": "Sunset at the beach 🌅",
         "imgUrl": "https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg",
+        "likesCount": 8734,
+        "commentsCount": 58,
         "by": {
             "_id": "u103",
             "fullname": "beach_bum22",

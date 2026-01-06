@@ -21,11 +21,11 @@ export function postReducer(state = initialState, action) {
 			newState = { ...state, post: action.post };
 			break;
 		case REMOVE_POST:
-			const lastRemovedCar = state.posts.find(
+			const lastRemovedPost = state.posts.find(
 				(post) => post._id === action.postId
 			);
 			posts = state.posts.filter((post) => post._id !== action.postId);
-			newState = { ...state, posts, lastRemovedCar };
+			newState = { ...state, posts, lastRemovedPost };
 			break;
 		case ADD_POST:
 			newState = { ...state, posts: [...state.posts, action.post] };
