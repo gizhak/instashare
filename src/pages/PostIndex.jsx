@@ -6,7 +6,9 @@ import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service';
 import { postService } from '../services/post';
 import { userService } from '../services/user';
 
+// Icons
 import { IoSearchOutline } from 'react-icons/io5';
+
 
 import { PostList } from '../cmps/PostList';
 //import { PostFilter } from '../cmps/PostFilter';
@@ -21,6 +23,8 @@ export function PostIndex() {
 			txt: 'Lake trip with the best 🩷',
 			imgUrl:
 				'https://static.vecteezy.com/system/resources/thumbnails/057/068/323/small/single-fresh-red-strawberry-on-table-green-background-food-fruit-sweet-macro-juicy-plant-image-photo.jpg',
+			likesCount: 8734,
+			commentsCount: 58,
 			by: {
 				_id: 'u101',
 				fullname: 'sunflower_power77',
@@ -32,6 +36,8 @@ export function PostIndex() {
 			txt: 'Lake  🩷',
 			imgUrl:
 				'https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg',
+			likesCount: 8734,
+			commentsCount: 58,
 			by: {
 				_id: 'u101',
 				fullname: 'sunflower_power77',
@@ -43,6 +49,8 @@ export function PostIndex() {
 			txt: 'Lake  🩷',
 			imgUrl:
 				'https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg',
+			likesCount: 8734,
+			commentsCount: 58,
 			by: {
 				_id: 'u101',
 				fullname: 'sunflower_power77',

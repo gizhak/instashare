@@ -13,6 +13,9 @@ import { IoSearchOutline } from 'react-icons/io5';
 import { MdOutlineExplore } from 'react-icons/md';
 import { IoMdHeartEmpty } from 'react-icons/io';
 import { FaPlus } from 'react-icons/fa6';
+import { FaInstagram } from "react-icons/fa6";
+
+
 
 export function AppHeader() {
 	const user = useSelector((storeState) => storeState.userModule.user);
@@ -32,7 +35,7 @@ export function AppHeader() {
 		<header className="app-header full">
 			<nav>
 				<NavLink to="/" className="logo">
-					<RiCamera2Line className="icon" />
+					<FaInstagram className="icon" />
 					<span className="text"></span>
 				</NavLink>
 				<NavLink to="/">
