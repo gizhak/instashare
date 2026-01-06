@@ -13,6 +13,10 @@ import {
 
 import { PostList } from '../cmps/PostList';
 
+import { IoIosSettings } from 'react-icons/io';
+import { GrGrid } from 'react-icons/gr';
+import { RiBookmarkLine } from 'react-icons/ri';
+
 export function UserDetails() {
 	const params = useParams();
 	const user = useSelector((storeState) => storeState.userModule.watchedUser);
@@ -69,12 +73,42 @@ export function UserDetails() {
 		<section className="user-details">
 			<h1>User Details</h1>
 			{user && (
-				<div>
-					<h3>{user.fullname}</h3>
-					<img src={user.imgUrl} style={{ width: '100px' }} />
-					{/* <pre> {JSON.stringify(user, null, 2)} </pre> */}
-				</div>
+				<section>
+					<div className="user-header flex">
+						<img src={user.imgUrl} style={{ width: '150px' }} />
+						<div className="user-info">
+							<div className="user-handle">
+								<h5>{user.username}</h5>
+								<IoIosSettings />
+							</div>
+
+							<p>{user.fullname}</p>
+							<div className="user-stats flex">
+								<p>0 posts</p>
+								<p>0 followers</p>
+								<p>0 following</p>
+							</div>
+						</div>
+					</div>
+					<div className="btns-section">
+						<button className="edit-btn">Edit profile</button>
+						<button className="archive-btn">View archive</button>
+					</div>
+					<nav className="tab-bar">
+						<ul>
+							<li className="active">
+								<GrGrid />
+							</li>
+							<li>
+								<RiBookmarkLine />
+							</li>
+						</ul>
+					</nav>
+				</section>
 			)}
+
+			{/* <pre> {JSON.stringify(user, null, 2)} </pre> */}
+
 			<PostList posts={myPosts} />
 		</section>
 	);
