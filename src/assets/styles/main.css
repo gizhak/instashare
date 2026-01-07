@@ -13,6 +13,7 @@
 @import 'cmps/UserDetails';
 @import 'cmps/LoginSignup';
 @import 'cmps/Chat';
+@import 'cmps/Feed';
 
 @import 'cmps/AppHeader';
 @import 'cmps/AppFooter';

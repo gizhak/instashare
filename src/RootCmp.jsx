@@ -8,6 +8,7 @@ import { ReviewIndex } from './pages/ReviewIndex.jsx';
 import { ChatApp } from './pages/Chat.jsx';
 import { AdminIndex } from './pages/AdminIndex.jsx';
 import { ReelsIndex } from './pages/ReelsIndex.jsx';
+import { Feed } from './pages/Feed.jsx';
 
 import { CarDetails } from './pages/CarDetails';
 import { UserDetails } from './pages/UserDetails';
@@ -21,25 +22,25 @@ import { PostIndex } from './pages/PostIndex.jsx';
 export function RootCmp() {
 	return (
 		<div className="main-container">
-			<AppHeader />
-
 			<main>
 				<UserMsg />
 				<Routes>
-					<Route path="" element={<HomePage />} />
-					<Route path="reels" element={<ReelsIndex />} />
-
-					<Route path="about" element={<AboutUs />}>
-						<Route path="team" element={<AboutTeam />} />
-						<Route path="vision" element={<AboutVision />} />
+					<Route path="/" element={<HomePage />}>
+						<Route index element={<Feed />} />
+						<Route path="reels" element={<ReelsIndex />} />
+						<Route path="explore" element={<PostIndex />} />
+						<Route path="user/:id" element={<UserDetails />} />
+						<Route path="chat" element={<ChatApp />} />
+						<Route path="review" element={<ReviewIndex />} />
 					</Route>
 
-					<Route path="explore" element={<PostIndex />} />
-					<Route path="car/:carId" element={<CarDetails />} />
-					<Route path="user/:id" element={<UserDetails />} />
-					<Route path="review" element={<ReviewIndex />} />
-					<Route path="chat" element={<ChatApp />} />
-					<Route path="admin" element={<AdminIndex />} />
+					{/* <Route path="car/:carId" element={<CarDetails />} /> */}
+					{/* <Route path="admin" element={<AdminIndex />} /> */}
+					{/* <Route path="about" element={<AboutUs />}>
+						<Route path="team" element={<AboutTeam />} />
+						<Route path="vision" element={<AboutVision />} />
+					</Route> */}
+
 					<Route path="auth" element={<LoginSignup />}>
 						<Route path="login" element={<Login />} />
 						<Route path="signup" element={<Signup />} />
