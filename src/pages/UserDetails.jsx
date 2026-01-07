@@ -17,6 +17,8 @@ import { IoIosSettings } from 'react-icons/io';
 import { GrGrid } from 'react-icons/gr';
 import { RiBookmarkLine } from 'react-icons/ri';
 
+import { SvgIcon } from '../cmps/SvgIcon';
+
 export function UserDetails() {
 	const params = useParams();
 	const user = useSelector((storeState) => storeState.userModule.watchedUser);
@@ -71,15 +73,14 @@ export function UserDetails() {
 
 	return (
 		<section className="user-details">
-			<h1>User Details</h1>
 			{user && (
 				<section>
 					<div className="user-header flex">
 						<img src={user.imgUrl} style={{ width: '150px' }} />
-						<div className="user-info">
+						<div className="profile-user-info">
 							<div className="user-handle">
 								<h5>{user.username}</h5>
-								<IoIosSettings />
+								<SvgIcon iconName="settingsCircle" />
 							</div>
 
 							<p>{user.fullname}</p>
