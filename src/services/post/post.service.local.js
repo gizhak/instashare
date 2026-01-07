@@ -35,14 +35,23 @@ async function query(filterBy = { txt: '', likesCount: 0 }) {
 		);
 	}
 	if (sortField === 'likesCount') {
-		posts.sort((post1, post2) =>
-			(post1[sortField] - post2[sortField]) * +sortDir
+		posts.sort(
+			(post1, post2) => (post1[sortField] - post2[sortField]) * +sortDir
 		);
 	}
 
 	posts = posts.map(
-		({ _id, txt, imgUrl, by, loc, comments, likedBy, tags }) =>
-			({ _id, txt, imgUrl, by, loc, comments, likedBy, tags, }));
+		({ _id, txt, imgUrl, by, loc, comments, likedBy, tags }) => ({
+			_id,
+			txt,
+			imgUrl,
+			by,
+			loc,
+			comments,
+			likedBy,
+			tags,
+		})
+	);
 	return posts;
 }
 
@@ -91,25 +100,4 @@ async function addPostComment(postId, txt) {
 	await storageService.put(STORAGE_KEY, post);
 
 	return msg;
-}
-
-async function _createPosts() {
-	let posts = await storageService.query(STORAGE_KEY);
-
-	if (!posts || !posts.length) {
-		console.log('Creating demo posts from JSON...');
-
-		try {
-			const response = await fetch('/data/post.json');
-			const postsData = await response.json();
-
-			for (const post of postsData) {
-				await storageService.post(STORAGE_KEY, post);
-			}
-
-			console.log('Demo posts created!');
-		} catch (err) {
-			console.error('Failed to load demo posts:', err);
-		}
-	}
 }
