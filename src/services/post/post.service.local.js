@@ -4,147 +4,147 @@ import { userService } from '../user';
 
 const STORAGE_KEY = 'post';
 
-const defaultPosts = [
-	{
-		_id: 's201',
-		txt: 'Sunset reflections at the lake 🌅',
-		imgUrl:
-			'https://images.unsplash.com/photo-1461988320302-91bde64fc8e4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-		by: {
-			_id: 'u201',
-			fullname: 'wanderlust_amy',
-			imgUrl:
-				'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
-		},
-		loc: { lat: 39.0, lng: -120.0, name: 'Lake Tahoe' },
-		comments: [
-			{
-				id: 'c2001',
-				by: {
-					_id: 'u205',
-					fullname: 'sunny_days',
-					imgUrl:
-						'https://images.unsplash.com/photo-1502767089025-6572583495b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
-				},
-				txt: 'Absolutely postcard perfection!',
-			},
-		],
-		likedBy: [
-			{
-				_id: 'u205',
-				fullname: 'sunny_days',
-				imgUrl:
-					'https://images.unsplash.com/photo-1502767089025-6572583495b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
-			},
-		],
-		tags: ['sunset', 'lake', 'travel'],
-	},
-	{
-		_id: 's202',
-		txt: 'Clear blue skies & calm waters 💙',
-		imgUrl:
-			'https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-		by: {
-			_id: 'u202',
-			fullname: 'nature_seeker',
-			imgUrl:
-				'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
-		},
-		comments: [],
-		likedBy: [],
-		tags: ['nature', 'lake', 'sky'],
-	},
-	{
-		_id: 's203',
-		txt: 'Chilling by the water 🌊',
-		imgUrl:
-			'https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-		by: {
-			_id: 'u203',
-			fullname: 'cool_vibes',
-			imgUrl:
-				'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
-		},
-		comments: [],
-		likedBy: [],
-		tags: ['chill', 'travel'],
-	},
-	{
-		_id: 's204',
-		txt: 'Morning mist over the lake 🌫️',
-		imgUrl:
-			'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-		by: {
-			_id: 'u204',
-			fullname: 'early_bird',
-			imgUrl:
-				'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
-		},
-		comments: [],
-		likedBy: [],
-		tags: ['mist', 'peace'],
-	},
-	{
-		_id: 's205',
-		txt: 'Weekend getaway vibes ✨',
-		imgUrl:
-			'https://images.unsplash.com/photo-1526779259212-7c2e1b1cf378?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-		by: {
-			_id: 'u205',
-			fullname: 'weekend_lover',
-			imgUrl:
-				'https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
-		},
-		comments: [],
-		likedBy: [],
-		tags: ['weekend', 'trip'],
-	},
-	{
-		_id: 's206',
-		txt: 'Loving this view 💫',
-		imgUrl:
-			'https://images.unsplash.com/photo-1493558103817-58b2924bce98?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-		by: {
-			_id: 'u206',
-			fullname: 'viewfinder',
-			imgUrl:
-				'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
-		},
-		comments: [],
-		likedBy: [],
-		tags: ['adventure', 'lake'],
-	},
-	{
-		_id: 's207',
-		txt: 'Nature’s mirror 🌿',
-		imgUrl:
-			'https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-		by: {
-			_id: 'u207',
-			fullname: 'reflective_soul',
-			imgUrl:
-				'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
-		},
-		comments: [],
-		likedBy: [],
-		tags: ['reflection', 'nature'],
-	},
-	{
-		_id: 's208',
-		txt: 'Golden hour glow ✨',
-		imgUrl:
-			'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-		by: {
-			_id: 'u208',
-			fullname: 'sunset_chaser',
-			imgUrl:
-				'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
-		},
-		comments: [],
-		likedBy: [],
-		tags: ['goldenhour', 'travel'],
-	},
-];
+// const defaultPosts = [
+// 	{
+// 		_id: 's201',
+// 		txt: 'Sunset reflections at the lake 🌅',
+// 		imgUrl:
+// 			'https://images.unsplash.com/photo-1461988320302-91bde64fc8e4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+// 		by: {
+// 			_id: 'u201',
+// 			fullname: 'wanderlust_amy',
+// 			imgUrl:
+// 				'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
+// 		},
+// 		loc: { lat: 39.0, lng: -120.0, name: 'Lake Tahoe' },
+// 		comments: [
+// 			{
+// 				id: 'c2001',
+// 				by: {
+// 					_id: 'u205',
+// 					fullname: 'sunny_days',
+// 					imgUrl:
+// 						'https://images.unsplash.com/photo-1502767089025-6572583495b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
+// 				},
+// 				txt: 'Absolutely postcard perfection!',
+// 			},
+// 		],
+// 		likedBy: [
+// 			{
+// 				_id: 'u205',
+// 				fullname: 'sunny_days',
+// 				imgUrl:
+// 					'https://images.unsplash.com/photo-1502767089025-6572583495b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
+// 			},
+// 		],
+// 		tags: ['sunset', 'lake', 'travel'],
+// 	},
+// 	{
+// 		_id: 's202',
+// 		txt: 'Clear blue skies & calm waters 💙',
+// 		imgUrl:
+// 			'https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+// 		by: {
+// 			_id: 'u202',
+// 			fullname: 'nature_seeker',
+// 			imgUrl:
+// 				'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
+// 		},
+// 		comments: [],
+// 		likedBy: [],
+// 		tags: ['nature', 'lake', 'sky'],
+// 	},
+// 	{
+// 		_id: 's203',
+// 		txt: 'Chilling by the water 🌊',
+// 		imgUrl:
+// 			'https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+// 		by: {
+// 			_id: 'u203',
+// 			fullname: 'cool_vibes',
+// 			imgUrl:
+// 				'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
+// 		},
+// 		comments: [],
+// 		likedBy: [],
+// 		tags: ['chill', 'travel'],
+// 	},
+// 	{
+// 		_id: 's204',
+// 		txt: 'Morning mist over the lake 🌫️',
+// 		imgUrl:
+// 			'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+// 		by: {
+// 			_id: 'u204',
+// 			fullname: 'early_bird',
+// 			imgUrl:
+// 				'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
+// 		},
+// 		comments: [],
+// 		likedBy: [],
+// 		tags: ['mist', 'peace'],
+// 	},
+// 	{
+// 		_id: 's205',
+// 		txt: 'Weekend getaway vibes ✨',
+// 		imgUrl:
+// 			'https://images.unsplash.com/photo-1526779259212-7c2e1b1cf378?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+// 		by: {
+// 			_id: 'u205',
+// 			fullname: 'weekend_lover',
+// 			imgUrl:
+// 				'https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
+// 		},
+// 		comments: [],
+// 		likedBy: [],
+// 		tags: ['weekend', 'trip'],
+// 	},
+// 	{
+// 		_id: 's206',
+// 		txt: 'Loving this view 💫',
+// 		imgUrl:
+// 			'https://images.unsplash.com/photo-1493558103817-58b2924bce98?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+// 		by: {
+// 			_id: 'u206',
+// 			fullname: 'viewfinder',
+// 			imgUrl:
+// 				'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
+// 		},
+// 		comments: [],
+// 		likedBy: [],
+// 		tags: ['adventure', 'lake'],
+// 	},
+// 	{
+// 		_id: 's207',
+// 		txt: 'Nature’s mirror 🌿',
+// 		imgUrl:
+// 			'https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+// 		by: {
+// 			_id: 'u207',
+// 			fullname: 'reflective_soul',
+// 			imgUrl:
+// 				'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
+// 		},
+// 		comments: [],
+// 		likedBy: [],
+// 		tags: ['reflection', 'nature'],
+// 	},
+// 	{
+// 		_id: 's208',
+// 		txt: 'Golden hour glow ✨',
+// 		imgUrl:
+// 			'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+// 		by: {
+// 			_id: 'u208',
+// 			fullname: 'sunset_chaser',
+// 			imgUrl:
+// 				'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
+// 		},
+// 		comments: [],
+// 		likedBy: [],
+// 		tags: ['goldenhour', 'travel'],
+// 	},
+// ];
 
 export const postService = {
 	query,
@@ -249,6 +249,147 @@ async function addPostComment(postId, txt) {
 export function _createPosts() {
 	const postsFromStorage = localStorage.getItem(STORAGE_KEY);
 	if (!postsFromStorage) {
+		const defaultPosts = [
+			{
+				_id: 's201',
+				txt: 'Sunset reflections at the lake 🌅',
+				imgUrl:
+					'https://images.unsplash.com/photo-1461988320302-91bde64fc8e4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+				by: {
+					_id: 'u201',
+					fullname: 'wanderlust_amy',
+					imgUrl:
+						'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
+				},
+				loc: { lat: 39.0, lng: -120.0, name: 'Lake Tahoe' },
+				comments: [
+					{
+						id: 'c2001',
+						by: {
+							_id: 'u205',
+							fullname: 'sunny_days',
+							imgUrl:
+								'https://images.unsplash.com/photo-1502767089025-6572583495b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
+						},
+						txt: 'Absolutely postcard perfection!',
+					},
+				],
+				likedBy: [
+					{
+						_id: 'u205',
+						fullname: 'sunny_days',
+						imgUrl:
+							'https://images.unsplash.com/photo-1502767089025-6572583495b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
+					},
+				],
+				tags: ['sunset', 'lake', 'travel'],
+			},
+			{
+				_id: 's202',
+				txt: 'Clear blue skies & calm waters 💙',
+				imgUrl:
+					'https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+				by: {
+					_id: 'u202',
+					fullname: 'nature_seeker',
+					imgUrl:
+						'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
+				},
+				comments: [],
+				likedBy: [],
+				tags: ['nature', 'lake', 'sky'],
+			},
+			{
+				_id: 's203',
+				txt: 'Chilling by the water 🌊',
+				imgUrl:
+					'https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+				by: {
+					_id: 'u203',
+					fullname: 'cool_vibes',
+					imgUrl:
+						'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
+				},
+				comments: [],
+				likedBy: [],
+				tags: ['chill', 'travel'],
+			},
+			{
+				_id: 's204',
+				txt: 'Morning mist over the lake 🌫️',
+				imgUrl:
+					'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+				by: {
+					_id: 'u204',
+					fullname: 'early_bird',
+					imgUrl:
+						'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
+				},
+				comments: [],
+				likedBy: [],
+				tags: ['mist', 'peace'],
+			},
+			{
+				_id: 's205',
+				txt: 'Weekend getaway vibes ✨',
+				imgUrl:
+					'https://images.unsplash.com/photo-1526779259212-7c2e1b1cf378?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+				by: {
+					_id: 'u205',
+					fullname: 'weekend_lover',
+					imgUrl:
+						'https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
+				},
+				comments: [],
+				likedBy: [],
+				tags: ['weekend', 'trip'],
+			},
+			{
+				_id: 's206',
+				txt: 'Loving this view 💫',
+				imgUrl:
+					'https://images.unsplash.com/photo-1493558103817-58b2924bce98?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+				by: {
+					_id: 'u206',
+					fullname: 'viewfinder',
+					imgUrl:
+						'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
+				},
+				comments: [],
+				likedBy: [],
+				tags: ['adventure', 'lake'],
+			},
+			{
+				_id: 's207',
+				txt: 'Nature’s mirror 🌿',
+				imgUrl:
+					'https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+				by: {
+					_id: 'u207',
+					fullname: 'reflective_soul',
+					imgUrl:
+						'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
+				},
+				comments: [],
+				likedBy: [],
+				tags: ['reflection', 'nature'],
+			},
+			{
+				_id: 's208',
+				txt: 'Golden hour glow ✨',
+				imgUrl:
+					'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+				by: {
+					_id: 'u208',
+					fullname: 'sunset_chaser',
+					imgUrl:
+						'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
+				},
+				comments: [],
+				likedBy: [],
+				tags: ['goldenhour', 'travel'],
+			},
+		];
 		localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultPosts));
 
 		return defaultPosts;
