@@ -1,7 +1,9 @@
 .post-list-grid {
 	display: grid;
-	grid-template-columns: repeat(3, 1fr);
+	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 	grid-auto-rows: 1fr;
+	justify-content: center;
+	justify-items: center;
 	gap: 1px;
 	width: 65vw;
 	margin-top: 3rem;
@@ -17,7 +19,7 @@
 .post {
 	position: relative;
 	width: 100%;
-	height: 1005;
+	height: 100%;
 	aspect-ratio: 4 / 5;
 	background: #ddd;
 	overflow: hidden;
