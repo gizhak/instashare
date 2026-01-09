@@ -23,6 +23,7 @@ export function LoginSignup() {
 
 export function Login() {
     const [users, setUsers] = useState([])
+    const [showRemoveModal, setShowRemoveModal] = useState(false)
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -34,8 +35,51 @@ export function Login() {
         setUsers(users)
     }
 
+    async function onRemoveUser(userId) {
+        console.log('Removing user with ID:', userId)
+        await userService.remove(userId)
+        loadUsers()
+    }
+
     return (
         <div className="login-page">
+            {/* Remove Account Modal */}
+            {showRemoveModal && (
+                <div className="modal-overlay" onClick={() => setShowRemoveModal(false)}>
+                    <div className="remove-modal" onClick={(e) => e.stopPropagation()}>
+                        <button className='close-btn' onClick={() => setShowRemoveModal(false)}>
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em" aria-hidden="true" class="close-btn-icon">
+                                <path d="M5.707 4.293a1 1 0 1 0-1.414 1.414L10.586 12l-6.293 6.293a1 1 0 1 0 1.414 1.414L12 13.414l6.293 6.293a1 1 0 0 0 1.414-1.414L13.414 12l6.293-6.293a1 1 0 1 0-1.414-1.414L12 10.586 5.707 4.293z"></path></svg>
+                        </button>
+                        <h2>Remove profiles from this browser</h2>
+
+                        <div className="remove-users-list">
+                            {users.map(user => (
+                                <div key={user._id} className="remove-user-item">
+                                    <img src={user.imgUrl} alt={user.fullname} />
+                                    <div className="user-info">
+                                        <span className="username">{user.username}</span>
+                                        <span className="app-name">InstaShare</span>
+                                    </div>
+                                    <button
+                                        className="remove-btn"
+                                        onClick={() => onRemoveUser(user._id)}
+                                    >
+                                        Remove
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+
+                        <p className="learn-more">
+                            <a href="#">Learn more</a> about why you see profiles here and what it means to remove them.
+                        </p>
+                    </div>
+                </div>
+            )}
+
+
+
             {/* Left Side - Hero Section */}
             <div className="login-hero">
                 <div className="instagram-logo">
@@ -78,7 +122,7 @@ export function Login() {
                 </div> */}
                 <div className="login-header">
                     <h2>Log into InstaShare</h2>
-                    <span className="settings-icon">
+                    <span className="settings-icon" onClick={() => setShowRemoveModal(true)}>
                         <svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em" aria-hidden="true" class="x1lliihq x2lah0s x1k90msu x2h7rmj x1qfuztq x198g3q0 xxk0z11 xvy4d1p"><path fill-rule="evenodd" clip-rule="evenodd" d="m19.967 11.267 2.224-2.06a1 1 0 0 0 .187-1.233l-1.702-2.948a1 1 0 0 0-1.162-.455l-2.895.896a7.99 7.99 0 0 0-1.27-.735l-.672-2.954A1 1 0 0 0 13.702 1H10.3a1 1 0 0 0-.975.778l-.672 2.954a7.992 7.992 0 0 0-1.27.735L4.487 4.57a1 1 0 0 0-1.162.455L1.623 7.974a1 1 0 0 0 .187 1.233l2.224 2.06a8.1 8.1 0 0 0 0 1.466l-2.224 2.06a1 1 0 0 0-.187 1.233l1.702 2.948a1 1 0 0 0 1.162.455l2.895-.896a8 8 0 0 0 1.27.735l.672 2.954a1 1 0 0 0 .975.778h3.403a1 1 0 0 0 .975-.778l.672-2.954a7.991 7.991 0 0 0 1.27-.735l2.895.896a1 1 0 0 0 1.162-.455l1.702-2.948a1 1 0 0 0-.187-1.233l-2.224-2.06a8.112 8.112 0 0 0 0-1.466zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path></svg>
                     </span>
                 </div>
