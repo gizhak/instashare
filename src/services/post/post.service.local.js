@@ -152,6 +152,7 @@ export const postService = {
 	save,
 	remove,
 	addPostComment,
+	togglePostLike,
 };
 window.cs = postService;
 
@@ -244,7 +245,32 @@ async function addPostComment(postId, txt) {
 	return msg;
 }
 
+async function togglePostLike(postId) {
+	// Later this should be handled by the backend
+	const post = await getById(postId);
+	const user = userService.getLoggedinUser();
 
+	if (!user) throw new Error('User not logged in');
+
+	const liker = {
+		_id: user._id,
+		fullname: user.fullname,
+		imgUrl: user.imgUrl,
+	};
+
+	const likeIdx = post.likedBy.findIndex((u) => u._id === user._id);
+
+	if (likeIdx !== -1) {
+		// 👎 User already liked → cancel like
+		post.likedBy.splice(likeIdx, 1);
+	} else {
+		// 👍 User has not liked yet → add like
+		post.likedBy.push(liker);
+	}
+
+	await storageService.put(STORAGE_KEY, post);
+	return post;
+}
 
 export function _createPosts() {
 	const postsFromStorage = localStorage.getItem(STORAGE_KEY);

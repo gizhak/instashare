@@ -1,0 +1,51 @@
+/* BACKDROP */
+.backdrop {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.6);
+	z-index: 100;
+}
+
+/* MODAL */
+.modal {
+	position: fixed;
+	bottom: 25vh;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 90%;
+	max-width: 420px;
+
+	background: #1c1c1e;
+	border-radius: 16px;
+	overflow: hidden;
+
+	z-index: 101;
+}
+
+/* MODAL ITEMS */
+.modal-item {
+	padding: 16px;
+	text-align: center;
+	font-size: 16px;
+	color: #fff;
+	cursor: pointer;
+}
+
+.modal-item:not(:last-child) {
+	border-bottom: 1px solid #2c2c2e;
+}
+
+.modal-item.danger {
+	color: #ff453a;
+	font-weight: 600;
+}
+
+.modal-item.cancel {
+	font-weight: 600;
+}
+.modal-item:hover {
+	background: #2c2c2e;
+}
+.modal-item:active {
+	background: #3a3a3c;
+}

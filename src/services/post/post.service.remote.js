@@ -6,6 +6,7 @@ export const postService = {
 	save,
 	remove,
 	addPostComment,
+	togglePostLike,
 };
 
 async function query(filterBy = { txt: '', likesCount: 0 }) {
@@ -34,4 +35,9 @@ async function addPostComment(postId, txt) {
 		txt,
 	});
 	return savedComment;
+}
+
+async function togglePostLike(postId) {
+	// POST because it changes state
+	return httpService.post(`post/${postId}/like`);
 }

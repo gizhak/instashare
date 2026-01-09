@@ -63,11 +63,23 @@ export async function updatePost(post) {
 
 export async function addPostComment(postId, txt) {
 	try {
+		const txt = prompt('Enter your comment:');
 		const msg = await postService.addPostComment(postId, txt);
-		store.dispatch(getCmdAddPostMsg(msg));
+		store.dispatch(getCmdAddPostComment(msg));
 		return msg;
 	} catch (err) {
 		console.log('Cannot add post msg', err);
+		throw err;
+	}
+}
+
+export async function addPostLike(postId) {
+	try {
+		const likedPost = await postService.togglePostLike(postId);
+		store.dispatch(getCmdUpdatePost(likedPost));
+		return likedPost;
+	} catch (err) {
+		console.log('Cannot like post', err);
 		throw err;
 	}
 }
@@ -103,9 +115,9 @@ function getCmdUpdatePost(post) {
 		post,
 	};
 }
-function getCmdAddPostMsg(msg) {
+function getCmdAddPostComment(msg) {
 	return {
-		type: ADD_POST_MSG,
+		type: ADD_POST_COMMENT,
 		msg,
 	};
 }

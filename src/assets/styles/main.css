@@ -30,3 +30,5 @@
 
 @import 'cmps/post/PostIndex';
 @import 'cmps/post/PostList';
+
+@import 'cmps/Modal';
