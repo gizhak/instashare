@@ -188,8 +188,6 @@ export function Signup() {
     }
 
     function handleChange(ev) {
-        const type = ev.target.type
-
         const field = ev.target.name
         const value = ev.target.value
         setCredentials({ ...credentials, [field]: value })
@@ -197,7 +195,6 @@ export function Signup() {
 
     async function onSignup(ev = null) {
         if (ev) ev.preventDefault()
-
         if (!credentials.username || !credentials.password || !credentials.fullname) return
         await signup(credentials)
         clearState()
@@ -209,33 +206,110 @@ export function Signup() {
     }
 
     return (
-        <form className="signup-form" onSubmit={onSignup}>
-            <input
-                type="text"
-                name="fullname"
-                value={credentials.fullname}
-                placeholder="Fullname"
-                onChange={handleChange}
-                required
-            />
-            <input
-                type="text"
-                name="username"
-                value={credentials.username}
-                placeholder="Username"
-                onChange={handleChange}
-                required
-            />
-            <input
-                type="password"
-                name="password"
-                value={credentials.password}
-                placeholder="Password"
-                onChange={handleChange}
-                required
-            />
-            <ImgUploader onUploaded={onUploaded} />
-            <button>Signup</button>
-        </form>
+        <div className="signup-page">
+            <form className="signup-form" onSubmit={onSignup}>
+                <div className="signup-container">
+                    <NavLink to="/auth/login" className="back-btn">&lt;</NavLink>
+
+                    <div className="meta-logo-signup">
+                        <span className="meta-text">ⵔ Meta</span>
+                    </div>
+
+                    <h2>Get started on InstaShare</h2>
+                    <p className="subtitle">Sign up to see photos and videos from your friends.</p>
+
+                    {/* Mobile or Email */}
+                    <label className="input-label">Mobile number or email</label>
+                    <input
+                        type="text"
+                        name="mobileOrEmail"
+                        value={credentials.mobileOrEmail || ''}
+                        placeholder="Mobile number or email"
+                        onChange={handleChange}
+                        required
+                    />
+                    <p className="input-note">You may receive notifications from us. <a href="#">Learn why we ask for your contact information</a></p>
+
+                    {/* Password */}
+                    <label className="input-label">Password</label>
+                    <input
+                        type="password"
+                        name="password"
+                        value={credentials.password}
+                        placeholder="Password"
+                        onChange={handleChange}
+                        required
+                    />
+
+                    {/* Birthday */}
+                    <label className="input-label">Birthday <span className="info-icon">ⓘ</span></label>
+                    <div className="birthday-selects">
+                        <select name="birthMonth" onChange={handleChange} defaultValue="">
+                            <option value="" disabled>Month</option>
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                        <select name="birthDay" onChange={handleChange} defaultValue="">
+                            <option value="" disabled>Day</option>
+                            {[...Array(31)].map((_, i) => (
+                                <option key={i + 1} value={i + 1}>{i + 1}</option>
+                            ))}
+                        </select>
+                        <select name="birthYear" onChange={handleChange} defaultValue="">
+                            <option value="" disabled>Year</option>
+                            {[...Array(100)].map((_, i) => (
+                                <option key={2024 - i} value={2024 - i}>{2024 - i}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {/* Name */}
+                    <label className="input-label">Name</label>
+                    <input
+                        type="text"
+                        name="fullname"
+                        value={credentials.fullname}
+                        placeholder="Full name"
+                        onChange={handleChange}
+                        required
+                    />
+
+                    {/* Username */}
+                    <label className="input-label">Username</label>
+                    <input
+                        type="text"
+                        name="username"
+                        value={credentials.username}
+                        placeholder="Username"
+                        onChange={handleChange}
+                        required
+                    />
+
+                    {/* Legal text */}
+                    <p className="legal-text">
+                        People who use our service may have uploaded your contact information to InstaShare. <a href="#">Learn more</a>.
+                    </p>
+                    <p className="legal-text">
+                        By tapping Submit, you agree to create an account and to InstaShare's <a href="#">Terms</a>, <a href="#">Privacy Policy</a> and <a href="#">Cookies Policy</a>.
+                    </p>
+
+                    {/* Submit Button */}
+                    <button type="submit" className="submit-btn">Submit</button>
+
+                    {/* Already have account */}
+                    <NavLink to="/auth/login" className="login-link">I already have an account</NavLink>
+                </div>
+            </form>
+        </div>
     )
 }
