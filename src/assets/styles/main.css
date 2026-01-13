@@ -30,6 +30,7 @@
 
 @import 'cmps/post/PostIndex';
 @import 'cmps/post/PostList';
+@import 'cmps/post/CreatePost.css';
 
 @import 'cmps/Modal';
 @import 'cmps/PostWithComments';

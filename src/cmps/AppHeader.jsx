@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
 import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service';
 import { logout } from '../store/actions/user.actions';
+import { CreatePost } from './CreatePost';
 
 import { useState } from 'react';
 
@@ -16,6 +17,7 @@ export function AppHeader() {
 	console.log('user in AppHeader:', user);
 
 	const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
+	const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
 
 	async function onLogout() {
 		try {
@@ -101,14 +103,11 @@ export function AppHeader() {
 						<span className="text">Notifications</span>
 					</div>
 				</NavLink>
-				<NavLink to="review" onClick={closeMoreMenu}>
-					<div className="nav-item">
-						<svg aria-label="New post" class="icon" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>New post</title>
-							<path d="M21 11h-8V3a1 1 0 1 0-2 0v8H3a1 1 0 1 0 0 2h8v8a1 1 0 1 0 2 0v-8h8a1 1 0 1 0 0-2Z"></path></svg>
-						<span className="text">Create</span>
-					</div>
-				</NavLink>
-
+				<div className="nav-item create-nav-item" onClick={(e) => { e.preventDefault(); setIsCreatePostOpen(true); closeMoreMenu(); }}>
+					<svg aria-label="New post" class="icon" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>New post</title>
+						<path d="M21 11h-8V3a1 1 0 1 0-2 0v8H3a1 1 0 1 0 0 2h8v8a1 1 0 1 0 2 0v-8h8a1 1 0 1 0 0-2Z"></path></svg>
+					<span className="text">Create</span>
+				</div>
 				<NavLink to={`user/${user._id}`} className="user-link nav-item" onClick={closeMoreMenu}>
 					<img className="icon" src={user.imgUrl} />
 					<div className="user-name text" title={user.fullname}>Profile</div>
@@ -190,23 +189,8 @@ export function AppHeader() {
 						Login
 					</NavLink>
 				)}
-				{/* {user && (
-					<div className="user-info">
-						<Link to={`user/${user._id}`}>
-							{user.imgUrl && <img src={user.imgUrl} />}
-							<div className="user-name">{user.fullname}</div>
-						</Link>
-						{
-							<NavLink to={`user/${user._id}`} className="user-link nav-item">
-								<img className="icon" src={user.imgUrl} />
-								<div className="user-name text" title={user.fullname}>Profile</div>
-							</NavLink>
-						}
-						<span className="score">{user.score?.toLocaleString()}</span>
-						<button onClick={onLogout}>logout</button>
-					</div>
-				)} */}
 			</nav>
+			{isCreatePostOpen && <CreatePost onClose={() => setIsCreatePostOpen(false)} />}
 		</header>
 	);
 }

@@ -118,6 +118,7 @@
             transition: opacity 0.2s ease-in-out;
             font-size: 16px;
             font-weight: 400;
+            color: var(--inst-text);
         }
 
         img {
@@ -125,6 +126,19 @@
             height: 56px;
             border-radius: 50%;
             object-fit: cover;
+        }
+    }
+
+    /* Create button specific styles */
+    .create-nav-item {
+        color: var(--inst-text) !important;
+
+        .text {
+            color: var(--inst-text) !important;
+        }
+
+        svg {
+            color: var(--inst-text) !important;
         }
     }
 

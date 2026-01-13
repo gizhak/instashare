@@ -76,16 +76,17 @@ async function save(post) {
 	} else {
 		const postToSave = {
 			txt: post.txt,
+			imgUrl: post.imgUrl,
 			loc: post.loc,
 			// Later, owner is set by the backend
-			by: userService.getLoggedinUser(),
-			comments: [],
-			likedBy: [],
-			tags: [],
+			by: post.by || userService.getLoggedinUser(),
+			comments: post.comments || [],
+			likedBy: post.likedBy || [],
+			tags: post.tags || [],
 		};
-		savedpost = await storageService.post(STORAGE_KEY, postToSave);
+		savedPost = await storageService.post(STORAGE_KEY, postToSave);
 	}
-	return savedpost;
+	return savedPost;
 }
 
 async function addPostComment(postId, txt) {
