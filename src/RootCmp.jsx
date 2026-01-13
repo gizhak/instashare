@@ -11,6 +11,7 @@ import { AdminIndex } from './pages/AdminIndex.jsx';
 import { ReelsIndex } from './pages/ReelsIndex.jsx';
 import { Feed } from './pages/Feed.jsx';
 
+
 import { CarDetails } from './pages/CarDetails';
 import { UserDetails } from './pages/UserDetails';
 
@@ -18,6 +19,8 @@ import { UserDetails } from './pages/UserDetails';
 import { AppHeader } from './cmps/AppHeader';
 import { AppFooter } from './cmps/AppFooter';
 import { UserMsg } from './cmps/UserMsg.jsx';
+import { CreatePost } from './cmps/CreatePost.jsx';
+
 import { LoginSignup, Login, Signup } from './pages/LoginSignup.jsx';
 import { PostIndex } from './pages/PostIndex.jsx';
 
@@ -41,6 +44,7 @@ export function RootCmp() {
 						<Route path="user/:id" element={<UserDetails />} />
 						<Route path="chat" element={<ChatApp />} />
 						<Route path="review" element={<ReviewIndex />} />
+						<Route path="create" element={<CreatePost />} />
 					</Route>
 
 					{/* <Route path="car/:carId" element={<CarDetails />} /> */}

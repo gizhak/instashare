@@ -28,7 +28,7 @@ export function postReducer(state = initialState, action) {
 			newState = { ...state, posts, lastRemovedPost };
 			break;
 		case ADD_POST:
-			newState = { ...state, posts: [...state.posts, action.post] };
+			newState = { ...state, posts: [action.post, ...state.posts] };
 			break;
 		case UPDATE_POST:
 			posts = state.posts.map((post) =>
@@ -51,17 +51,17 @@ export function postReducer(state = initialState, action) {
 					post:
 						state.post && state.post._id === action.postId
 							? {
-									...state.post,
-									comments: [...(state.post.comments || []), action.comment],
-							  }
+								...state.post,
+								comments: [...(state.post.comments || []), action.comment],
+							}
 							: state.post,
 					// Update the posts array (for feed)
 					posts: state.posts.map((post) =>
 						post._id === action.postId
 							? {
-									...post,
-									comments: [...(post.comments || []), action.comment],
-							  }
+								...post,
+								comments: [...(post.comments || []), action.comment],
+							}
 							: post
 					),
 				};

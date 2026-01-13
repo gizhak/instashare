@@ -87,10 +87,10 @@ export function UserDetails() {
 		if (!file) return;
 		console.log('Uploading file...')
 
-		const resute = await uploadService.uploadImg(ev)
-		console.log('Uploaded file URL:', resute.secure_url)
+		const imgUrl = await uploadService.uploadImg(file)
+		console.log('Uploaded file URL:', imgUrl)
 
-		const updatedUser = { ...user, imgUrl: resute.secure_url }
+		const updatedUser = { ...user, imgUrl: imgUrl }
 		await userService.update(updatedUser)
 		store.dispatch({ type: 'SET_WATCHED_USER', user: updatedUser })
 		store.dispatch({ type: 'SET_USER', user: updatedUser })
