@@ -11,7 +11,11 @@ import { SvgIcon } from '../cmps/SvgIcon';
 import { useState } from 'react';
 import { Modal } from '../cmps/Modal';
 import { postService } from '../services/post';
-import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service';
+import {
+	showErrorMsg,
+	showSuccessMsg,
+	showGeneralMsg,
+} from '../services/event-bus.service';
 import { PostWithComments } from '../cmps/PostWithComments';
 import { store } from '../store/store';
 import { checkIsLiked } from '../services/util.service';
@@ -21,6 +25,7 @@ export function Feed() {
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [modalType, setModalType] = useState('menu'); // 'menu' or 'comments'
+	const [selectedPost, setSelectedPost] = useState(null);
 
 	const loggedInUser = userService.getLoggedinUser();
 
@@ -39,15 +44,27 @@ export function Feed() {
 	};
 
 	// Function to open menu modal
-	const handleOpenMenu = () => {
+	function handleOpenMenu(post) {
+		setSelectedPost(post);
 		setModalType('menu');
 		setIsModalOpen(true);
-	};
+	}
 
-	const handleCloseModal = () => {
+	function handleCloseModal() {
 		setIsModalOpen(false);
 		setModalType('menu');
-	};
+		setSelectedPost(null); // Clear selected post
+	}
+
+	function handleReportPost(user) {
+		showErrorMsg(`Reported user: ${user.fullname}`);
+		handleCloseModal();
+	}
+
+	// function handleGoToPost(postId) {
+	// 	setModalType('comments');
+	// 	loadPost(postId);
+	// }
 
 	return (
 		<section className="home">
@@ -66,7 +83,7 @@ export function Feed() {
 									<SvgIcon
 										iconName="postDots"
 										className="icon"
-										onClick={handleOpenMenu}
+										onClick={() => handleOpenMenu(post)}
 									/>
 								</div>
 
@@ -101,15 +118,52 @@ export function Feed() {
 				onClose={handleCloseModal}
 				variant={modalType}
 			>
-				{modalType === 'menu' && (
+				{modalType === 'menu' && selectedPost && (
 					<>
-						<div className="modal-item danger">Report</div>
+						<div
+							className="modal-item danger"
+							onClick={() => handleReportPost(selectedPost.by)}
+						>
+							Report
+						</div>
 						<div className="modal-item">Not interested</div>
-						<div className="modal-item">Go to post</div>
+						<div
+							className="modal-item"
+							onClick={() => {
+								handleCloseModal();
+								handleOpenComments(selectedPost._id);
+							}}
+						>
+							Go to post
+						</div>
 						<div className="modal-item">Share to...</div>
-						<div className="modal-item">Copy link</div>
+						<div
+							className="modal-item"
+							onClick={async () => {
+								try {
+									await navigator.clipboard.writeText(
+										`${window.location.origin}/post/${selectedPost._id}`
+									);
+									// Optional: Show a success message
+									showGeneralMsg('Link copied to clipboard');
+									handleCloseModal();
+								} catch (err) {
+									console.error('Failed to copy link:', err);
+								}
+							}}
+						>
+							Copy link
+						</div>
 						<div className="modal-item">Embed</div>
-						<div className="modal-item">About this account</div>
+						<div
+							className="modal-item"
+							onClick={() => {
+								navigate(`/user/${selectedPost.by._id}`);
+								handleCloseModal();
+							}}
+						>
+							About this account
+						</div>
 						<div className="modal-item cancel" onClick={handleCloseModal}>
 							Cancel
 						</div>

@@ -129,11 +129,10 @@ export function UserDetails() {
 								<SvgIcon iconName="settingsCircle" />
 							</div>
 
-							{/* <p>{user.fullname}</p> */}
 							<div className="user-stats">
-								<p>0 posts</p>
-								<p>0 followers</p>
-								<p>0 following</p>
+								<p> {userPosts.length || 0} posts</p>
+								<p>{user?.followers?.length || 0} followers</p>
+								<p>{user?.following?.length || 0} following</p>
 							</div>
 						</div>
 					</div>
