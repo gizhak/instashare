@@ -13,18 +13,16 @@ import {
 } from '../store/actions/post.actions';
 
 // Icons
-import { FaHeart } from "react-icons/fa";
-import { BiSolidMessageRounded } from "react-icons/bi";
+import { FaHeart } from 'react-icons/fa';
+import { BiSolidMessageRounded } from 'react-icons/bi';
 import { use } from 'react';
 
-export function PostList() {
-	const posts = useSelector((storeState) => storeState.postModule.posts);
+export function PostList({ posts }) {
+	// const posts = useSelector((storeState) => storeState.postModule.posts);
 
-	useEffect(() => {
-		loadPosts();
-	}, []);
-
-
+	// useEffect(() => {
+	// 	loadPosts();
+	// }, []);
 
 	function shouldShowActionBtns(post) {
 		const user = userService.getLoggedinUser();
@@ -34,14 +32,13 @@ export function PostList() {
 		return post.owner?._id === user._id;
 	}
 
-	function openPost() { }
+	function openPost() {}
 
 	return (
 		<section>
 			<div className="post-list-grid">
 				{posts.map((post) => (
 					<div className="post" key={post._id}>
-
 						<PostPreview post={post} openPost={openPost} />
 					</div>
 				))}
