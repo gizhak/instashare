@@ -11,9 +11,11 @@
 	position: fixed;
 	z-index: 101;
 }
+
 .modal-menu {
 	bottom: 25vh;
-	left: 50%;
+	left: 48%;
+	right: 48%;
 	transform: translateX(-50%);
 	width: 90%;
 	max-width: 420px;
@@ -55,9 +57,11 @@
 .modal-item.cancel {
 	font-weight: 600;
 }
+
 .modal-item:hover {
 	background: #2c2c2e;
 }
+
 .modal-item:active {
 	background: #3a3a3c;
 }

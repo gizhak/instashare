@@ -22,7 +22,7 @@
 
 /* Profile grid - uniform size */
 .profile-grid {
-	grid-auto-rows: 300px;
+	grid-auto-rows: 400px;
 	gap: 2px;
 	min-width: max-content;
 }
@@ -59,7 +59,7 @@
 }
 
 .post-full-width {
-	grid-column: span 3;
+	grid-column: span 1;
 	grid-row: span 1;
 }
 

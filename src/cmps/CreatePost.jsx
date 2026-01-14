@@ -81,7 +81,7 @@ export function CreatePost({ onClose }) {
 
             // Save to local storage
             await addPost(newPost);
-            showSuccessMsg('Post created successfully!');
+            // showSuccessMsg('Post created successfully!');
             onClose();
 
             // Reload to show new post
