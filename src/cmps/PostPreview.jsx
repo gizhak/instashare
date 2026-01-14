@@ -3,12 +3,13 @@ import { BiSolidMessageRounded } from "react-icons/bi";
 import { useState } from 'react';
 import { useSelector } from "react-redux";
 
-import { addPostComment, addPostLike } from "../store/actions/post.actions";
+import { addPostComment, addPostLike, removePost } from "../store/actions/post.actions";
 
 export function PostPreview({ post, openPost, posts, currentIndex, onNavigate }) {
 	const loggedinUser = useSelector((storeState) => storeState.userModule.user)
 	const [showDetails, setShowDetails] = useState(false);
 	const [commentTxt, setCommentTxt] = useState('');
+	const [showDeleteMenu, setShowDeleteMenu] = useState(false);
 
 	const [comments, setComments] = useState(post.comments || []);
 
@@ -46,6 +47,20 @@ export function PostPreview({ post, openPost, posts, currentIndex, onNavigate })
 		setCommentTxt('')
 
 		await addPostComment(post._id, commentTxt)
+	}
+
+	async function handleDeletePost() {
+		if (window.confirm('Are you sure you want to delete this post?')) {
+			await removePost(post._id);
+			setShowDetails(false);
+			setShowDeleteMenu(false);
+			window.location.reload(); // Reload to update the list
+		}
+	}
+
+	function toggleDeleteMenu(ev) {
+		ev.stopPropagation();
+		setShowDeleteMenu(!showDeleteMenu);
 	}
 
 	async function handleDeleteComment(ev, commentId) {
@@ -126,14 +141,22 @@ export function PostPreview({ post, openPost, posts, currentIndex, onNavigate })
 									<img className="user-image-post" src={post.by?.imgUrl} alt={post.by?.fullname} />
 									<span className="username">{post.by?.fullname}</span>
 								</div>
-								<button className="more-options">•••</button>
+								<button className="more-options" onClick={toggleDeleteMenu}>•••</button>
 							</div>
 
-							{/* Comments Section */}
-							<div className="post-details-comments">
-								{comments.length > 0 ? (
-									comments.map((comment, idx) => (
-										<div key={comment.id || idx} className="comment-item">
+							{/* Delete Menu Modal */}
+							{showDeleteMenu && (
+								<div className="delete-menu-overlay" onClick={() => setShowDeleteMenu(false)}>
+									<div className="delete-menu" onClick={(e) => e.stopPropagation()}>
+										<button className="delete-menu-item delete" onClick={handleDeletePost}>
+											Delete
+										</button>
+										<button className="delete-menu-item cancel" onClick={() => setShowDeleteMenu(false)}>
+											Cancel
+										</button>
+									</div>
+								</div>
+							)}
 											<div className="comment-header">
 												<img src={comment.by?.imgUrl} alt={comment.by?.fullname} />
 												<div className="comment-meta">
@@ -202,13 +225,14 @@ export function PostPreview({ post, openPost, posts, currentIndex, onNavigate })
 							</form>
 						</div>
 					</div>
-				</div>
-			)}
+				</div >
+			)
+}
 
-			{/* Thumbnail Image */}
+{/* Thumbnail Image */ }
 			<img src={post.imgUrl} alt="post" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
 
-			{/* Hover Overlay */}
+{/* Hover Overlay */ }
 			<div className="post-overlay">
 				<div className="post-stats">
 					<div className="stat" onClick={(e) => { e.stopPropagation(); handleLike(e); }}>
@@ -221,7 +245,7 @@ export function PostPreview({ post, openPost, posts, currentIndex, onNavigate })
 					</div>
 				</div>
 			</div>
-		</article>
+		</article >
 	);
 }
 
