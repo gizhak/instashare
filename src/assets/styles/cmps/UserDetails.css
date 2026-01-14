@@ -114,25 +114,21 @@
 	.tab-link {
 		padding: 15px 0;
 		border-top: 1px solid transparent;
-		/* קו שקוף כברירת מחדל */
 		margin-top: -1px;
-		/* מעלה את הקו על הבורדר */
 		transition: all 0.2s;
 
 		svg {
 			color: var(--inst-scrollbar);
-			/* צבע עמום */
 			width: 18px;
 			height: 18px;
 		}
 
 		&.active {
+			margin-block-end: 8px;
 			border-bottom: 1px solid var(--inst-text);
-			/* קו מודגש בצבע טקסט */
 
 			svg {
 				color: var(--inst-text);
-				/* צבע מלא */
 			}
 		}
 
@@ -150,7 +146,7 @@
 		flex-direction: row;
 		justify-content: space-around;
 		width: 100%;
-		gap: 10px;
+		gap: 3px;
 		margin-top: 1em;
 		margin-bottom: 0.4em;
 
@@ -184,7 +180,6 @@
 	/* gap: 0; */
 }
 
-
 /* user image */
 .profile-img-container {
 	width: 200px;
@@ -204,7 +199,6 @@
 	}
 
 }
-
 
 /* Modal Title */
 .modal-title {
@@ -253,7 +247,6 @@
 	color: var(--inst-text);
 	font-weight: 400;
 }
-
 
 @media (max-width: 768px) {
 	.btns-section {
