@@ -3,12 +3,13 @@ import { BiSolidMessageRounded } from "react-icons/bi";
 import { useState } from 'react';
 import { useSelector } from "react-redux";
 
-import { addPostComment, addPostLike } from "../store/actions/post.actions";
+import { addPostComment, addPostLike, removePost } from "../store/actions/post.actions";
 
 export function PostPreview({ post, openPost, posts, currentIndex, onNavigate }) {
 	const loggedinUser = useSelector((storeState) => storeState.userModule.user)
 	const [showDetails, setShowDetails] = useState(false);
 	const [commentTxt, setCommentTxt] = useState('');
+	const [showDeleteMenu, setShowDeleteMenu] = useState(false);
 
 	const [comments, setComments] = useState(post.comments || []);
 
@@ -46,6 +47,20 @@ export function PostPreview({ post, openPost, posts, currentIndex, onNavigate })
 		setCommentTxt('')
 
 		await addPostComment(post._id, commentTxt)
+	}
+
+	async function handleDeletePost() {
+		if (window.confirm('Are you sure you want to delete this post?')) {
+			await removePost(post._id);
+			setShowDetails(false);
+			setShowDeleteMenu(false);
+			window.location.reload(); // Reload to update the list
+		}
+	}
+
+	function toggleDeleteMenu(ev) {
+		ev.stopPropagation();
+		setShowDeleteMenu(!showDeleteMenu);
 	}
 
 	async function handleDeleteComment(ev, commentId) {
@@ -126,8 +141,22 @@ export function PostPreview({ post, openPost, posts, currentIndex, onNavigate })
 									<img className="user-image-post" src={post.by?.imgUrl} alt={post.by?.fullname} />
 									<span className="username">{post.by?.fullname}</span>
 								</div>
-								<button className="more-options">•••</button>
+								<button className="more-options" onClick={toggleDeleteMenu}>•••</button>
 							</div>
+
+							{/* Delete Menu Modal */}
+							{showDeleteMenu && (
+								<div className="delete-menu-overlay" onClick={() => setShowDeleteMenu(false)}>
+									<div className="delete-menu" onClick={(e) => e.stopPropagation()}>
+										<button className="delete-menu-item delete" onClick={handleDeletePost}>
+											Delete
+										</button>
+										<button className="delete-menu-item cancel" onClick={() => setShowDeleteMenu(false)}>
+											Cancel
+										</button>
+									</div>
+								</div>
+							)}
 
 							{/* Comments Section */}
 							<div className="post-details-comments">
@@ -145,9 +174,6 @@ export function PostPreview({ post, openPost, posts, currentIndex, onNavigate })
 												<span className="comment-username">{comment.by?.fullname}</span>
 												<span className="comment-text">{comment.txt}</span>
 											</div>
-											{/* <div className="edit-comment">
-												<span>...</span>
-											</div> */}
 										</div>
 									))
 								) : (
@@ -158,19 +184,15 @@ export function PostPreview({ post, openPost, posts, currentIndex, onNavigate })
 								)}
 							</div>
 
-							{/* Actions */}
+							{/* Actions Section */}
 							<div className="post-details-actions">
 								<div className="action-buttons">
-									<div className="left-actions">
-										<button onClick={handleLike} className={isLiked ? 'liked' : ''}>
-											{isLiked ? <FaHeart /> : <FaRegHeart />}
-										</button>
-										<button><BiSolidMessageRounded /></button>
-										<button>
-											<svg aria-label="Share Post" className="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Share Post</title>
-												<path d="M13.973 20.046 21.77 6.928C22.8 5.195 21.55 3 19.535 3H4.466C2.138 3 .984 5.825 2.646 7.456l4.842 4.752 1.723 7.121c.548 2.266 3.571 2.721 4.762.717Z" fill="none" stroke="currentColor" strokeLinejoin="round" strokeWidth="2"></path><line fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" x1="7.488" x2="15.515" y1="12.208" y2="7.641"></line></svg>
-										</button>
-									</div>
+									<button onClick={handleLike}>
+										{isLiked ? <FaHeart color="#ed4956" /> : <FaRegHeart />}
+									</button>
+									<button>
+										<BiSolidMessageRounded />
+									</button>
 									<button className="save-btn">
 										<svg aria-label="Save" className="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Save</title>
 											<polygon fill="none" points="20 21 12 13.44 4 21 4 3 20 3 20 21" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></polygon></svg>
@@ -224,4 +246,3 @@ export function PostPreview({ post, openPost, posts, currentIndex, onNavigate })
 		</article>
 	);
 }
-

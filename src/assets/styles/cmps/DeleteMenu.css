@@ -1,0 +1,55 @@
+/* Delete Menu Overlay */
+.delete-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10002;
+}
+
+/* Delete Menu Container */
+.delete-menu {
+    background: var(--inst-popup-comment);
+    border-radius: 12px;
+    width: 400px;
+    max-width: 90vw;
+    overflow: hidden;
+}
+
+/* Delete Menu Items */
+.delete-menu-item {
+    width: 100%;
+    padding: 14px 8px;
+    border: none;
+    background: transparent;
+    color: var(--inst-text);
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+    border-bottom: 1px solid var(--inst-border);
+    text-align: center;
+}
+
+.delete-menu-item:last-child {
+    border-bottom: none;
+}
+
+.delete-menu-item:hover {
+    background: var(--inst-more-dropdown-hover);
+}
+
+/* Delete button - red color */
+.delete-menu-item.delete {
+    color: #ed4956;
+    font-weight: 700;
+}
+
+/* Cancel button */
+.delete-menu-item.cancel {
+    font-weight: 400;
+}

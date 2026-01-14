@@ -87,7 +87,7 @@
 
 	.close-btn-post {
 		position: fixed;
-		top: 15px;
+		top: -15px;
 		/* right: 10rem; */
 		left: 40rem;
 		background-color: transparent;
