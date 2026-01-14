@@ -157,6 +157,12 @@ export function PostPreview({ post, openPost, posts, currentIndex, onNavigate })
 									</div>
 								</div>
 							)}
+
+							{/* Comments Section */}
+							<div className="post-details-comments">
+								{comments.length > 0 ? (
+									comments.map((comment, idx) => (
+										<div key={comment.id || idx} className="comment-item">
 											<div className="comment-header">
 												<img src={comment.by?.imgUrl} alt={comment.by?.fullname} />
 												<div className="comment-meta">
@@ -168,9 +174,6 @@ export function PostPreview({ post, openPost, posts, currentIndex, onNavigate })
 												<span className="comment-username">{comment.by?.fullname}</span>
 												<span className="comment-text">{comment.txt}</span>
 											</div>
-											{/* <div className="edit-comment">
-												<span>...</span>
-											</div> */}
 										</div>
 									))
 								) : (
@@ -181,19 +184,15 @@ export function PostPreview({ post, openPost, posts, currentIndex, onNavigate })
 								)}
 							</div>
 
-							{/* Actions */}
+							{/* Actions Section */}
 							<div className="post-details-actions">
 								<div className="action-buttons">
-									<div className="left-actions">
-										<button onClick={handleLike} className={isLiked ? 'liked' : ''}>
-											{isLiked ? <FaHeart /> : <FaRegHeart />}
-										</button>
-										<button><BiSolidMessageRounded /></button>
-										<button>
-											<svg aria-label="Share Post" className="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Share Post</title>
-												<path d="M13.973 20.046 21.77 6.928C22.8 5.195 21.55 3 19.535 3H4.466C2.138 3 .984 5.825 2.646 7.456l4.842 4.752 1.723 7.121c.548 2.266 3.571 2.721 4.762.717Z" fill="none" stroke="currentColor" strokeLinejoin="round" strokeWidth="2"></path><line fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" x1="7.488" x2="15.515" y1="12.208" y2="7.641"></line></svg>
-										</button>
-									</div>
+									<button onClick={handleLike}>
+										{isLiked ? <FaHeart color="#ed4956" /> : <FaRegHeart />}
+									</button>
+									<button>
+										<BiSolidMessageRounded />
+									</button>
 									<button className="save-btn">
 										<svg aria-label="Save" className="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Save</title>
 											<polygon fill="none" points="20 21 12 13.44 4 21 4 3 20 3 20 21" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></polygon></svg>
@@ -225,14 +224,13 @@ export function PostPreview({ post, openPost, posts, currentIndex, onNavigate })
 							</form>
 						</div>
 					</div>
-				</div >
-			)
-}
+				</div>
+			)}
 
-{/* Thumbnail Image */ }
+			{/* Thumbnail Image */}
 			<img src={post.imgUrl} alt="post" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
 
-{/* Hover Overlay */ }
+			{/* Hover Overlay */}
 			<div className="post-overlay">
 				<div className="post-stats">
 					<div className="stat" onClick={(e) => { e.stopPropagation(); handleLike(e); }}>
@@ -245,7 +243,6 @@ export function PostPreview({ post, openPost, posts, currentIndex, onNavigate })
 					</div>
 				</div>
 			</div>
-		</article >
+		</article>
 	);
 }
-
