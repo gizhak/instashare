@@ -17,7 +17,7 @@ import { FaHeart } from 'react-icons/fa';
 import { BiSolidMessageRounded } from 'react-icons/bi';
 import { use } from 'react';
 
-export function PostList({ posts }) {
+export function PostList({ posts, isExplore = false }) {
 	// const posts = useSelector((storeState) => storeState.postModule.posts);
 
 	// useEffect(() => {
@@ -36,10 +36,10 @@ export function PostList({ posts }) {
 
 	return (
 		<section>
-			<div className="post-list-grid">
+			<div className={`post-list-grid ${isExplore ? 'explore-grid' : 'profile-grid'}`}>
 				{posts.map((post, idx) => {
-					// Every 3rd and 10th item (0-indexed: 2, 9, 11, 20, 22...)
-					const isBig = (idx % 10 === 2 || idx % 10 === 9);
+					// Every 3rd and 10th item (0-indexed: 2, 9, 11, 20, 22...) - only in explore
+					const isBig = isExplore && (idx % 10 === 2 || idx % 10 === 9);
 					return (
 						<div className={`post ${isBig ? 'post-big' : ''}`} key={post._id}>
 							<PostPreview post={post} openPost={openPost} />

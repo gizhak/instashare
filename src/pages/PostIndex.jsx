@@ -81,7 +81,7 @@ export function PostIndex() {
 			</header>
 			{/* <PostFilter filterBy={filterBy} setFilterBy={setFilterBy} /> */}
 
-			<PostList posts={posts} />
+			<PostList posts={posts} isExplore={true} />
 		</section>
 	);
 }

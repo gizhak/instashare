@@ -18,6 +18,7 @@ import { userService } from '../services/user';
 import { PostList } from '../cmps/PostList';
 import { Modal } from '../cmps/Modal';
 import { SvgIcon } from '../cmps/SvgIcon';
+import { LoadingSpinner } from '../cmps/LoadingSpinner';
 
 import { loadPosts } from '../store/actions/post.actions';
 
@@ -28,6 +29,7 @@ export function UserDetails() {
 	const params = useParams();
 	const user = useSelector((storeState) => storeState.userModule.watchedUser);
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [isUploading, setIsUploading] = useState(false);
 	const posts = useSelector((storeState) => storeState.postModule.posts);
 
 	const userPosts = posts.filter((post) => post.by._id === user?._id);
@@ -60,24 +62,33 @@ export function UserDetails() {
 
 	async function handleImageChange(ev) {
 		console.log('ev:', ev.target.files[0]);
-		// console.log('File name:', file.name)
-		// console.log('File size:', file.size)
-		// console.log('File type:', file.type)
 		const file = ev.target.files[0];
 		if (!file) return;
-		console.log('Uploading file...');
 
-		const imgUrl = await uploadService.uploadImg(file);
-		console.log('Uploaded file URL:', imgUrl);
+		try {
+			setIsUploading(true);
+			console.log('Uploading file...');
 
-		const updatedUser = { ...user, imgUrl: imgUrl };
-		await userService.update(updatedUser);
-		store.dispatch({ type: 'SET_WATCHED_USER', user: updatedUser });
-		store.dispatch({ type: 'SET_USER', user: updatedUser });
+			const imgUrl = await uploadService.uploadImg(file);
+			console.log('Uploaded file URL:', imgUrl);
 
-		console.log('User image updated successfully');
+			if (!imgUrl) {
+				throw new Error('Failed to upload image - no URL returned');
+			}
 
-		setIsModalOpen(false);
+			const updatedUser = { ...user, imgUrl: imgUrl };
+			await userService.update(updatedUser);
+			store.dispatch({ type: 'SET_WATCHED_USER', user: updatedUser });
+			store.dispatch({ type: 'SET_USER', user: updatedUser });
+
+			console.log('User image updated successfully');
+			setIsModalOpen(false);
+		} catch (err) {
+			console.error('Error uploading image:', err);
+			alert('Failed to upload image. Please try again.');
+		} finally {
+			setIsUploading(false);
+		}
 	}
 
 	async function handleRemoveImage(ev) {
@@ -97,6 +108,7 @@ export function UserDetails() {
 
 	return (
 		<section className="user-details">
+			{isUploading && <LoadingSpinner message="Uploading profile photo..." />}
 			{user && (
 				<section>
 					<div className="user-header">
@@ -104,7 +116,7 @@ export function UserDetails() {
 							<img src={user.imgUrl} onClick={() => setIsModalOpen(true)} />
 							<Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
 								{/* <img src={user.imgUrl} /> */}
-								<h3 lassName="modal-title">Change Profile Photo</h3>
+								<h3 className="modal-title">Change Profile Photo</h3>
 
 								<label htmlFor="profile-img" className="modal-item upload">
 									<h4>Upload Photo</h4>
