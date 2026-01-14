@@ -6,6 +6,7 @@
 	max-height: 90vh;
 	background-color: #212328;
 	color: #fff;
+	overflow: hidden;
 }
 
 .post-modal img {

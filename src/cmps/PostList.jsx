@@ -38,10 +38,26 @@ export function PostList({ posts, isExplore = false }) {
 		<section>
 			<div className={`post-list-grid ${isExplore ? 'explore-grid' : 'profile-grid'}`}>
 				{posts.map((post, idx) => {
-					// Every 3rd and 10th item (0-indexed: 2, 9, 11, 20, 22...) - only in explore
-					const isBig = isExplore && (idx % 10 === 2 || idx % 10 === 9);
+					if (!isExplore) {
+						return (
+							<div className="post" key={post._id}>
+								<PostPreview post={post} openPost={openPost} />
+							</div>
+						);
+					}
+
+					// Explore mode - Instagram-like pattern
+					// Every 7th item is big (2x2)
+					const isBig = idx % 7 === 3;
+					// Every 19th item is full width
+					const isFullWidth = idx % 19 === 9;
+
+					let className = 'post';
+					if (isFullWidth) className += ' post-full-width';
+					else if (isBig) className += ' post-big';
+
 					return (
-						<div className={`post ${isBig ? 'post-big' : ''}`} key={post._id}>
+						<div className={className} key={post._id}>
 							<PostPreview post={post} openPost={openPost} />
 						</div>
 					);

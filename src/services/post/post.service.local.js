@@ -214,21 +214,21 @@ export function _createPosts() {
 				likedBy: [],
 				tags: ['mist', 'peace'],
 			},
-			{
-				_id: 's205',
-				txt: 'Weekend getaway vibes ✨',
-				imgUrl:
-					'https://images.unsplash.com/photo-1526779259212-7c2e1b1cf378?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-				by: {
-					_id: 'u205',
-					fullname: 'weekend_lover',
-					imgUrl:
-						'https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
-				},
-				comments: [],
-				likedBy: [],
-				tags: ['weekend', 'trip'],
-			},
+			// {
+			// 	_id: 's205',
+			// 	txt: 'Weekend getaway vibes ✨',
+			// 	imgUrl:
+			// 		'https://images.unsplash.com/photo-1526779259212-7c2e1b1cf378?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+			// 	by: {
+			// 		_id: 'u205',
+			// 		fullname: 'weekend_lover',
+			// 		imgUrl:
+			// 			'https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
+			// 	},
+			// 	comments: [],
+			// 	likedBy: [],
+			// 	tags: ['weekend', 'trip'],
+			// },
 			{
 				_id: 's206',
 				txt: 'Loving this view 💫',
