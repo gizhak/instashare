@@ -58,7 +58,7 @@ export function Login() {
                                 <div key={user._id} className="remove-user-item">
                                     <img src={user.imgUrl} alt={user.fullname} />
                                     <div className="user-info">
-                                        <span className="username">{user.username}</span>
+                                        <span className="username">{user.fullname}</span>
                                         <span className="app-name">InstaShare</span>
                                     </div>
                                     <button
@@ -136,7 +136,7 @@ export function Login() {
                             }}
                         >
                             <img src={user.imgUrl} alt={user.fullname} />
-                            <span>{user.username}</span>
+                            <span>{user.fullname}</span>
                             <span className="arrow">
                                 <svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em" aria-hidden="true" class="x1lliihq x2lah0s x1k90msu x2h7rmj x1qfuztq x198g3q0 xlup9mm x1kky2od"><path fill-rule="evenodd" clip-rule="evenodd" d="M7.247 4.341a1 1 0 0 1 1.412-.094l8 7a1 1 0 0 1 0 1.506l-8 7a1 1 0 0 1-1.318-1.506L14.482 12l-7.14-6.247a1 1 0 0 1-.094-1.412z"></path></svg>
                             </span>

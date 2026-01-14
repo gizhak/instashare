@@ -21,6 +21,9 @@ import { SvgIcon } from '../cmps/SvgIcon';
 
 import { loadPosts } from '../store/actions/post.actions';
 
+
+
+
 export function UserDetails() {
 	const params = useParams();
 	const user = useSelector((storeState) => storeState.userModule.watchedUser);
@@ -33,6 +36,9 @@ export function UserDetails() {
 	// const myPosts = postsCollection
 	// 	.find({ 'by._id': loggedinUser._id })
 	// 	.sort({ _id: -1 });
+
+
+
 
 	useEffect(() => {
 		loadUser(params.id);
@@ -86,6 +92,9 @@ export function UserDetails() {
 		setIsModalOpen(false);
 	}
 
+
+
+
 	return (
 		<section className="user-details">
 			{user && (
@@ -125,7 +134,7 @@ export function UserDetails() {
 
 						<div className="profile-user-info">
 							<div className="user-handle">
-								<h5>{user.username}</h5>
+								<h5>{user.fullname}</h5>
 								<SvgIcon iconName="settingsCircle" />
 							</div>
 
@@ -144,7 +153,6 @@ export function UserDetails() {
 						<NavLink to="posts" end className="tab-link">
 							<div className="tab-bar">
 								<svg
-									clicked
 									viewBox="0 0 24 24"
 									width="24"
 									height="24"
