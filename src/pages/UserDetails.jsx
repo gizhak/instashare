@@ -150,7 +150,7 @@ export function UserDetails() {
 						<button className="archive-btn">View archive</button>
 					</div>
 					<div className="nav-bar">
-						<NavLink to="posts" end className="tab-link">
+						<NavLink to='' end className="tab-link">
 							<div className="tab-bar">
 								<svg
 									viewBox="0 0 24 24"
@@ -204,7 +204,7 @@ export function UserDetails() {
 								<span className="text"></span>
 							</div>
 						</NavLink>
-						<NavLink to="saved" end className="tab-link">
+						<NavLink to='' end className="tab-link">
 							<div className="tab-bar">
 								<svg
 									aria-label="Saved"
@@ -228,7 +228,7 @@ export function UserDetails() {
 								<span className="text"></span>
 							</div>
 						</NavLink>
-						<NavLink to="tagged" end className="tab-link">
+						<NavLink to='' end className="tab-link">
 							<div className="tab-bar">
 								<svg
 									viewBox="0 0 24 24"
