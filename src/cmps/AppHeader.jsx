@@ -159,7 +159,7 @@ export function AppHeader() {
 								</NavLink>
 								<NavLink >
 									<div className="dropdown-item switch-accounts-item" onClick={toggleMoreMenu}>
-										<nav className='text'>Swich aconnts</nav>
+										<nav className='text'>Switch accounts</nav>
 									</div>
 								</NavLink>
 								<NavLink  >
