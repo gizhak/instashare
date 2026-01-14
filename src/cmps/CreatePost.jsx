@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { addPost } from '../store/actions/post.actions';
 import { uploadService } from '../services/upload.service';
 import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service';
+import { LoadingSpinner } from './LoadingSpinner';
 import '../assets/styles/cmps/post/CreatePost.css';
 
 export function CreatePost({ onClose }) {
@@ -95,6 +96,7 @@ export function CreatePost({ onClose }) {
 
     return (
         <div className="create-post-overlay" onClick={onClose}>
+            {isUploading && <LoadingSpinner message="Uploading your post..." />}
             <button className="close-btn-create" onClick={onClose}>
                 ✕
             </button>

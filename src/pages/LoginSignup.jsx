@@ -48,7 +48,7 @@ export function Login() {
                 <div className="modal-overlay" onClick={() => setShowRemoveModal(false)}>
                     <div className="remove-modal" onClick={(e) => e.stopPropagation()}>
                         <button className='close-btn' onClick={() => setShowRemoveModal(false)}>
-                            <svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em" aria-hidden="true" class="close-btn-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em" aria-hidden="true" className="close-btn-icon">
                                 <path d="M5.707 4.293a1 1 0 1 0-1.414 1.414L10.586 12l-6.293 6.293a1 1 0 1 0 1.414 1.414L12 13.414l6.293 6.293a1 1 0 0 0 1.414-1.414L13.414 12l6.293-6.293a1 1 0 1 0-1.414-1.414L12 10.586 5.707 4.293z"></path></svg>
                         </button>
                         <h2>Remove profiles from this browser</h2>
@@ -121,7 +121,7 @@ export function Login() {
                 <div className="login-header">
                     <h2>Log into InstaShare</h2>
                     <span className="settings-icon" onClick={() => setShowRemoveModal(true)}>
-                        <svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em" aria-hidden="true" class="x1lliihq x2lah0s x1k90msu x2h7rmj x1qfuztq x198g3q0 xxk0z11 xvy4d1p"><path fill-rule="evenodd" clip-rule="evenodd" d="m19.967 11.267 2.224-2.06a1 1 0 0 0 .187-1.233l-1.702-2.948a1 1 0 0 0-1.162-.455l-2.895.896a7.99 7.99 0 0 0-1.27-.735l-.672-2.954A1 1 0 0 0 13.702 1H10.3a1 1 0 0 0-.975.778l-.672 2.954a7.992 7.992 0 0 0-1.27.735L4.487 4.57a1 1 0 0 0-1.162.455L1.623 7.974a1 1 0 0 0 .187 1.233l2.224 2.06a8.1 8.1 0 0 0 0 1.466l-2.224 2.06a1 1 0 0 0-.187 1.233l1.702 2.948a1 1 0 0 0 1.162.455l2.895-.896a8 8 0 0 0 1.27.735l.672 2.954a1 1 0 0 0 .975.778h3.403a1 1 0 0 0 .975-.778l.672-2.954a7.991 7.991 0 0 0 1.27-.735l2.895.896a1 1 0 0 0 1.162-.455l1.702-2.948a1 1 0 0 0-.187-1.233l-2.224-2.06a8.112 8.112 0 0 0 0-1.466zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path></svg>
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em" aria-hidden="true" className="x1lliihq x2lah0s x1k90msu x2h7rmj x1qfuztq x198g3q0 xxk0z11 xvy4d1p"><path fillRule="evenodd" clipRule="evenodd" d="m19.967 11.267 2.224-2.06a1 1 0 0 0 .187-1.233l-1.702-2.948a1 1 0 0 0-1.162-.455l-2.895.896a7.99 7.99 0 0 0-1.27-.735l-.672-2.954A1 1 0 0 0 13.702 1H10.3a1 1 0 0 0-.975.778l-.672 2.954a7.992 7.992 0 0 0-1.27.735L4.487 4.57a1 1 0 0 0-1.162.455L1.623 7.974a1 1 0 0 0 .187 1.233l2.224 2.06a8.1 8.1 0 0 0 0 1.466l-2.224 2.06a1 1 0 0 0-.187 1.233l1.702 2.948a1 1 0 0 0 1.162.455l2.895-.896a8 8 0 0 0 1.27.735l.672 2.954a1 1 0 0 0 .975.778h3.403a1 1 0 0 0 .975-.778l.672-2.954a7.991 7.991 0 0 0 1.27-.735l2.895.896a1 1 0 0 0 1.162-.455l1.702-2.948a1 1 0 0 0-.187-1.233l-2.224-2.06a8.112 8.112 0 0 0 0-1.466zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path></svg>
                     </span>
                 </div>
 
@@ -138,7 +138,7 @@ export function Login() {
                             <img src={user.imgUrl} alt={user.fullname} />
                             <span>{user.fullname}</span>
                             <span className="arrow">
-                                <svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em" aria-hidden="true" class="x1lliihq x2lah0s x1k90msu x2h7rmj x1qfuztq x198g3q0 xlup9mm x1kky2od"><path fill-rule="evenodd" clip-rule="evenodd" d="M7.247 4.341a1 1 0 0 1 1.412-.094l8 7a1 1 0 0 1 0 1.506l-8 7a1 1 0 0 1-1.318-1.506L14.482 12l-7.14-6.247a1 1 0 0 1-.094-1.412z"></path></svg>
+                                <svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em" aria-hidden="true" className="x1lliihq x2lah0s x1k90msu x2h7rmj x1qfuztq x198g3q0 xlup9mm x1kky2od"><path fillRule="evenodd" clipRule="evenodd" d="M7.247 4.341a1 1 0 0 1 1.412-.094l8 7a1 1 0 0 1 0 1.506l-8 7a1 1 0 0 1-1.318-1.506L14.482 12l-7.14-6.247a1 1 0 0 1-.094-1.412z"></path></svg>
                             </span>
                         </div>
                     ))}
@@ -311,3 +311,4 @@ export function Signup() {
         </div>
     )
 }
+

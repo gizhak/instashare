@@ -19,9 +19,20 @@ async function uploadImg(file) {
 	try {
 		const res = await fetch(UPLOAD_URL, { method: 'POST', body: formData })
 		const imgData = await res.json()
-		return imgData.secure_url || imgData.url
+		console.log('Cloudinary response:', imgData)
+
+		if (!res.ok) {
+			throw new Error(`Upload failed: ${imgData.error?.message || 'Unknown error'}`)
+		}
+
+		const url = imgData.secure_url || imgData.url
+		if (!url) {
+			throw new Error('No URL returned from Cloudinary')
+		}
+
+		return url
 	} catch (err) {
-		console.error(err)
+		console.error('Upload error:', err)
 		throw err
 	}
 }
