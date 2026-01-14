@@ -211,11 +211,13 @@ export function PostPreview({ post, openPost, posts, currentIndex, onNavigate })
 			{/* Hover Overlay */}
 			<div className="post-overlay">
 				<div className="post-stats">
-					<div className={`stat ${isLiked ? 'liked' : ''}`} onClick={handleLike}>
+					<div className="stat" onClick={(e) => { e.stopPropagation(); handleLike(e); }}>
 						<FaHeart />
+						<span>{post.likedBy?.length || 0}</span>
 					</div>
 					<div className="stat">
 						<BiSolidMessageRounded />
+						<span>{comments.length}</span>
 					</div>
 				</div>
 			</div>

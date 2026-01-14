@@ -32,16 +32,20 @@ export function PostList({ posts }) {
 		return post.owner?._id === user._id;
 	}
 
-	function openPost() {}
+	function openPost() { }
 
 	return (
 		<section>
 			<div className="post-list-grid">
-				{posts.map((post) => (
-					<div className="post" key={post._id}>
-						<PostPreview post={post} openPost={openPost} />
-					</div>
-				))}
+				{posts.map((post, idx) => {
+					// Every 3rd and 10th item (0-indexed: 2, 9, 11, 20, 22...)
+					const isBig = (idx % 10 === 2 || idx % 10 === 9);
+					return (
+						<div className={`post ${isBig ? 'post-big' : ''}`} key={post._id}>
+							<PostPreview post={post} openPost={openPost} />
+						</div>
+					);
+				})}
 			</div>
 		</section>
 	);
