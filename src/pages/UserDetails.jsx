@@ -287,7 +287,7 @@ export function UserDetails() {
 
 			<PostList posts={userPosts} />
 
-			<footer className="login-footer">
+			{/* <footer className="login-footer">
 				<div className="footer-links">
 					<a href="#">Meta</a>
 					<a href="#">About</a>
@@ -299,7 +299,7 @@ export function UserDetails() {
 					<a href="#">Terms</a>
 				</div>
 				<div className="footer-copyright">© 2026 InstaShare from Meta</div>
-			</footer>
+			</footer> */}
 		</section>
 	);
 }

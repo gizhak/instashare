@@ -1,4 +1,3 @@
-
 .app-footer {
     display: flex;
     align-items: center;
@@ -12,14 +11,14 @@
     & p {
         margin: 0;
     }
-    
-    > span {
+
+    >span {
         font-size: .8em;
-        
+
         &.local-services {
             color: --var(clr1);
         }
-        
+
         &.remote-services {
             color: --var(clr5);
         }
