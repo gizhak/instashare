@@ -6,17 +6,20 @@
 	gap: 1px;
 	/* min-width: 1000px; */
 	min-height: 100px;
-	margin-top: -0.8rem;
-	border-top: 1px solid var(--inst-scrollbar);
+	margin-top: 0rem;
+	/* border-top: 1px solid var(--inst-scrollbar); */
 	padding-bottom: 20px;
 	/* scrollbar-width: thin;
 	scrollbar-color: var(--inst-scrollbar) transparent; */
 	border-radius: 8px;
 	overflow-y: auto;
+	max-width: fit-content;
 }
 
 .post-list-container {
 	width: 100%;
+
+	border-top: 1px solid var(--inst-more-dropdown-hover);
 }
 
 /* Explore grid - with big items */
