@@ -35,7 +35,7 @@ export function PostList({ posts, isExplore = false }) {
 	function openPost() { }
 
 	return (
-		<section>
+		<section className="post-list-container">
 			<div className={`post-list-grid ${isExplore ? 'explore-grid' : 'profile-grid'}`}>
 				{posts.map((post, idx) => {
 					if (!isExplore) {

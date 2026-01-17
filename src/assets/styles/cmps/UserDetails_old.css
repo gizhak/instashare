@@ -138,8 +138,9 @@ div .profile-user-info {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	border-top: 1px solid var(--inst-border);
-	border-bottom: 1px solid var(--inst-border);
+	margin-right: -20px;
+	/* border-top: 1px solid var(--inst-border);
+	border-bottom: 1px solid var(--inst-border); */
 
 	img {
 		width: 100%;
