@@ -153,14 +153,14 @@
 	justify-content: center;
 	width: 100%;
 	gap: 180px;
-	margin-top: 2rem;
-	margin-bottom: .5rem;
+	margin-top: 3.5rem;
+	margin-bottom: -0.3rem;
 
 
 	.tab-link {
 		cursor: pointer;
 		/* transition: all 0.2s; */
-		padding-bottom: 13px;
+		padding-bottom: 10px;
 		border-bottom: 2px solid transparent;
 
 		svg {
@@ -182,7 +182,7 @@
 		align-items: center;
 
 		svg {
-			width: 80px;
+			width: 60px;
 			height: 25px;
 		}
 	}
