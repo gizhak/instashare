@@ -3,7 +3,7 @@
 	justify-content: center;
 	margin-top: 2rem;
 
-	>article {
+	> article {
 		margin-bottom: 20px;
 	}
 }
@@ -22,11 +22,16 @@
 	margin-bottom: 20px;
 	width: 100%;
 	overflow: hidden;
+
+	h4 {
+		cursor: pointer;
+		font-weight: 600;
+	}
 }
 
 .post-img {
 	width: 468px;
-	height: auto;
+	max-height: 468px;
 	display: block;
 }
 
@@ -37,20 +42,38 @@
 	justify-self: start;
 	gap: 10px;
 
-	svg {
+	div {
 		margin-left: auto;
+		cursor: pointer;
+		color: #85a1ff;
+		font-weight: 500;
+		align-items: center;
+		margin-left: auto;
+		display: flex;
+		align-items: center;
+
+		&:hover {
+			text-decoration: underline;
+		}
+		span {
+			padding: 5px;
+			align-self: center;
+			line-height: 18px;
+			font-size: 0.9rem;
+		}
 	}
 }
 
 .post-desc {
 	padding: 10px;
-
+	margin-bottom: 20px;
 	span {
 		font-weight: 400;
 	}
 }
 
 .post-actions {
+	margin-top: 10px;
 	display: flex;
 	align-items: center;
 	gap: 6px;
@@ -58,6 +81,9 @@
 
 	span {
 		font-weight: 800;
+	}
+	.bookmark-icon {
+		margin-left: auto;
 	}
 }
 
