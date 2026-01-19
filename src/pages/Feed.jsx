@@ -19,6 +19,7 @@ import {
 import { PostWithComments } from '../cmps/PostWithComments';
 import { store } from '../store/store';
 import { checkIsLiked } from '../services/util.service';
+import { updateUser } from '../store/actions/user.actions';
 
 export function Feed() {
 	const posts = useSelector((storeState) => storeState.postModule.posts);
@@ -28,7 +29,7 @@ export function Feed() {
 	const [selectedPost, setSelectedPost] = useState(null);
 
 	const loggedInUser = userService.getLoggedinUser();
-
+	console.log('loggedInUser:', loggedInUser);
 	useEffect(() => {
 		loadPosts();
 	}, []);
@@ -66,6 +67,27 @@ export function Feed() {
 	// 	loadPost(postId);
 	// }
 
+	async function followUser(userId) {
+		const updates = {
+			following: [...loggedInUser.following, userId],
+		};
+		await updateUser(updates);
+		showSuccessMsg('You are now following this user');
+	}
+
+	async function toggleBookmark(postId) {
+		const isBookmarked = loggedInUser.savedPostIds.includes(postId);
+
+		const updates = {
+			savedPostIds: isBookmarked
+				? loggedInUser.savedPostIds.filter((id) => id !== postId)
+				: [...loggedInUser.savedPostIds, postId],
+		};
+
+		await updateUser(updates);
+		showSuccessMsg(isBookmarked ? 'Bookmark removed' : 'Post bookmarked');
+	}
+
 	return (
 		<section className="home">
 			<section className="feed-grid-container">
@@ -80,34 +102,49 @@ export function Feed() {
 									<h4 onClick={() => navigate(`/user/${post.by._id}`)}>
 										{post.by.fullname}
 									</h4>
-									<SvgIcon
-										iconName="postDots"
-										className="icon"
-										onClick={() => handleOpenMenu(post)}
-									/>
+									<div>
+										{!loggedInUser.following.includes(post.by._id) && (
+											<span onClick={() => followUser(post.by._id)}>
+												Follow
+											</span>
+										)}
+										<SvgIcon
+											iconName="postDots"
+											className="icon"
+											onClick={() => handleOpenMenu(post)}
+										/>
+									</div>
 								</div>
 
 								<img className="post-img" src={post.imgUrl} />
 
+								<div className="post-actions">
+									<SvgIcon
+										iconName={isLiked ? 'likeFilled' : 'like'}
+										fill={isLiked ? '#ff3040' : 'currentColor'}
+										onClick={() => addPostLike(post._id)}
+									/>
+									<span>{post.likedBy.length}</span>
+
+									<SvgIcon
+										iconName="comment"
+										onClick={() => handleOpenComments(post._id)}
+									/>
+									<span>{post.comments.length}</span>
+									<SvgIcon
+										className="bookmark-icon"
+										iconName={
+											loggedInUser.savedPostIds.includes(post._id)
+												? 'bookmarkFilled'
+												: 'bookmark'
+										}
+										onClick={() => toggleBookmark(post._id)}
+									/>
+								</div>
 								<div className="post-desc">
 									<h4 onClick={() => navigate(`/user/${post.by._id}`)}>
 										{post.by.fullname}: <span>{post.txt}</span>
 									</h4>
-
-									<div className="post-actions">
-										<SvgIcon
-											iconName={isLiked ? 'likeFilled' : 'like'}
-											fill={isLiked ? '#ff3040' : 'currentColor'}
-											onClick={() => addPostLike(post._id)}
-										/>
-										<span>{post.likedBy.length}</span>
-
-										<SvgIcon
-											iconName="comment"
-											onClick={() => handleOpenComments(post._id)}
-										/>
-										<span>{post.comments.length}</span>
-									</div>
 								</div>
 							</article>
 						);
@@ -126,7 +163,7 @@ export function Feed() {
 						>
 							Report
 						</div>
-						<div className="modal-item">Not interested</div>
+
 						<div
 							className="modal-item"
 							onClick={() => {
@@ -136,7 +173,6 @@ export function Feed() {
 						>
 							Go to post
 						</div>
-						<div className="modal-item">Share to...</div>
 						<div
 							className="modal-item"
 							onClick={async () => {
@@ -154,7 +190,6 @@ export function Feed() {
 						>
 							Copy link
 						</div>
-						<div className="modal-item">Embed</div>
 						<div
 							className="modal-item"
 							onClick={() => {
