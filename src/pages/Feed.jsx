@@ -11,6 +11,7 @@ import { SvgIcon } from '../cmps/SvgIcon';
 import { useState } from 'react';
 import { Modal } from '../cmps/Modal';
 import { postService } from '../services/post';
+import { userService } from '../services/user'; // fix import path -guy
 import {
 	showErrorMsg,
 	showSuccessMsg,
@@ -104,7 +105,7 @@ export function Feed() {
 										{post.by.fullname}
 									</h4>
 									<div>
-										{!loggedInUser.following.includes(post.by._id) && (
+										{loggedInUser && loggedInUser.following && !loggedInUser.following.includes(post.by._id) && (
 											<span onClick={() => followUser(post.by._id)}>
 												Follow
 											</span>

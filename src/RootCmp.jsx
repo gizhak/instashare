@@ -10,6 +10,7 @@ import { ChatApp } from './pages/Chat.jsx';
 import { AdminIndex } from './pages/AdminIndex.jsx';
 import { ReelsIndex } from './pages/ReelsIndex.jsx';
 import { Feed } from './pages/Feed.jsx';
+import { EditUser } from './cmps/EditUser.jsx';
 
 
 import { CarDetails } from './pages/CarDetails';
@@ -23,6 +24,7 @@ import { CreatePost } from './cmps/CreatePost.jsx';
 
 import { LoginSignup, Login, Signup } from './pages/LoginSignup.jsx';
 import { PostIndex } from './pages/PostIndex.jsx';
+// import { EditUser } from './cmps/EditUser.jsx';
 
 export function RootCmp() {
 
@@ -45,6 +47,9 @@ export function RootCmp() {
 						<Route path="chat" element={<ChatApp />} />
 						<Route path="review" element={<ReviewIndex />} />
 						<Route path="create" element={<CreatePost />} />
+
+						{/* element from More button */}
+						<Route path="setting" element={<EditUser />} />
 					</Route>
 
 					{/* <Route path="car/:carId" element={<CarDetails />} /> */}
@@ -53,6 +58,8 @@ export function RootCmp() {
 						<Route path="team" element={<AboutTeam />} />
 						<Route path="vision" element={<AboutVision />} />
 					</Route> */}
+
+
 
 					<Route path="auth" element={<LoginSignup />}>
 						<Route path="login" element={<Login />} />

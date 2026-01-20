@@ -14,6 +14,7 @@
 @import 'cmps/LoginSignup';
 @import 'cmps/Chat';
 @import 'cmps/Feed';
+@import 'cmps/EditUser.css';
 
 @import 'cmps/AppHeader';
 @import 'cmps/AppFooter';
@@ -32,6 +33,7 @@
 @import 'cmps/post/PostIndex';
 @import 'cmps/post/PostList';
 @import 'cmps/post/CreatePost.css';
+
 
 @import 'cmps/Modal';
 @import 'cmps/PostWithComments';
