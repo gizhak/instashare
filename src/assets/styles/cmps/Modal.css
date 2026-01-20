@@ -18,7 +18,7 @@
 	transform: translateX(-59%);
 	width: 90%;
 	max-width: 420px;
-	background: #1c1c1e;
+	background: var(--inst-popup-background);
 	border-radius: 16px;
 	overflow: hidden;
 }
@@ -29,7 +29,7 @@
 	transform: translate(-50%, -50%);
 	width: 90%;
 	max-width: 420px;
-	background: #1c1c1e;
+	background: var(--inst-popup-background);
 	border-radius: 16px;
 	overflow: hidden;
 }
@@ -41,7 +41,7 @@
 	width: 60vw;
 	max-width: 1200px;
 	max-height: 90vh;
-	background: #000;
+	background: var(--inst-popup-background);
 	border-radius: 0;
 	overflow: hidden;
 }
@@ -51,16 +51,16 @@
 	padding: 16px;
 	text-align: center;
 	font-size: 16px;
-	color: #fff;
+	color: var(--inst-text);
 	cursor: pointer;
 }
 
 .modal-item:not(:last-child) {
-	border-bottom: 1px solid #2c2c2e;
+	border-bottom: 1px solid var(--inst-border);
 }
 
 .modal-item.danger {
-	color: #ff453a;
+	color: var(--inst-error);
 	font-weight: 600;
 }
 
@@ -69,9 +69,9 @@
 }
 
 .modal-item:hover {
-	background: #2c2c2e;
+	background: var(--inst-button-hover);
 }
 
 .modal-item:active {
-	background: #3a3a3c;
+	background: var(--inst-button-active);
 }

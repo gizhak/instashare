@@ -1,34 +1,61 @@
 :root {
-  --clr1: #ce2e6c;
-  --clr2: #4f3a65;
-  --clr3: #574f7d;
-  --clr4: #95adbe;
-  --clr5: #dff0ea;
+	color-scheme: dark;
 
-  --clr1-light: color-mix(in lab, var(--clr1), white 15%);
+	--clr1-light: color-mix(in lab, var(--clr1), white 15%);
+	--white: #ffffff;
+	--gray1: #ddd;
+	--gray2: #aaa;
+	--gray3: #777;
+	--gray4: #333;
 
-  --gray1: #ddd;
-  --gray2: #aaa;
-  --gray3: #777;
-  --gray4: #333;
+	--success: rgb(41, 189, 73);
+	--error: rgb(216, 59, 59);
 
-  --success: rgb(41, 189, 73);
-  --error: rgb(216, 59, 59);
+	--inst-text: #f5f5f5;
+	--inst-a: #a8a8a8;
+	--inst-background: #0c1014;
+	--inst-border: #262626;
+	--inst-buttons: hsl(214, 11%, 18%);
+	--inst-more-dropdown-hover: #292b2e;
+	--inst-more-dropdown-hover-button: #3f4143;
+	--inst-scrollbar: #5e6062;
 
-  --inst-text: #F5F5F5;
-  --inst-a: #A8A8A8;
-  --inst-background: #0C1014;
-  --inst-buttons: hsl(214, 11%, 18%);
-  --inst-more-dropdown-hover: #292B2E;
-  --inst-more-dropdown-hover-button: #3F4143;
-  --inst-scrollbar: #5E6062;
+	--inst-custom-bg: #25292e;
 
-  --inst-custom-bg: #25292E;
+	--inst-gender-input: #ef5c67;
 
-  --inst-gender-input: #EF5C67;
+	/* login buttons */
+	--inst-signup: #1f8cf8;
+	--inst-popup-comment: #212328;
+	--inst-popup-background: #152127;
 
-  /* login buttons */
-  --inst-signup: #1F8CF8;
-  --inst-popup-comment: #212328;
-  --inst-popup-background: #152127;
+	--inst-follow-button: #85a1ff;
+	--inst-button-active: #1e1f24;
+	--inst-button-hover: #2c2c2e;
+}
+
+:root[data-theme='light'] {
+	color-scheme: light;
+
+	--inst-text: #262626;
+	--inst-a: #565656;
+	--inst-background: #ffffff;
+	--inst-border: #dbdbdb;
+	--inst-buttons: #efefef;
+	--inst-more-dropdown-hover: #f7f7f7;
+	--inst-more-dropdown-hover-button: #e0e0e0;
+	--inst-scrollbar: #b0b0b0;
+
+	--inst-custom-bg: #fafafa;
+
+	--inst-gender-input: #ed4956;
+
+	/* login buttons */
+	--inst-signup: #0095f6;
+	--inst-popup-comment: #f0f0f0;
+	--inst-popup-background: #ffffff;
+
+	--inst-follow-button: #0095f6;
+	--inst-button-active: #e5e5e5;
+	--inst-button-hover: #d5d5d5;
 }
