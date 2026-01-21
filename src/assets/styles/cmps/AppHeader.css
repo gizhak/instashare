@@ -17,7 +17,7 @@
     /* border-right: 1px solid #dbdbdb; */
     transition: width 0.2s ease-in-out;
     overflow: hidden;
-    z-index: 1000;
+    /* z-index: 1000; */
 
 
     &:hover {
@@ -54,6 +54,7 @@
         align-items: flex-start;
         gap: 1.5rem;
         flex: 1;
+        margin-top: 0;
 
         a {
             width: 100%;
