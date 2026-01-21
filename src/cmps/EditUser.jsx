@@ -2,6 +2,11 @@ import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 
+// import for action of loading image from user from another function
+import { uploadService } from '../services/upload.service';
+import { store } from '../store/store';
+import { LoadingSpinner } from '../cmps/LoadingSpinner';
+
 
 
 import { loadUser } from '../store/actions/user.actions';
@@ -16,9 +21,13 @@ export function EditUser() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedGender, setSelectedGender] = useState('Prefer not to say');
 
+    // get fun from userdetails
+    const [isUploading, setIsUploading] = useState(false);
+
+    const navigate = useNavigate()
+
     console.log('user in EditUser:', user);
 
-    // useEffect(() => {
     //     loadUser(user);
     // }, [user]);
 
@@ -29,13 +38,43 @@ export function EditUser() {
     }
 
 
-    function handleChangeImage(ev) {
+    async function handleChangeImage(ev) {
+        setIsUploading(true);
+        console.log('ev:', ev.target.files[0]);
         const file = ev.target.files[0];
-        console.log('Selected file:', file);
-        // Here you can call the upload service to upload the image
-        // and update the user's profile picture accordingly.
-
         if (!file) return;
+
+        try {
+            setIsUploading(true);
+            console.log('Uploading file...');
+
+            const imgUrl = await uploadService.uploadImg(file);
+            console.log('Uploaded file URL:', imgUrl);
+
+            if (!imgUrl) {
+                throw new Error('Failed to upload image - no URL returned');
+            }
+
+            const updatedUser = { ...user, imgUrl: imgUrl };
+            await userService.update(updatedUser);
+            store.dispatch({ type: 'SET_WATCHED_USER', user: updatedUser });
+            store.dispatch({ type: 'SET_USER', user: updatedUser });
+
+            console.log('User image updated successfully');
+            setIsModalOpen(false);
+        } catch (err) {
+            console.error('Error uploading image:', err);
+            alert('Failed to upload image. Please try again.');
+        } finally {
+            setIsUploading(false);
+        }
+
+    }
+
+    async function handleSubmit(ev) {
+        ev.preventDefault();
+        // go back to previous page
+        navigate(-1);
 
     }
 
@@ -44,6 +83,7 @@ export function EditUser() {
         <section className="edit-profile-container">
             <h3 className='edit-title'>Edit profile</h3>
             <div className="user-profile" >
+                {isUploading && <LoadingSpinner message="Uploading profile photo..." />}
                 {user && (
                     <div className="user-info-edit">
                         <img src={user.imgUrl} alt="" />
@@ -53,7 +93,11 @@ export function EditUser() {
                 <label htmlFor="upload-photo" className="change-photo-btn" >
                     Change photo
                 </label>
-                <input type="file" id="upload-photo" hidden onChange={handleChangeImage} />
+                <input
+                    type="file"
+                    id="upload-photo"
+                    hidden
+                    onChange={handleChangeImage} />
             </div>
             <form className='edit-user-form' action="">
                 <label htmlFor="website">Website</label>
@@ -66,13 +110,6 @@ export function EditUser() {
                     <textarea id="bio" name="bio" placeholder="Bio" onChange={handleChange} />
                     <span className="char-count">{charCount}/150</span>
                 </div>
-
-                {/* <label htmlFor="show-threads-badge">Show Threads badge</label>
-                <input type="checkbox" id="show-threads-badge" name="show-threads-badge" /> */}
-
-
-
-
 
                 <div className='gender-container'>
                     <label htmlFor="Gender">Gender</label>
@@ -138,23 +175,8 @@ export function EditUser() {
                     </div>
                 </div>
 
-
-                {/* <select id='gender-select' name='gender'>
-                    <option value="prefer-not-to-say">Prefer not to say</option>
-                    <option value="male">Male</option>
-                    <option value=" female">Female</option>
-                    <option value="non-binary">Custom
-                        <input type="text" />
-                    </option>
-                </select> */}
-
-                {/* <label htmlFor="Show account suggestions on profiles">Show account suggestions on profiles</label>
-                <input type="checkbox" id="Show account suggestions on profiles" name="Show account suggestions on profiles" /> */}
-
-
-
                 <div className='submit-btn-container'>
-                    <button className="submit-btn" type="submit">Submit</button>
+                    <button className="submit-btn" type="submit" onClick={handleSubmit}>Submit</button>
                 </div>
 
 

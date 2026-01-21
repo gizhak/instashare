@@ -7,9 +7,10 @@
     align-items: center;
     gap: 5px;
     padding: 20px;
-    border: 1px solid var(--inst-border);
-    border-radius: 8px;
+    /* border: 1px solid var(--inst-border);
+    border-radius: 8px; */
     background-color: var(--inst-bg);
+    margin-top: 50px;
 
     .edit-title {
         width: 556px;

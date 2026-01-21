@@ -45,7 +45,7 @@ export function UserDetails() {
 	console.log('userPosts:', userPosts);
 	console.log('otherUsers:', otherUsers);
 	console.log('bookmarkedPosts:', bookmarkedPosts);
-	
+
 
 	// here we will get them from collection
 	// const myPosts = postsCollection
@@ -74,6 +74,7 @@ export function UserDetails() {
 	}
 
 	async function handleImageChange(ev) {
+		setIsUploading(true);
 		console.log('ev:', ev.target.files[0]);
 		const file = ev.target.files[0];
 		if (!file) return;
@@ -102,6 +103,7 @@ export function UserDetails() {
 		} finally {
 			setIsUploading(false);
 		}
+
 	}
 
 	async function handleRemoveImage(ev) {

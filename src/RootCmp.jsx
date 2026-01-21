@@ -32,8 +32,9 @@ export function RootCmp() {
 
 	return (
 		<div className="main-container">
+			<AppHeader />
+			<UserMsg />
 			<main>
-				<UserMsg />
 				<Routes>
 					<Route path="/" element={
 						loggedInUser ? <HomePage />
@@ -51,14 +52,6 @@ export function RootCmp() {
 						{/* element from More button */}
 						<Route path="setting" element={<EditUser />} />
 					</Route>
-
-					{/* <Route path="car/:carId" element={<CarDetails />} /> */}
-					{/* <Route path="admin" element={<AdminIndex />} /> */}
-					{/* <Route path="about" element={<AboutUs />}>
-						<Route path="team" element={<AboutTeam />} />
-						<Route path="vision" element={<AboutVision />} />
-					</Route> */}
-
 
 
 					<Route path="auth" element={<LoginSignup />}>
