@@ -17,6 +17,9 @@ import {
 import { uploadService } from '../services/upload.service';
 import { userService } from '../services/user';
 
+//navigate to other user details
+import { EditUser } from '../cmps/EditUser';
+
 import { PostList } from '../cmps/PostList';
 import { Modal } from '../cmps/Modal';
 import { SvgIcon } from '../cmps/SvgIcon';
@@ -191,7 +194,7 @@ export function UserDetails() {
 					</div>
 
 					<div className="btns-section">
-						<button className="edit-btn">Edit profile</button>
+						<button className="edit-btn"  >Edit profile</button>
 						<button className="archive-btn">View archive</button>
 					</div>
 
