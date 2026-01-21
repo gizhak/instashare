@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams, NavLink } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+
+import { useNavigate } from 'react-router';
 
 import { loadUser, loadUsers } from '../store/actions/user.actions';
 import { store } from '../store/store';
@@ -24,27 +26,32 @@ import { loadPosts } from '../store/actions/post.actions';
 
 
 export function UserDetails() {
+	//get user id from params
 	const params = useParams();
 	const user = useSelector((storeState) => storeState.userModule.watchedUser);
-
 	const users = useSelector((storeState) => storeState.userModule.users);
 
+	//modal state
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isUploading, setIsUploading] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
+	//tab state
 	const [activeTab, setActiveTab] = useState('posts');
-
+	//get all posts from store
 	const posts = useSelector((storeState) => storeState.postModule.posts);
 
+	//filter posts for this user
 	const userPosts = posts.filter((post) => post.by._id === user?._id);
 	const otherUsers = users.filter((u) => u._id !== user?._id);
 	const bookmarkedPosts = posts.filter((post) => user?.savedPostIds?.includes(post._id));
 
+	const navigate = useNavigate()
 
-	console.log('Posts:', posts);
-	console.log('userPosts:', userPosts);
-	console.log('otherUsers:', otherUsers);
-	console.log('bookmarkedPosts:', bookmarkedPosts);
+	// console.log('Posts:', posts);
+	// console.log('userPosts:', userPosts);
+	// console.log('otherUsers:', otherUsers);
+	// console.log('bookmarkedPosts:', bookmarkedPosts);
 
 
 	// here we will get them from collection
@@ -53,6 +60,8 @@ export function UserDetails() {
 	// 	.sort({ _id: -1 });
 
 
+
+	//load user on params change
 	useEffect(() => {
 		loadUser(params.id);
 		loadUsers();
@@ -66,6 +75,7 @@ export function UserDetails() {
 		};
 	}, [params.id]);
 
+	//socket function
 	function onUserUpdate(user) {
 		showSuccessMsg(
 			`This user ${user.fullname} just got updated from socket, new score: ${user.score}`
@@ -73,9 +83,10 @@ export function UserDetails() {
 		store.dispatch({ type: 'SET_WATCHED_USER', user });
 	}
 
+	//image upload functions
 	async function handleImageChange(ev) {
 		setIsUploading(true);
-		console.log('ev:', ev.target.files[0]);
+		// console.log('ev:', ev.target.files[0]);
 		const file = ev.target.files[0];
 		if (!file) return;
 
@@ -106,6 +117,7 @@ export function UserDetails() {
 
 	}
 
+	//remove image function
 	async function handleRemoveImage(ev) {
 		const DEFAULT_USER_IMG =
 			'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png';
@@ -116,6 +128,14 @@ export function UserDetails() {
 		store.dispatch({ type: 'SET_USER', user: updatedUser });
 
 		setIsModalOpen(false);
+	}
+
+	//navigation to other user details
+	async function handleNavigate(userId) {
+		setIsLoading(true);
+		// console.log('Navigating to user with ID:', userId);
+		navigate(`/user/${userId}`)
+		window.location.reload()
 	}
 
 	return (
@@ -176,11 +196,20 @@ export function UserDetails() {
 					</div>
 
 					{/* other users */}
+					{isLoading && (
+						<div className="loading-overlay">
+							<div className="loading-dots">
+								<span></span>
+								<span></span>
+								<span></span>
+							</div>
+						</div>
+					)}
 					<div className="suggestions-users">
 						{otherUsers.map((u) => (
-							<div className="suggestion-user" key={u._id}>
+							<div className="suggestion-user" key={u._id} onClick={() => handleNavigate(u._id)}>
 								<img className="suggestion-user-img" src={u.imgUrl} />
-								<h4 onClick={() => navigate(`/user/${u._id}`)}>
+								<h4>
 									{u.fullname}
 								</h4>
 							</div>

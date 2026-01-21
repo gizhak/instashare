@@ -14,7 +14,7 @@ export function AppHeader() {
 	const user = useSelector((storeState) => storeState.userModule.user);
 	const navigate = useNavigate();
 
-	console.log('user in AppHeader:', user);
+	// console.log('user in AppHeader:', user);
 
 	const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
 	const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
@@ -55,24 +55,24 @@ export function AppHeader() {
 	}
 
 	function toggleTheme() {
-	const root = document.documentElement;
-	const currentTheme = root.getAttribute('data-theme');
-	const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+		const root = document.documentElement;
+		const currentTheme = root.getAttribute('data-theme');
+		const newTheme = currentTheme === 'light' ? 'dark' : 'light';
 
-	root.setAttribute('data-theme', newTheme);
-			
+		root.setAttribute('data-theme', newTheme);
 
-// Optional: Save preference to localStorage	
-// localStorage.setItem('theme', newTheme);
-			}
 
-// Optional: Load saved theme on page load
-// document.addEventListener('DOMContentLoaded', () => {
-// 	const savedTheme = localStorage.getItem('theme');
-// 	if (savedTheme) {
-// 		document.documentElement.setAttribute('data-theme', savedTheme);
-// 	}
-// });
+		// Optional: Save preference to localStorage	
+		// localStorage.setItem('theme', newTheme);
+	}
+
+	// Optional: Load saved theme on page load
+	// document.addEventListener('DOMContentLoaded', () => {
+	// 	const savedTheme = localStorage.getItem('theme');
+	// 	if (savedTheme) {
+	// 		document.documentElement.setAttribute('data-theme', savedTheme);
+	// 	}
+	// });
 
 	return (
 		<header className={`app-header full ${isMoreMenuOpen ? 'menu-open' : ''}`}>

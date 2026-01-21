@@ -31,8 +31,10 @@ export function RootCmp() {
 	const loggedInUser = useSelector((storeState) => storeState.userModule.user)
 
 	return (
-		<div className="main-container">
-			<AppHeader />
+		<div className="main-container grid grid-rows-3">
+			<div className='header-container'>
+				<AppHeader />
+			</div>
 			<UserMsg />
 			<main>
 				<Routes>
