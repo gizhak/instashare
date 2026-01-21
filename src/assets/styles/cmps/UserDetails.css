@@ -37,7 +37,7 @@
 		/* border: 1px solid rgba(255, 255, 255, 0.3); */
 		border-radius: 10px;
 		color: var(--inst-text);
-		font-size: .8rem;
+		font-size: 0.8rem;
 		cursor: pointer;
 		transition: background-color 0.2s;
 
@@ -80,7 +80,6 @@
 			text-align: center;
 		} */
 	}
-
 }
 
 
@@ -142,7 +141,6 @@
 		border-radius: 50%;
 		object-fit: cover;
 		cursor: pointer;
-
 	}
 
 	p {
@@ -180,7 +178,6 @@
 			color: var(--inst-text);
 		}
 	}
-
 }
 
 .nav-bar {
@@ -191,7 +188,6 @@
 	gap: 180px;
 	margin-top: 3.5rem;
 	margin-bottom: -0.3rem;
-
 
 	.tab-link {
 		cursor: pointer;
@@ -250,7 +246,6 @@
 		margin-top: 10px;
 		text-align: center;
 	}
-
 }
 
 /* Modal Title */
@@ -286,13 +281,12 @@
 	.upload {
 		color: var(--inst-signup);
 		font-weight: 600;
-		font-size: .8rem;
+		font-size: 0.8rem;
 	}
-
 }
 
 .modal-item.remove {
-	color: #ED4956;
+	color: #ed4956;
 	font-weight: 600;
 }
 
@@ -319,5 +313,15 @@
 
 	.user-details {
 		width: 100vw;
+	}
+}
+
+.btns-section .follow-btn {
+	background-color: var(--inst-signup);
+
+	font-weight: 600;
+
+	&:hover {
+		background-color: #4150f7;
 	}
 }

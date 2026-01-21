@@ -26,15 +26,17 @@ import { SvgIcon } from '../cmps/SvgIcon';
 import { LoadingSpinner } from '../cmps/LoadingSpinner';
 
 import { loadPosts } from '../store/actions/post.actions';
-
+// for follow functionality
+import { updateUser } from '../store/actions/user.actions';
 
 export function UserDetails() {
 	//get user id from params
 	const params = useParams();
 	const user = useSelector((storeState) => storeState.userModule.watchedUser);
+	const loggedInUser = useSelector((storeState) => storeState.userModule.user);
 	const users = useSelector((storeState) => storeState.userModule.users);
-
-	//modal state
+	const isFollowing = loggedInUser.following?.includes(user?._id);
+	const navigate = useNavigate();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [isUploading, setIsUploading] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
@@ -133,6 +135,30 @@ export function UserDetails() {
 		setIsModalOpen(false);
 	}
 
+	async function handleFollow() {
+  try {
+    let updates;
+    
+    if (isFollowing) {
+      // Unfollow: remove user._id from following array
+      updates = {
+        following: loggedInUser.following.filter(id => id !== user._id),
+      };
+      await updateUser(updates);
+      showSuccessMsg('You unfollowed this user');
+    } else {
+      // Follow: add user._id to following array
+      updates = {
+        following: [...loggedInUser.following, user._id],
+      };
+      await updateUser(updates);
+      showSuccessMsg('You are now following this user');
+    }
+  } catch (error) {
+    console.error('Error following/unfollowing user:', error);
+    showErrorMsg('Failed to update follow status');
+  }
+}
 	//navigation to other user details
 	async function handleNavigate(userId) {
 		setIsLoading(true);
@@ -194,7 +220,16 @@ export function UserDetails() {
 					</div>
 
 					<div className="btns-section">
-						<button className="edit-btn"  >Edit profile</button>
+						{loggedInUser._id === user._id ? (
+						<button className="edit-btn" onClick={() => navigate(`/setting`)}>
+							Edit profile
+						</button>
+						) : (
+						<button className="follow-btn" onClick={handleFollow}>
+							{isFollowing ? 'Unfollow' : 'Follow'}
+					
+						</button>
+						)}
 						<button className="archive-btn">View archive</button>
 					</div>
 
