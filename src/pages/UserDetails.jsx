@@ -212,8 +212,8 @@ export function UserDetails() {
 							</div>
 
 							<div className="user-stats">
-								<p> {userPosts.length || 0} posts</p>
-								<p>{user?.followers?.length || 0} followers</p>
+								<p>{userPosts.length || 0} {userPosts.length === 1 ? 'post' : 'posts'}</p>
+								<p>{user?.followers?.length || 0} {user?.followers?.length === 1 ? 'follower' : 'followers'}</p>
 								<p>{user?.following?.length || 0} following</p>
 							</div>
 						</div>
