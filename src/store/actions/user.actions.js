@@ -9,6 +9,7 @@ import {
 	SET_USER,
 	SET_USERS,
 	SET_WATCHED_USER,
+	UPDATE_WATCHED_USER,
 	UPDATE_USER,
 } from '../reducers/user.reducer';
 
@@ -87,12 +88,42 @@ export async function loadUser(userId) {
 	}
 }
 
-export async function updateUser(updates) {
+// export async function updateUser(updates) {
+// 	try {
+// 		const loggedinUser = userService.getLoggedinUser();
+// 		const updatedUser = { ...loggedinUser, ...updates };
+// 		await userService.update(updatedUser);
+// 		store.dispatch({ type: UPDATE_USER, updates: updatedUser });
+// 	} catch (err) {
+// 		console.log('UserActions: err in updateUser', err);
+// 		throw err;
+// 	}
+// }
+
+export async function updateUser(updates, userId = null) {
 	try {
 		const loggedinUser = userService.getLoggedinUser();
-		const updatedUser = { ...loggedinUser, ...updates };
+		const targetUserId = userId || loggedinUser._id;
+
+		// Fetch the current user data
+		let userToUpdate;
+		if (targetUserId === loggedinUser._id) {
+			userToUpdate = loggedinUser;
+		} else {
+			userToUpdate = await userService.getById(targetUserId);
+		}
+
+		const updatedUser = { ...userToUpdate, ...updates };
 		await userService.update(updatedUser);
-		store.dispatch({ type: UPDATE_USER, updates: updatedUser });
+
+		// Dispatch to appropriate store location
+		if (targetUserId === loggedinUser._id) {
+			store.dispatch({ type: UPDATE_USER, updates: updatedUser });
+		} else {
+			store.dispatch({ type: UPDATE_WATCHED_USER, user: updatedUser });
+		}
+
+		return updatedUser;
 	} catch (err) {
 		console.log('UserActions: err in updateUser', err);
 		throw err;

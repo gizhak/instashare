@@ -9,6 +9,7 @@ export const REMOVE_USER = 'REMOVE_USER';
 export const SET_USERS = 'SET_USERS';
 export const SET_SCORE = 'SET_SCORE';
 export const UPDATE_USER = 'UPDATE_USER';
+export const UPDATE_WATCHED_USER = 'UPDATE_WATCHED_USER';
 
 const initialState = {
 	count: 10,
@@ -33,6 +34,9 @@ export function userReducer(state = initialState, action) {
 			newState = { ...state, user: action.user };
 			break;
 		case SET_WATCHED_USER:
+			newState = { ...state, watchedUser: action.user };
+			break;
+		case UPDATE_WATCHED_USER:
 			newState = { ...state, watchedUser: action.user };
 			break;
 		case REMOVE_USER:

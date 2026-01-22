@@ -53,7 +53,6 @@ export function UserDetails() {
 
 	const navigate = useNavigate()
 
-	// console.log('Posts:', posts);
 	// console.log('userPosts:', userPosts);
 	// console.log('otherUsers:', otherUsers);
 	// console.log('bookmarkedPosts:', bookmarkedPosts);
@@ -63,7 +62,6 @@ export function UserDetails() {
 	// const myPosts = postsCollection
 	// 	.find({ 'by._id': loggedinUser._id })
 	// 	.sort({ _id: -1 });
-
 
 
 	//load user on params change
@@ -136,32 +134,42 @@ export function UserDetails() {
 	}
 
 	async function handleFollow() {
-  try {
-    let updates;
-    
-    if (isFollowing) {
-      // Unfollow: remove user._id from following array
-      updates = {
-        following: loggedInUser.following.filter(id => id !== user._id),
-      };
-      await updateUser(updates);
-      showSuccessMsg('You unfollowed this user');
-    } else {
-      // Follow: add user._id to following array
-      updates = {
-        following: [...loggedInUser.following, user._id],
-      };
-      await updateUser(updates);
-      showSuccessMsg('You are now following this user');
-    }
-  } catch (error) {
-    console.error('Error following/unfollowing user:', error);
-    showErrorMsg('Failed to update follow status');
-  }
-}
-	//navigation to other user details
-	async function handleNavigate(userId) {
-		setIsLoading(true);
+			try {
+				if (isFollowing) {
+				// Update logged-in user (remove from following)
+				await updateUser({
+					following: loggedInUser.following.filter(id => id !== user._id),
+				});
+
+				// Update watched user (remove from followers)
+				await updateUser({
+					followers: user.followers.filter(id => id !== loggedInUser._id),
+				}, user._id);
+
+				showSuccessMsg('You unfollowed this user');
+				} else {
+				// Update logged-in user (add to following)
+				await updateUser({
+					following: [...loggedInUser.following, user._id],
+				});
+
+				// Update watched user (add to followers)
+				await updateUser({
+					followers: [...user.followers, loggedInUser._id],
+				}, user._id);
+
+				showSuccessMsg('You are now following this user');
+				}
+			} catch (error) {
+				console.error('Error following/unfollowing user:', error);
+				showErrorMsg('Failed to update follow status');
+			}
+			}
+
+
+//navigation to other user details
+async function handleNavigate(userId) {
+	setIsLoading(true);
 		// console.log('Navigating to user with ID:', userId);
 		navigate(`/user/${userId}`)
 		window.location.reload()
@@ -219,19 +227,23 @@ export function UserDetails() {
 						</div>
 					</div>
 
-					<div className="btns-section">
+				
 						{loggedInUser._id === user._id ? (
+						<section className="btns-section">
 						<button className="edit-btn" onClick={() => navigate(`/setting`)}>
 							Edit profile
 						</button>
+						<button className="archive-btn">View archive</button>
+                        </section>
 						) : (
-						<button className="follow-btn" onClick={handleFollow}>
-							{isFollowing ? 'Unfollow' : 'Follow'}
+						<section className="btns-section">
+						<button className={isFollowing ? '' : 'follow-btn'} onClick={handleFollow}>
+							{isFollowing ? 'Following' : 'Follow'}
 					
 						</button>
+						<button className="message-btn">Message</button>
+					    </section>
 						)}
-						<button className="archive-btn">View archive</button>
-					</div>
 
 					{/* other users */}
 					{isLoading && (
