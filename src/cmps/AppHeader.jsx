@@ -3,21 +3,19 @@ import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
 import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service';
 import { logout } from '../store/actions/user.actions';
-import { CreatePost } from './CreatePost';
 
 import { useState } from 'react';
 
 // Icons
 import { FaInstagram } from "react-icons/fa6";
 
-export function AppHeader() {
+export function AppHeader({ onCreatePostClick }) {
 	const user = useSelector((storeState) => storeState.userModule.user);
 	const navigate = useNavigate();
 
 	// console.log('user in AppHeader:', user);
 
 	const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
-	const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
 
 	async function onLogout() {
 		try {
@@ -123,7 +121,7 @@ export function AppHeader() {
 						<span className="text">Notifications</span>
 					</div>
 				</NavLink>
-				<div className="nav-item create-nav-item" onClick={(e) => { e.preventDefault(); setIsCreatePostOpen(true); closeMoreMenu(); }}>
+				<div className="nav-item create-nav-item" onClick={(e) => { e.preventDefault(); onCreatePostClick(); closeMoreMenu(); }}>
 					<svg aria-label="New post" className="icon" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>New post</title>
 						<path d="M21 11h-8V3a1 1 0 1 0-2 0v8H3a1 1 0 1 0 0 2h8v8a1 1 0 1 0 2 0v-8h8a1 1 0 1 0 0-2Z"></path></svg>
 					<span className="text">Create</span>
@@ -210,8 +208,6 @@ export function AppHeader() {
 					</NavLink>
 				)}
 			</nav>
-			{isCreatePostOpen && <CreatePost onClose={() => setIsCreatePostOpen(false)} />}
 		</header>
 	);
 }
-

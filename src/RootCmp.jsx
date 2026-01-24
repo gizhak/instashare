@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router';
 import { useSelector } from 'react-redux'
 
@@ -29,11 +29,12 @@ import { PostIndex } from './pages/PostIndex.jsx';
 export function RootCmp() {
 
 	const loggedInUser = useSelector((storeState) => storeState.userModule.user)
+	const [isCreatePostOpen, setIsCreatePostOpen] = useState(false)
 
 	return (
 		<div className="main-container grid grid-rows-3">
 			<div className='header-container'>
-				<AppHeader />
+				<AppHeader onCreatePostClick={() => setIsCreatePostOpen(true)} />
 			</div>
 			<UserMsg />
 			<main>
@@ -64,6 +65,8 @@ export function RootCmp() {
 
 				{/* <AppFooter /> */}
 			</main>
+
+			{isCreatePostOpen && <CreatePost onClose={() => setIsCreatePostOpen(false)} />}
 		</div>
 	);
 }

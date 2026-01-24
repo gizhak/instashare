@@ -3,7 +3,7 @@
 	justify-content: center;
 	margin-top: 2rem;
 
-	> article {
+	>article {
 		margin-bottom: 20px;
 	}
 }
@@ -55,6 +55,7 @@
 		&:hover {
 			text-decoration: underline;
 		}
+
 		span {
 			padding: 5px;
 			align-self: center;
@@ -67,6 +68,7 @@
 .post-desc {
 	padding: 10px;
 	margin-bottom: 20px;
+
 	span {
 		font-weight: 400;
 	}
