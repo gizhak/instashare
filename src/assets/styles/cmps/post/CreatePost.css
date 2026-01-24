@@ -87,13 +87,13 @@ body:has(.create-post-overlay) .app-header {
     background: transparent;
     border: none;
     color: var(--inst-text);
-    font-size: 18px;
+    font-size: 23px;
     cursor: pointer;
     padding: 8px;
 }
 
 .create-post-title {
-    font-size: 12px;
+    font-size: 15px;
     font-weight: 600;
     color: var(--inst-text);
     margin: 0;
@@ -106,8 +106,8 @@ body:has(.create-post-overlay) .app-header {
     background: transparent;
     border: none;
     color: var(--inst-signup);
-    font-size: 10px;
-    /* font-weight: 600; */
+    font-size: 13px;
+    font-weight: 700;
     cursor: pointer;
     padding: 8px 16px;
     z-index: 10;
@@ -122,8 +122,8 @@ body:has(.create-post-overlay) .app-header {
 /* Close Button */
 .close-btn {
     position: absolute;
-    top: 12px;
-    right: 12px;
+    top: 0px;
+    right: 0px;
     background: transparent;
     border: none;
     color: var(--inst-text);
@@ -286,6 +286,7 @@ body:has(.create-post-overlay) .app-header {
     left: 0;
     width: 100vw;
     height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -294,8 +295,8 @@ body:has(.create-post-overlay) .app-header {
 
 .discard-modal {
     background: var(--inst-popup-comment);
-    border-radius: 12px;
-    width: 400px;
+    border-radius: 18px;
+    width: 500px;
     text-align: center;
     overflow: hidden;
 }
@@ -318,7 +319,7 @@ body:has(.create-post-overlay) .app-header {
     width: 100%;
     padding: 14px;
     border: none;
-    border-top: 1px solid var(--inst-border);
+    border-top: 1px solid #2f2e2e;
     background: transparent;
     font-size: 14px;
     cursor: pointer;
@@ -330,10 +331,10 @@ body:has(.create-post-overlay) .app-header {
     font-weight: 700;
 }
 
-.discard-btn:hover,
+/* .discard-btn:hover,
 .cancel-discard-btn:hover {
     background: rgba(255, 255, 255, 0.05);
-}
+} */
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
