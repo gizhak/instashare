@@ -27,7 +27,7 @@
 		min-width: 1000px;
 		/* border-top: 1px solid var(--inst-scrollbar); */
 	}
-	button:not(.nav-arrow, .post-comment-btn) {
+	button:not(.nav-arrow, .post-comment-btn, .close-btn-modal) {
 		width: 100%;
 		padding: 14px;
 		margin-bottom: 1em;

@@ -111,7 +111,8 @@ export function Feed() {
 									<div>
 										{loggedInUser &&
 											loggedInUser.following &&
-											!loggedInUser.following.includes(feedPost.by._id) && (
+											!loggedInUser.following.includes(feedPost.by._id) &&
+											loggedInUser._id !== feedPost.by._id && (
 												<span onClick={() => followUser(feedPost.by._id)}>
 													Follow
 												</span>

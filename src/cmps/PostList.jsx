@@ -78,12 +78,12 @@ export function PostList({ posts, isExplore = false, handleLike }) {
 								onClick={() => handleOpenPost(post._id, index)}
 							>
 								<div className="post-stats">
-									<div className={`stat ${isLiked ? 'liked' : ''}`}>
+									{/* <div className={`stat ${isLiked ? 'liked' : ''}`}>
 										<SvgIcon iconName={isLiked ? 'likeFilled' : 'like'} />
 										<span>{post?.likedBy?.length || 0}</span>
-									</div>
+									</div> */}
 									<div className="stat">
-										<SvgIcon iconName="comment" />
+										<SvgIcon iconName="commentFilled" />
 										<span>{post?.comments?.length || 0}</span>
 									</div>
 								</div>
