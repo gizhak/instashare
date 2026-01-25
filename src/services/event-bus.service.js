@@ -26,6 +26,10 @@ export function showUserMsg(msg) {
 	eventBus.emit(SHOW_MSG, msg);
 }
 
+export function confirmUserMsg(txt) {
+	eventBus.emit(SHOW_MSG, { txt, type: 'confirm' });
+}
+
 export function showSuccessMsg(txt) {
 	showUserMsg({ txt, type: 'success' });
 }
@@ -37,4 +41,13 @@ export function showGeneralMsg(txt) {
 	showUserMsg({ txt, type: 'general' });
 }
 
+export function showLoadingMsg() {
+	showUserMsg({ txt: 'Loading...', type: 'loading' });
+}
+
+export function confirmMsg(txt) {
+	confirmUserMsg(txt);
+}
+
 window.showUserMsg = showUserMsg;
+window.confirmMsg = confirmMsg;

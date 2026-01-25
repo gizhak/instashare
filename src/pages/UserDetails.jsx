@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router';
 
 import { loadUser, loadUsers } from '../store/actions/user.actions';
 import { store } from '../store/store';
-import { showSuccessMsg } from '../services/event-bus.service';
+import { showSuccessMsg, confirmMsg } from '../services/event-bus.service';
 import {
 	socketService,
 	SOCKET_EVENT_USER_UPDATED,
@@ -115,6 +115,8 @@ export function UserDetails() {
 			console.error('Error uploading image:', err);
 			alert('Failed to upload image. Please try again.');
 		} finally {
+
+			showSuccessMsg('Profile photo updated');
 			setIsUploading(false);
 		}
 
@@ -124,18 +126,21 @@ export function UserDetails() {
 	async function handleRemoveImage(ev) {
 		const DEFAULT_USER_IMG =
 			'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png';
-		window.confirm('Are you sure you want to remove your profile photo?');
+		// window.confirm('Are you sure you want to remove your profile photo?');
+		// confirmMsg('Are you sure you want to remove your profile photo new?');
 		const updatedUser = { ...user, imgUrl: DEFAULT_USER_IMG };
 		await userService.update(updatedUser);
 		store.dispatch({ type: 'SET_WATCHED_USER', user: updatedUser });
 		store.dispatch({ type: 'SET_USER', user: updatedUser });
 
+		showSuccessMsg('Profile photo removed');
+
 		setIsModalOpen(false);
 	}
 
 	async function handleFollow() {
-			try {
-				if (isFollowing) {
+		try {
+			if (isFollowing) {
 				// Update logged-in user (remove from following)
 				await updateUser({
 					following: loggedInUser.following.filter(id => id !== user._id),
@@ -147,7 +152,7 @@ export function UserDetails() {
 				}, user._id);
 
 				showSuccessMsg('You unfollowed this user');
-				} else {
+			} else {
 				// Update logged-in user (add to following)
 				await updateUser({
 					following: [...loggedInUser.following, user._id],
@@ -159,17 +164,17 @@ export function UserDetails() {
 				}, user._id);
 
 				showSuccessMsg('You are now following this user');
-				}
-			} catch (error) {
-				console.error('Error following/unfollowing user:', error);
-				showErrorMsg('Failed to update follow status');
 			}
-			}
+		} catch (error) {
+			console.error('Error following/unfollowing user:', error);
+			showErrorMsg('Failed to update follow status');
+		}
+	}
 
 
-//navigation to other user details
-async function handleNavigate(userId) {
-	setIsLoading(true);
+	//navigation to other user details
+	async function handleNavigate(userId) {
+		setIsLoading(true);
 		// console.log('Navigating to user with ID:', userId);
 		navigate(`/user/${userId}`)
 		window.location.reload()
@@ -227,23 +232,23 @@ async function handleNavigate(userId) {
 						</div>
 					</div>
 
-				
-						{loggedInUser._id === user._id ? (
+
+					{loggedInUser._id === user._id ? (
 						<section className="btns-section">
-						<button className="edit-btn" onClick={() => navigate(`/setting`)}>
-							Edit profile
-						</button>
-						<button className="archive-btn">View archive</button>
-                        </section>
-						) : (
+							<button className="edit-btn" onClick={() => navigate(`/setting`)}>
+								Edit profile
+							</button>
+							<button className="archive-btn">View archive</button>
+						</section>
+					) : (
 						<section className="btns-section">
-						<button className={isFollowing ? '' : 'follow-btn'} onClick={handleFollow}>
-							{isFollowing ? 'Following' : 'Follow'}
-					
-						</button>
-						<button className="message-btn">Message</button>
-					    </section>
-						)}
+							<button className={isFollowing ? '' : 'follow-btn'} onClick={handleFollow}>
+								{isFollowing ? 'Following' : 'Follow'}
+
+							</button>
+							<button className="message-btn">Message</button>
+						</section>
+					)}
 
 					{/* other users */}
 					{isLoading && (

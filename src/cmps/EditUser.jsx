@@ -12,6 +12,7 @@ import { LoadingSpinner } from '../cmps/LoadingSpinner';
 import { loadUser } from '../store/actions/user.actions';
 import { userService } from '../services/user';
 import { useDispatch } from 'react-redux';
+import { showSuccessMsg } from '../services/event-bus.service';
 
 export function EditUser() {
 
@@ -20,6 +21,9 @@ export function EditUser() {
     const [charCount, setCharCount] = useState(0)
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedGender, setSelectedGender] = useState('Prefer not to say');
+    const [website, setWebsite] = useState('');
+    const [bio, setBio] = useState('');
+    const [customGender, setCustomGender] = useState('');
 
     // get fun from userdetails
     const [isUploading, setIsUploading] = useState(false);
@@ -28,12 +32,20 @@ export function EditUser() {
 
     console.log('user in EditUser:', user);
 
-    //     loadUser(user);
-    // }, [user]);
+    useEffect(() => {
+        if (user) {
+            setWebsite(user.website || '');
+            setBio(user.bio || '');
+            setCharCount(user.bio?.length || 0);
+            setSelectedGender(user.gender || 'Prefer not to say');
+            setCustomGender(user.customGender || '');
+        }
+    }, [user]);
 
     function handleChange(ev) {
         const value = ev.target.value;
         console.log('value:', value);
+        setBio(value);
         setCharCount(value.length);
     }
 
@@ -66,6 +78,7 @@ export function EditUser() {
             console.error('Error uploading image:', err);
             alert('Failed to upload image. Please try again.');
         } finally {
+            showSuccessMsg('Profile photo updated');
             setIsUploading(false);
         }
 
@@ -73,9 +86,26 @@ export function EditUser() {
 
     async function handleSubmit(ev) {
         ev.preventDefault();
-        // go back to previous page
-        navigate(-1);
 
+        try {
+            const updatedUser = {
+                ...user,
+                website,
+                bio,
+                gender: selectedGender,
+                customGender: selectedGender === 'Custom' ? customGender : ''
+            };
+
+            await userService.update(updatedUser);
+            store.dispatch({ type: 'SET_WATCHED_USER', user: updatedUser });
+            store.dispatch({ type: 'SET_USER', user: updatedUser });
+
+            showSuccessMsg('Profile updated');
+            navigate(-1);
+        } catch (err) {
+            console.error('Error updating profile:', err);
+            alert('Failed to update profile. Please try again.');
+        }
     }
 
     return (
@@ -101,25 +131,38 @@ export function EditUser() {
             </div>
             <form className='edit-user-form' action="">
                 <label htmlFor="website">Website</label>
-                <input type="text" id="website" name="website" placeholder="Website" />
+                <input
+                    type="text"
+                    id="website"
+                    name="website"
+                    placeholder="Website"
+                    value={website}
+                    onChange={(e) => setWebsite(e.target.value)}
+                />
                 <p className='web-p'>Editing your links is only available on mobile. Visit the Instagram app and edit your profile to change the websites in your bio.</p>
 
 
                 <div className='edit-bio-container'>
                     <label htmlFor="bio">Bio</label>
-                    <textarea id="bio" name="bio" placeholder="Bio" onChange={handleChange} />
+                    <textarea
+                        id="bio"
+                        name="bio"
+                        placeholder="Bio"
+                        value={bio}
+                        onChange={handleChange}
+                        maxLength={150}
+                    />
                     <span className="char-count">{charCount}/150</span>
                 </div>
 
                 <div className='gender-container'>
                     <label htmlFor="Gender">Gender</label>
-                    <div className={`gender-select-container ${selectedGender === 'Custom' ? 'active' : ''}`}>
+                    <div className={`gender-select-container ${selectedGender === 'Custom' && !customGender ? 'active' : ''}`}>
                         <button className='gender-select-btn' type="button" onClick={() => setIsModalOpen(!isModalOpen)}>
                             <div className={`selected-text`}>
-                                {selectedGender}
-                                {/* {selectedGender === 'Custom' && (
-                                    <input type="text" placeholder="Custom gender" />
-                                )} */}
+                                {selectedGender === 'Custom' && customGender
+                                    ? customGender
+                                    : selectedGender}
                             </div>
                             <svg aria-label="Down chevron" className="select-btn" fill="currentColor" height="12" role="img" viewBox="0 0 24 24" width="12"><title>Down chevron</title>
                                 <path d="M21 17.502a.997.997 0 0 1-.707-.293L12 8.913l-8.293 8.296a1 1 0 1 1-1.414-1.414l9-9.004a1.03 1.03 0 0 1 1.414 0l9 9.004A1 1 0 0 1 21 17.502Z"></path></svg>
@@ -159,6 +202,8 @@ export function EditUser() {
                                         type="text"
                                         placeholder="Custom gender"
                                         className={`custom-gender-input`}
+                                        value={customGender}
+                                        onChange={(e) => setCustomGender(e.target.value)}
                                         disabled={selectedGender !== 'Custom'}
                                     />
 
