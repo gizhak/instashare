@@ -96,6 +96,7 @@ export function CreatePost({ onClose }) {
                 },
                 likedBy: [],
                 comments: [],
+                createdAt: new Date().toISOString(),
             };
 
             await addPost(newPost);

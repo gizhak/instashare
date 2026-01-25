@@ -129,6 +129,35 @@ export function PostDetailsContent({
 		}
 	}
 
+	function getTimeAgo(createdAt) {
+		console.log('Calculating time ago for:', createdAt);
+		if (!createdAt) return '';
+
+		const now = new Date();
+		const postDate = new Date(createdAt);
+		const diffInMs = now - postDate;
+		const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
+		const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
+		const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+		const diffInWeeks = Math.floor(diffInDays / 7);
+		const diffInMonths = Math.floor(diffInDays / 30);
+		const diffInYears = Math.floor(diffInDays / 365);
+
+		if (diffInMinutes < 1) return 'now';
+		if (diffInMinutes === 1) return '1 minute ago';
+		if (diffInMinutes < 60) return `${diffInMinutes} minutes ago`;
+		if (diffInHours === 1) return '1 hour ago';
+		if (diffInHours < 24) return `${diffInHours} hours ago`;
+		if (diffInDays === 1) return '1 day ago';
+		if (diffInDays < 7) return `${diffInDays} days ago`;
+		if (diffInWeeks === 1) return '1 week ago';
+		if (diffInWeeks < 4) return `${diffInWeeks} weeks ago`;
+		if (diffInMonths === 1) return '1 month ago';
+		if (diffInMonths < 12) return `${diffInMonths} months ago`;
+		if (diffInYears === 1) return '1 year ago';
+		return `${diffInYears} years ago`;
+	}
+
 	return (
 		<div className="post-details-content">
 			{isDeleting && (
@@ -264,7 +293,7 @@ export function PostDetailsContent({
 							)}
 						</div>
 
-						<div className="post-date">{post.createdAt || '7 days ago'}</div>
+						<div className="post-date">{getTimeAgo(post.createdAt)}</div>
 					</div>
 
 					{/* Add Comment Form */}
