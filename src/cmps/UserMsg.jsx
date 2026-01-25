@@ -16,7 +16,7 @@ export function UserMsg() {
 				timeoutIdRef.current = null;
 				clearTimeout(timeoutIdRef.current);
 			}
-			timeoutIdRef.current = setTimeout(closeMsg, 3000);
+			timeoutIdRef.current = setTimeout(closeMsg, 5000);
 		});
 
 		socketService.on(SOCKET_EVENT_REVIEW_ABOUT_YOU, (review) => {
@@ -37,8 +37,8 @@ export function UserMsg() {
 		return msg ? 'visible' : '';
 	}
 	return (
-		<section className={`user-msg ${msg?.type} ${msgClass()}`}>
-			<button onClick={closeMsg}>x</button>
+		<section className={`user-msg ${msg?.type} ${msgClass()}`} onClick={closeMsg}>
+			{/* <button onClick={closeMsg}>x</button> */}
 			{msg?.txt}
 		</section>
 	);
