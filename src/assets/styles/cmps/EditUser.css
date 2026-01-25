@@ -213,9 +213,9 @@
                 /* top: 285px;
                 right: 250px;
                 left: 250px; */
-                width: 365px;
-                height: 360px;
-                background-color: var(--inst-more-dropdown-hover-button);
+                width: 325px;
+                height: 400px;
+                background-color: var(--inst-more-dropdown-hover);
                 border: none;
                 border-radius: 18px;
                 z-index: 10;
