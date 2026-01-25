@@ -85,6 +85,7 @@ async function save(post) {
 			comments: post.comments || [],
 			likedBy: post.likedBy || [],
 			tags: post.tags || [],
+			createdAt: post.createdAt || new Date().toISOString(),
 		};
 		savedPost = await storageService.post(STORAGE_KEY, postToSave);
 	}
@@ -204,6 +205,7 @@ export function _createPosts() {
 					},
 				],
 				tags: ['sunset', 'lake', 'travel'],
+				createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
 			},
 			{
 				_id: 's202',
@@ -219,6 +221,7 @@ export function _createPosts() {
 				comments: [],
 				likedBy: [],
 				tags: ['nature', 'lake', 'sky'],
+				createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
 			},
 			{
 				_id: 's203',
@@ -234,6 +237,7 @@ export function _createPosts() {
 				comments: [],
 				likedBy: [],
 				tags: ['chill', 'travel'],
+				createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
 			},
 			{
 				_id: 's204',
@@ -249,6 +253,7 @@ export function _createPosts() {
 				comments: [],
 				likedBy: [],
 				tags: ['mist', 'peace'],
+				createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
 			},
 			// {
 			// 	_id: 's205',
@@ -279,6 +284,7 @@ export function _createPosts() {
 				comments: [],
 				likedBy: [],
 				tags: ['adventure', 'lake'],
+				createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
 			},
 			{
 				_id: 's207',
@@ -294,6 +300,7 @@ export function _createPosts() {
 				comments: [],
 				likedBy: [],
 				tags: ['reflection', 'nature'],
+				createdAt: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString(),
 			},
 			{
 				_id: 's208',
@@ -309,6 +316,7 @@ export function _createPosts() {
 				comments: [],
 				likedBy: [],
 				tags: ['goldenhour', 'travel'],
+				createdAt: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString(),
 			},
 		];
 		localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultPosts));
