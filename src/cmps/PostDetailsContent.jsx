@@ -8,6 +8,7 @@ import {
 	removePost,
 } from '../store/actions/post.actions.js';
 import { SvgIcon } from './SvgIcon.jsx';
+import { Modal } from '../cmps/Modal';
 
 export function PostDetailsContent({
 	post,
@@ -22,7 +23,6 @@ export function PostDetailsContent({
 	const [showDeleteMenu, setShowDeleteMenu] = useState(false);
 	const [isDeleting, setIsDeleting] = useState(false);
 	const [comments, setComments] = useState(post?.comments || []);
-
 	const [isLiked, setIsLiked] = useState(() => {
 		if (!loggedinUser) return false;
 		return post?.likedBy?.some((user) => user._id === loggedinUser._id);
@@ -179,25 +179,23 @@ export function PostDetailsContent({
 					</div>
 
 					{/* Delete Menu Modal */}
-					{showDeleteMenu && (
-						<>
-							<div
-								className="backdrop"
-								onClick={() => setShowDeleteMenu(false)}
-							/>
-							<div className="modal modal-menu-centered">
-								<div className="modal-item danger" onClick={handleDeletePost}>
-									Delete
-								</div>
-								<div
-									className="modal-item cancel"
-									onClick={() => setShowDeleteMenu(false)}
-								>
-									Cancel
-								</div>
+					<Modal isOpen={showDeleteMenu} onClose={() => setShowDeleteMenu(false)} variant="menu">
+						<div className="modal-header">
+							<h3>Delete post?</h3>
+							<p>Are you sure you want to delete this post?</p>
+						</div>
+						<div className="modal-actions">
+							<div className="modal-item danger" onClick={handleDeletePost}>
+								Delete
 							</div>
-						</>
-					)}
+							<div
+								className="modal-item cancel"
+								onClick={() => setShowDeleteMenu(false)}
+							>
+								Cancel
+							</div>
+						</div>
+					</Modal>
 
 					{/* Comments Section  */}
 					<div className="post-details-comments">
@@ -212,11 +210,10 @@ export function PostDetailsContent({
 											</span>
 											<span className="comment-text">{comment.txt}</span>
 											<span
-												className={`comment-like ${
-													comment.likedBy?.includes(loggedinUser._id)
-														? 'liked'
-														: ''
-												}`}
+												className={`comment-like ${comment.likedBy?.includes(loggedinUser._id)
+													? 'liked'
+													: ''
+													}`}
 												onClick={(e) => handleToggleLikeComment(e, comment.id)}
 											>
 												{comment.likedBy?.includes(loggedinUser._id)

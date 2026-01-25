@@ -303,6 +303,21 @@
 	font-size: 14px;
 }
 
+.modal-header {
+	/* display: flex; */
+	text-align: center;
+	justify-content: center;
+	align-items: center;
+	padding: 15px 20px;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+	p {
+		font-size: 12px;
+		font-weight: 600;
+		/* color: var(--inst-text); */
+	}
+}
+
 @media (max-width: 768px) {
 	.btns-section {
 		margin-left: 0;
