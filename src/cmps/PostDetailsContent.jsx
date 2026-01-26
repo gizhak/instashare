@@ -250,10 +250,11 @@ export function PostDetailsContent({
 													: '♡'}
 											</span>
 										</div>
+										{/* Guy - fixed comment meta likes count */}
 										<div className="comment-meta">
 											<span className="comment-time">{comment.date}</span>
 											<span className="comment-likes">
-												{comment.likedBy?.length || 0} likes
+												{comment?.likedBy?.length || 0} {comment?.likedBy?.length === 1 ? 'like' : 'likes'}
 											</span>
 											{loggedinUser && comment.by?._id === loggedinUser._id && (
 												<SvgIcon
@@ -284,10 +285,10 @@ export function PostDetailsContent({
 							<SvgIcon iconName="comment" />
 							<SvgIcon iconName="share" />
 						</div>
-
+						{/* Guy - Added likes count display */}
 						<div className="likes-count">
 							{post.likedBy && post.likedBy.length > 0 ? (
-								<div className="post-likes">{post.likedBy.length} likes</div>
+								<div className="post-likes">{post?.likedBy?.length || 0} {post?.likedBy?.length === 1 ? 'like' : 'likes'}</div>
 							) : (
 								'Be the first to like this'
 							)}
