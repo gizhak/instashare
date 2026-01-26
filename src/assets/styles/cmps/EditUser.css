@@ -320,3 +320,63 @@
     }
 
 }
+
+@media (max-width: 768px) {
+    .edit-profile-container {
+        width: 90vw;
+        margin-top: 0px;
+
+        .edit-title {
+            width: 100%;
+            font-size: 1.2rem;
+        }
+
+        .user-profile {
+            width: 100%;
+            height: auto;
+            padding: 10px;
+            flex-direction: row;
+            gap: 10px;
+
+            .user-info-edit {
+                flex-direction: row;
+                gap: 5px;
+
+                h5 {
+                    font-size: 1rem;
+                }
+            }
+
+            img {
+                width: 80px;
+                height: 80px;
+                margin-left: 0;
+            }
+
+            .change-photo-btn {
+                margin-right: 0;
+            }
+        }
+
+        .edit-user-form {
+            width: 100%;
+
+            .submit-btn-container {
+                width: 100%;
+
+                .submit-btn {
+                    width: 100%;
+                }
+            }
+        }
+
+        .gender-select-container {
+            width: 100% !important;
+        }
+
+        .gender-modal-container {
+            width: 100% !important;
+        }
+
+    }
+}

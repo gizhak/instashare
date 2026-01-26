@@ -583,6 +583,15 @@ input:hover {
 		grid-template-rows: 150px 1fr 150px;
 	}
 
+	nav {
+		gap: 0rem !important;
+	}
+
+	.user-link.nav-item {
+		/* padding: 8px !important; */
+		background-color: transparent !important;
+	}
+
 	.nav-bar {
 		display: none;
 	}
@@ -688,7 +697,13 @@ input:hover {
 
 	.signup-container {
 		max-width: 100%;
+
+
 	}
+
+	/* .app-header.full {
+		z-index: -1;
+	} */
 }
 
 

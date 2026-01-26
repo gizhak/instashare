@@ -99,3 +99,10 @@
 	padding: 0;
 	line-height: 1;
 }
+
+@media (max-width: 768px) {
+	.modal-menu {
+		width: 90%;
+		max-width: 80vh;
+	}
+}

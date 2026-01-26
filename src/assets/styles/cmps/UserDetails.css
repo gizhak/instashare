@@ -322,28 +322,6 @@
 	}
 }
 
-@media (max-width: 768px) {
-	.btns-section {
-		margin-left: 0;
-		padding: 0 20px;
-		justify-content: center;
-		flex-wrap: nowrap;
-	}
-
-	.edit-btn,
-	.archive-btn,
-	.message-btn {
-		width: auto;
-		flex: 1;
-		min-width: 0;
-		white-space: nowrap;
-	}
-
-	.user-details {
-		width: 100%;
-	}
-}
-
 .btns-section .follow-btn {
 	background-color: var(--inst-follow-button);
 	font-weight: 600;
@@ -352,4 +330,43 @@
 	&:hover {
 		background-color: #4150f7;
 	}
+}
+
+@media (max-width: 768px) {
+	.user-details {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		width: 92vw;
+
+		.btns-section {
+			width: 100%;
+		}
+
+		.profile-img-container {
+			width: 120px;
+			height: 120px;
+			border-radius: 50%;
+			object-fit: cover;
+			cursor: pointer;
+			margin: 30px 20px 30px 10px;
+		}
+
+		.suggestion-user {
+			display: none;
+		}
+
+		.nav-bar {
+			display: flex;
+			gap: 30px;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+
+		}
+	}
+
+
+
 }

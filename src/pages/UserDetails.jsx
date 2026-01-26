@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import { useNavigate } from 'react-router';
 
-import { loadUser, loadUsers } from '../store/actions/user.actions';
+import { loadUser, loadUsers, logout } from '../store/actions/user.actions';
 import { store } from '../store/store';
 import { showSuccessMsg, confirmMsg } from '../services/event-bus.service';
 import {
@@ -55,6 +55,16 @@ export function UserDetails() {
 
 	const navigate = useNavigate()
 
+	async function onLogout() {
+		try {
+			await logout();
+			navigate('auth/login');
+			// showSuccessMsg(`Bye now`);
+		} catch (err) {
+			showErrorMsg('Cannot logout');
+		}
+	}
+
 	// console.log('userPosts:', userPosts);
 	// console.log('otherUsers:', otherUsers);
 	// console.log('bookmarkedPosts:', bookmarkedPosts);
@@ -87,6 +97,8 @@ export function UserDetails() {
 		);
 		store.dispatch({ type: 'SET_WATCHED_USER', user });
 	}
+
+
 
 	//image upload functions
 	async function handleImageChange(ev) {
@@ -223,7 +235,7 @@ export function UserDetails() {
 						<div className="profile-user-info">
 							<div className="user-handle">
 								<h5>{user.fullname}</h5>
-								<SvgIcon iconName="settingsCircle" />
+								<SvgIcon iconName="settingsCircle" onClick={onLogout} />
 							</div>
 
 							<div className="user-stats">
