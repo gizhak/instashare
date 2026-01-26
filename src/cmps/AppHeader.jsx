@@ -20,7 +20,7 @@ export function AppHeader({ onCreatePostClick, onSearchClick }) {
 	async function onLogout() {
 		try {
 			await logout();
-			navigate('auth/login');
+			navigate('auth/login', { replace: true });
 			// showSuccessMsg(`Bye now`);
 		} catch (err) {
 			showErrorMsg('Cannot logout');

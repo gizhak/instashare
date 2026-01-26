@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router';
 
 import { loadUser, loadUsers, logout } from '../store/actions/user.actions';
 import { store } from '../store/store';
-import { showSuccessMsg, confirmMsg } from '../services/event-bus.service';
+import { showSuccessMsg, showErrorMsg, confirmMsg } from '../services/event-bus.service';
 import {
 	socketService,
 	SOCKET_EVENT_USER_UPDATED,
@@ -58,7 +58,7 @@ export function UserDetails() {
 	async function onLogout() {
 		try {
 			await logout();
-			navigate('auth/login');
+			navigate('/auth/login', { replace: true });
 			// showSuccessMsg(`Bye now`);
 		} catch (err) {
 			showErrorMsg('Cannot logout');
