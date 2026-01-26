@@ -298,6 +298,11 @@
 	align-self: flex-start;
 }
 
+.liked {
+	font-size: 18px;
+	fill: #ff3040;
+}
+
 .comment-meta {
 	display: flex;
 	gap: 12px;

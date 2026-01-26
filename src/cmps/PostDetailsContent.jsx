@@ -245,9 +245,8 @@ export function PostDetailsContent({
 													}`}
 												onClick={(e) => handleToggleLikeComment(e, comment.id)}
 											>
-												{comment.likedBy?.includes(loggedinUser._id)
-													? '♥'
-													: '♡'}
+												{comment.likedBy?.includes(loggedinUser._id) ? <SvgIcon className="liked" iconName="likeFilled" height="12" fill="#ff3040" /> : <SvgIcon iconName="like" height="12" />
+												}
 											</span>
 										</div>
 										{/* Guy - fixed comment meta likes count */}
