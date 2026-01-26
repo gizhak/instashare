@@ -24,7 +24,7 @@
 		margin-block-end: auto;
 		font-size: 0.8rem;
 		color: var(--inst-text);
-		min-width: 1000px;
+		/* min-width: 1000px; */
 		/* border-top: 1px solid var(--inst-scrollbar); */
 	}
 

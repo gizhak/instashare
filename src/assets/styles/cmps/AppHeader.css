@@ -69,7 +69,7 @@
     .logo {
         width: 100%;
         min-width: fit-content;
-        display: flex;
+        /* display: flex; */
         align-items: center;
         justify-content: flex-start;
         /* margin-bottom: 4rem; */
