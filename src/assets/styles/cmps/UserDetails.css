@@ -177,6 +177,10 @@
 			color: var(--inst-text);
 		}
 
+		.bio-user-header {
+			margin: 0 !important;
+		}
+
 	}
 }
 

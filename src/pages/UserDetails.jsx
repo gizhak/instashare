@@ -233,7 +233,7 @@ export function UserDetails() {
 							</div>
 							<div className="user-bio">
 								<div className="bio-header">
-									<p>{user.bio}</p>
+									<p className='bio-user-header'>{user.bio}</p>
 								</div>
 
 							</div>

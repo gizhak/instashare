@@ -192,9 +192,9 @@
 }
 
 .post-details-image img {
-	width: 100%;
-	height: 100%;
-	object-fit: contain;
+	width: 120%;
+	height: 120%;
+	object-fit: unset;
 }
 
 /* Right Side - Comments/Info (40% width) */

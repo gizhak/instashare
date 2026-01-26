@@ -170,11 +170,14 @@
 	color: #a8a8a8;
 }
 
+/* Guy - fixed post comment button style */
+
 .add-comment .post-comment-btn {
 	background: none;
 	border: none;
 	width: min-content;
-	color: var(--inst-signup, #0095f6);
+	/* color: var(--inst-signup, #0095f6); */
+	color: var(--inst-text, #262626);
 	font-weight: 600;
 	font-size: 14px;
 	cursor: pointer;
@@ -183,11 +186,12 @@
 }
 
 .add-comment .post-comment-btn:hover {
-	color: var(--inst-text, #00376b);
+	/* color: var(--inst-text, #00376b); */
 }
 
 .add-comment .post-comment-btn:disabled {
-	color: var(--inst-signup, #0095f6);
+	/* color: var(--inst-signup, #0095f6); */
+	color: var(--inst-text, #262626);
 	opacity: 0.3;
 	cursor: default;
 }
@@ -228,7 +232,7 @@
 .add-comment button {
 	background: none;
 	border: none;
-	color: #0095f6;
+	/* color: #0095f6; */
 	font-weight: 600;
 	font-size: 14px;
 	cursor: pointer;
@@ -286,8 +290,9 @@
 	word-break: break-word;
 }
 
+/* Guy - fixed comment meta likes count */
 .comment-like {
-	font-size: 12px;
+	font-size: 18px;
 	cursor: pointer;
 	margin-left: auto;
 	align-self: flex-start;
@@ -297,7 +302,7 @@
 	display: flex;
 	gap: 12px;
 	align-items: center;
-	font-size: 12px;
+	font-size: 18px;
 	color: #8e8e8e;
 }
 

@@ -79,10 +79,11 @@
 	/* background: var(--inst-button-active); */
 }
 
+/* Guy - added close button style */
 .close-btn-modal {
 	position: fixed;
-	top: 20px;
-	right: 20px;
+	top: 0px;
+	right: 0px;
 	background: transparent;
 	border: none;
 	color: white;

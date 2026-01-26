@@ -21,7 +21,7 @@ h6 {
 }
 
 p {
-    margin: 0 0 1em;
+    /* margin: 0 0 1em; */
     color: var(--inst-a);
 }
 
@@ -51,5 +51,5 @@ object {
     /* max-width: 100%; */
     display: block;
     /* height: auto; */
-    max-width: 50vw;
+    max-width: 60vw;
 }
