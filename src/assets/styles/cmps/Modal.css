@@ -71,6 +71,24 @@
 	font-weight: 600;
 }
 
+.modal-item.logout {
+	color: #ed4956;
+	font-size: 14px;
+	font-weight: 600;
+}
+
+.modal-item.upload {
+	color: var(--inst-follow-button);
+	font-weight: 400;
+	font-size: 14px;
+}
+
+.modal-item.settings {
+	font-size: 18px;
+	font-weight: 600;
+	color: var(--inst-text);
+}
+
 .modal-item:hover {
 	/* background: var(--inst-button-hover); */
 }

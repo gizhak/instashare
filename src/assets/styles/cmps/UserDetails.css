@@ -338,7 +338,8 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		width: 92vw;
+		width: 110vw;
+		margin-left: -40px;
 
 		.btns-section {
 			width: 100%;

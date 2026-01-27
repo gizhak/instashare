@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Routes, Route, Navigate } from 'react-router';
+import { Routes, Route, Navigate, useNavigate } from 'react-router';
 import { useSelector } from 'react-redux'
 
 import { HomePage } from './pages/HomePage';
@@ -26,6 +26,11 @@ import { Search } from './cmps/Search.jsx';
 import { LoginSignup, Login, Signup } from './pages/LoginSignup.jsx';
 import { PostIndex } from './pages/PostIndex.jsx';
 // import { EditUser } from './cmps/EditUser.jsx';
+
+function CreatePostWrapper() {
+	const navigate = useNavigate();
+	return <CreatePost onClose={() => navigate(-1)} />;
+}
 
 export function RootCmp() {
 
@@ -56,7 +61,7 @@ export function RootCmp() {
 						<Route path="user/:id" element={<UserDetails />} />
 						<Route path="chat" element={<ChatApp />} />
 						<Route path="review" element={<ReviewIndex />} />
-						<Route path="create" element={<CreatePost />} />
+						<Route path="create" element={<CreatePostWrapper />} />
 
 						{/* element from More button */}
 						<Route path="setting" element={<EditUser />} />

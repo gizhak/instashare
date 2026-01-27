@@ -100,8 +100,8 @@ export function CreatePost({ onClose }) {
             };
 
             await addPost(newPost);
+            showSuccessMsg('Post created successfully!');
             onClose();
-            window.location.reload();
         } catch (err) {
             console.error('Error creating post:', err);
             showErrorMsg('Failed to create post');
