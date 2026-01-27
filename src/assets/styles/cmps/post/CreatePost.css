@@ -352,4 +352,10 @@ body:has(.create-post-overlay) .app-header {
         border-left: none;
         border-top: 1px solid var(--inst-border);
     }
+
+    .image-preview {
+        width: 100%;
+        max-width: none;
+        height: 100%;
+    }
 }

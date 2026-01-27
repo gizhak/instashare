@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import { useNavigate } from 'react-router';
+import { Navigate, useNavigate } from 'react-router';
 
 import { loadUser, loadUsers, logout } from '../store/actions/user.actions';
 import { store } from '../store/store';
@@ -21,6 +21,7 @@ import { userService } from '../services/user';
 import { EditUser } from '../cmps/EditUser';
 
 import { PostList } from '../cmps/PostList';
+// import { CreatePost } from '../cmps/CreatePost';
 import { Modal } from '../cmps/Modal';
 import { SvgIcon } from '../cmps/SvgIcon';
 import { LoadingSpinner } from '../cmps/LoadingSpinner';
@@ -28,6 +29,7 @@ import { LoadingSpinner } from '../cmps/LoadingSpinner';
 import { loadPosts } from '../store/actions/post.actions';
 // for follow functionality
 import { updateUser } from '../store/actions/user.actions';
+import { CreatePost } from '../cmps/CreatePost';
 
 
 
@@ -40,8 +42,11 @@ export function UserDetails() {
 	const isFollowing = loggedInUser.following?.includes(user?._id);
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [isModalSettingOpen, setIsModalSettingOpen] = useState(false);
+	const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
 	const [isUploading, setIsUploading] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
+	const fileInputRef = useRef(null);
 
 	//tab state
 	const [activeTab, setActiveTab] = useState('posts');
@@ -84,7 +89,6 @@ export function UserDetails() {
 		socketService.emit(SOCKET_EMIT_USER_WATCH, params.id);
 		socketService.on(SOCKET_EVENT_USER_UPDATED, onUserUpdate);
 
-
 		return () => {
 			socketService.off(SOCKET_EVENT_USER_UPDATED, onUserUpdate);
 		};
@@ -97,8 +101,6 @@ export function UserDetails() {
 		);
 		store.dispatch({ type: 'SET_WATCHED_USER', user });
 	}
-
-
 
 	//image upload functions
 	async function handleImageChange(ev) {
@@ -185,6 +187,32 @@ export function UserDetails() {
 		}
 	}
 
+	const handleFileSelect = (file) => {
+		if (file && file.type.startsWith('image/')) {
+			setSelectedImage(file);
+			const reader = new FileReader();
+			reader.onloadend = () => {
+				setPreviewUrl(reader.result);
+				setStep('preview');
+			};
+			reader.readAsDataURL(file);
+		} else {
+			showErrorMsg('Please select an image file');
+		}
+	};
+
+	const handleFileInputChange = (ev) => {
+		console.log('File input changed', ev);
+		const file = ev.target.files[0];
+		if (file) handleFileSelect(file);
+	};
+
+	//create post from settings modal
+	function handleCreatePost() {
+		setIsModalSettingOpen(false);
+		navigate(`/create`);
+		setIsCreatePostOpen(true);
+	}
 
 	//navigation to other user details
 	async function handleNavigate(userId) {
@@ -235,7 +263,7 @@ export function UserDetails() {
 						<div className="profile-user-info">
 							<div className="user-handle">
 								<h5>{user.fullname}</h5>
-								<SvgIcon iconName="settingsCircle" onClick={onLogout} />
+								<SvgIcon iconName="settingsCircle" onClick={() => setIsModalSettingOpen(true)} />
 							</div>
 
 							<div className="user-stats">
@@ -339,6 +367,28 @@ export function UserDetails() {
 					</div>
 
 				</section>
+			)}
+
+			{/* Settings Modal */}
+			<Modal isOpen={isModalSettingOpen} onClose={() => setIsModalSettingOpen(false)}>
+				<h3 className="modal-title settings">Settings</h3>
+
+				<div className="modal-item upload" onClick={handleCreatePost}>
+					<h4>Create New Post</h4>
+				</div>
+
+				<div className="modal-item logout" onClick={onLogout}>
+					Log Out
+				</div>
+
+				<div className="modal-item cancel" onClick={() => setIsModalSettingOpen(false)}>
+					Cancel
+				</div>
+			</Modal>
+
+			{/* Create Post Modal */}
+			{isCreatePostOpen && (
+				<CreatePost onClose={() => setIsCreatePostOpen(false)} />
 			)}
 
 			{/* <pre> {JSON.stringify(user, null, 2)} </pre> */}

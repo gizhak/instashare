@@ -164,19 +164,18 @@ Prevent full-width posts in profile grid */
 @media (max-width: 768px) {
 	.post-list-grid {
 		grid-template-columns: repeat(3, 1fr);
-		gap: 2px;
-		width: 100%;
-		margin: 0px;
-		margin-top: 1rem;
-		padding: 10px;
-	}
-
-	.post {
-		width: 100%;
-		aspect-ratio: 286 / 374;
+		/* grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)) */
 	}
 
 	.post-list-container {
-		width: 100vw;
+		/* width: 100%; */
+
+	}
+
+	.post-index {
+		/* display: sticky; */
+		margin-inline: clamp(0px, 5vw, 0px);
+		margin-left: auto;
+		width: 110%;
 	}
 }
