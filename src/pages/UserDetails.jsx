@@ -70,9 +70,9 @@ export function UserDetails() {
 		}
 	}
 
-	// console.log('userPosts:', userPosts);
+	 //console.log('userPosts:', userPosts);
 	// console.log('otherUsers:', otherUsers);
-	// console.log('bookmarkedPosts:', bookmarkedPosts);
+	//console.log('bookmarkedPosts:', bookmarkedPosts);
 
 
 	// here we will get them from collection
@@ -393,8 +393,8 @@ export function UserDetails() {
 
 			{/* <pre> {JSON.stringify(user, null, 2)} </pre> */}
 
-			{activeTab === 'posts' && <PostList posts={userPosts} />}
-			{activeTab === 'saved' && <PostList posts={bookmarkedPosts} />}
+			{activeTab === 'posts' && <PostList posts={userPosts} context="user-posts" />}
+			{activeTab === 'saved' && <PostList posts={bookmarkedPosts} context="user-saved" />}
 			{/* <footer className="login-footer">
 				<div className="footer-links">
 					<a href="#">Meta</a>

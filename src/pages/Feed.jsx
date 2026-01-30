@@ -16,7 +16,8 @@ import {
 } from '../services/event-bus.service';
 import { checkIsLiked } from '../services/util.service';
 import { updateUser } from '../store/actions/user.actions';
-import { PostDetailsContent } from '../cmps/PostDetailsContent';
+// import { PostDetailsContent } from '../cmps/PostDetailsContent.jsx';
+import { usePostNavigation } from '../customHooks/usePostNavigation.js';
 
 export function Feed() {
 	const posts = useSelector((storeState) => storeState.postModule.posts);
@@ -36,13 +37,17 @@ export function Feed() {
 
 	// console.log('posts:', posts);
 	const navigate = useNavigate();
+	const { openPost } = usePostNavigation();
 
 	// Function to open comments modal
-	const handleOpenComments = async (postId, index) => {
-		setModalType('comments');
-		setSelectedPostIndex(index);
-		await loadPost(postId);
-		setIsModalOpen(true);
+	// const handleOpenComments = async (postId, index) => {
+	// 	setModalType('comments');
+	// 	setSelectedPostIndex(index);
+	// 	await loadPost(postId);
+	// 	setIsModalOpen(true);
+	// };
+	const handleOpenComments = (postId) => {
+		openPost(postId); // This opens modal via URL routing!
 	};
 
 	// Function to open menu modal
@@ -125,7 +130,13 @@ export function Feed() {
 									</div>
 								</div>
 
-								<img className="post-img" src={feedPost.imgUrl} />
+								{/* Make image clickable to open comments */}
+								<img
+									className="post-img"
+									src={feedPost.imgUrl}
+									onClick={() => handleOpenComments(feedPost._id)}
+									style={{ cursor: 'pointer' }}
+								/>
 
 								<div className="post-actions">
 									<SvgIcon
@@ -135,11 +146,14 @@ export function Feed() {
 									/>
 									<span>{feedPost.likedBy.length}</span>
 
+									{/* Update comment icon to use new function */}
 									<SvgIcon
 										iconName="comment"
-										onClick={() => handleOpenComments(feedPost._id, index)}
+										onClick={() => handleOpenComments(feedPost._id)}
+										style={{ cursor: 'pointer' }}
 									/>
 									<span>{feedPost.comments.length}</span>
+
 									<div className="bookmark-icon">
 										<SvgIcon
 											iconName={
@@ -151,6 +165,7 @@ export function Feed() {
 										/>
 									</div>
 								</div>
+
 								<div className="post-desc">
 									<h4 onClick={() => navigate(`/user/${feedPost.by._id}`)}>
 										{feedPost.by.fullname}: <span>{feedPost.txt}</span>
@@ -213,14 +228,14 @@ export function Feed() {
 						</div>
 					</>
 				)}
-				{modalType === 'comments' && post && (
+				{/* {modalType === 'comments' && post && (
 					<PostDetailsContent
 						post={post}
 						// posts={posts}
 						// currentIndex={selectedPostIndex}
 						// onNavigate={handleNavigate}
 					/>
-				)}
+				)} */}
 			</Modal>
 		</section>
 	);

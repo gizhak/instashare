@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-
+import { usePostNavigation } from '../customHooks/usePostNavigation';
 import {
 	loadPosts,
 	addPost,
@@ -21,6 +21,7 @@ import { PostList } from '../cmps/PostList';
 export function PostIndex() {
 	const [filterBy, setFilterBy] = useState(postService.getDefaultFilter());
 	const posts = useSelector((storeState) => storeState.postModule.posts);
+	const { openPost } = usePostNavigation();
 
 	useEffect(() => {
 		loadPosts(filterBy);
@@ -31,38 +32,9 @@ export function PostIndex() {
 		loadPosts(filterBy);
 	}
 
-	// async function onRemovePost(postId) {
-	// 	try {
-	// 		await removePost(postId);
-	// 		showSuccessMsg('Post removed');
-	// 	} catch (err) {
-	// 		showErrorMsg('Cannot remove post');
-	// 	}
-	// }
-
-	// async function onAddPost() {
-	// 	const post = postService.getEmptyPost();
-	// 	post.vendor = prompt('Vendor?', 'Some Vendor');
-	// 	try {
-	// 		const savedPost = await addPost(post);
-	// 		showSuccessMsg(`Post added (id: ${savedPost._id})`);
-	// 	} catch (err) {
-	// 		showErrorMsg('Cannot add post');
-	// 	}
-	// }
-
-	// async function onUpdatePost(post) {
-	// 	const speed = +prompt('New speed?', post.speed) || 0;
-	// 	if (speed === 0 || speed === post.speed) return;
-
-	// 	const postToSave = { ...post, speed };
-	// 	try {
-	// 		const savedPost = await updatePost(postToSave);
-	// 		showSuccessMsg(`Post updated, new speed: ${savedPost.speed}`);
-	// 	} catch (err) {
-	// 		showErrorMsg('Cannot update post');
-	// 	}
-	// }
+	function handlePostClick(postId) {
+		openPost(postId);
+	}
 
 	return (
 		<section className="post-index">
@@ -81,7 +53,7 @@ export function PostIndex() {
 			</header>
 			{/* <PostFilter filterBy={filterBy} setFilterBy={setFilterBy} /> */}
 
-			<PostList posts={posts} isExplore={true} />
+			<PostList posts={posts} isExplore={true} onPostClick={handlePostClick} />
 		</section>
 	);
 }
