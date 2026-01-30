@@ -6,11 +6,13 @@ import { userService } from '../services/user';
 import { SvgIcon } from './SvgIcon';
 import { Modal } from './Modal';
 import { loadPost } from '../store/actions/post.actions';
+import { usePostNavigation } from '../customHooks/usePostNavigation.js';
 
-export function PostList({ posts, isExplore = false, handleLike }) {
-	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [selectedPostIndex, setSelectedPostIndex] = useState(null);
-	const post = useSelector((storeState) => storeState.postModule.post);
+export function PostList({ posts, isExplore = false, handleLike}) {
+	const { openPost } = usePostNavigation();
+	// const [isModalOpen, setIsModalOpen] = useState(false);
+	// const [selectedPostIndex, setSelectedPostIndex] = useState(null);
+	// const post = useSelector((storeState) => storeState.postModule.post);
 
 	function shouldShowActionBtns(post) {
 		const user = userService.getLoggedinUser();
@@ -26,23 +28,27 @@ export function PostList({ posts, isExplore = false, handleLike }) {
 		return post?.likedBy?.some((likedUser) => likedUser._id === user._id);
 	}
 
-	async function handleOpenPost(postId, index) {
-		setSelectedPostIndex(index);
-		await loadPost(postId);
-		setIsModalOpen(true);
+	// async function handleOpenPost(postId, index) {
+	// 	setSelectedPostIndex(index);
+	// 	await loadPost(postId);
+	// 	setIsModalOpen(true);
+	// }
+
+	function handleOpenPost(postId) {
+		openPost(postId, posts);
 	}
 
-	function handleCloseModal() {
-		setIsModalOpen(false);
-		setSelectedPostIndex(null);
-	}
+	// function handleCloseModal() {
+	// 	setIsModalOpen(false);
+	// 	setSelectedPostIndex(null);
+	// }
 
-	async function handleNavigate(newIndex) {
-		if (newIndex >= 0 && newIndex < posts.length) {
-			setSelectedPostIndex(newIndex);
-			await loadPost(posts[newIndex]._id);
-		}
-	}
+	// async function handleNavigate(newIndex) {
+	// 	if (newIndex >= 0 && newIndex < posts.length) {
+	// 		setSelectedPostIndex(newIndex);
+	// 		await loadPost(posts[newIndex]._id);
+	// 	}
+	// }
 
 	return (
 		<section className="post-list-container">
@@ -75,7 +81,7 @@ export function PostList({ posts, isExplore = false, handleLike }) {
 							{/* Hover Overlay */}
 							<div
 								className="post-overlay"
-								onClick={() => handleOpenPost(post._id, index)}
+								onClick={() => handleOpenPost(post._id)}
 							>
 								<div className="post-stats">
 									{/* <div className={`stat ${isLiked ? 'liked' : ''}`}>
@@ -94,7 +100,7 @@ export function PostList({ posts, isExplore = false, handleLike }) {
 			</div>
 
 			{/* Post Details Modal */}
-			<Modal isOpen={isModalOpen} onClose={handleCloseModal} variant="comments">
+			{/* <Modal isOpen={isModalOpen} onClose={handleCloseModal} variant="comments">
 				{post && (
 					<PostDetailsContent
 						post={post}
@@ -103,7 +109,7 @@ export function PostList({ posts, isExplore = false, handleLike }) {
 						onNavigate={handleNavigate}
 					/>
 				)}
-			</Modal>
+			</Modal> */}
 		</section>
 	);
 }
