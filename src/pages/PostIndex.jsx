@@ -16,6 +16,7 @@ import { userService } from '../services/user';
 import { IoSearchOutline } from 'react-icons/io5';
 
 import { PostList } from '../cmps/PostList';
+import { Outlet } from 'react-router';
 //import { PostFilter } from '../cmps/PostFilter';
 
 export function PostIndex() {
@@ -37,23 +38,30 @@ export function PostIndex() {
 	}
 
 	return (
-		<section className="post-index">
-			<header>
-				<div className="search-container">
-					<IoSearchOutline className="search-icon" />
-					<input
-						className="search-bar"
-						onChange={onSearch}
-						placeholder="Search"
-					/>
-				</div>
-				{/* {userService.getLoggedinUser() && (
+		<>
+			<Outlet />
+			<section className="post-index">
+				<header>
+					<div className="search-container">
+						<IoSearchOutline className="search-icon" />
+						<input
+							className="search-bar"
+							onChange={onSearch}
+							placeholder="Search"
+						/>
+					</div>
+					{/* {userService.getLoggedinUser() && (
 					<button onClick={onAddPost}>Add a Post</button>
 				)} */}
-			</header>
-			{/* <PostFilter filterBy={filterBy} setFilterBy={setFilterBy} /> */}
+				</header>
+				{/* <PostFilter filterBy={filterBy} setFilterBy={setFilterBy} /> */}
 
-			<PostList posts={posts} isExplore={true} onPostClick={handlePostClick} />
-		</section>
+				<PostList
+					posts={posts}
+					isExplore={true}
+					onPostClick={handlePostClick}
+				/>
+			</section>
+		</>
 	);
 }

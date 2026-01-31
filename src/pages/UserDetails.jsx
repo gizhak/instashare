@@ -2,11 +2,15 @@ import { useEffect, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import { Navigate, useNavigate } from 'react-router';
+import { Navigate, Outlet, useNavigate } from 'react-router';
 
 import { loadUser, loadUsers, logout } from '../store/actions/user.actions';
 import { store } from '../store/store';
-import { showSuccessMsg, showErrorMsg, confirmMsg } from '../services/event-bus.service';
+import {
+	showSuccessMsg,
+	showErrorMsg,
+	confirmMsg,
+} from '../services/event-bus.service';
 import {
 	socketService,
 	SOCKET_EVENT_USER_UPDATED,
@@ -31,8 +35,6 @@ import { loadPosts } from '../store/actions/post.actions';
 import { updateUser } from '../store/actions/user.actions';
 import { CreatePost } from '../cmps/CreatePost';
 
-
-
 export function UserDetails() {
 	//get user id from params
 	const params = useParams();
@@ -56,9 +58,11 @@ export function UserDetails() {
 	//filter posts for this user
 	const userPosts = posts.filter((post) => post.by._id === user?._id);
 	const otherUsers = users.filter((u) => u._id !== user?._id);
-	const bookmarkedPosts = posts.filter((post) => user?.savedPostIds?.includes(post._id));
+	const bookmarkedPosts = posts.filter((post) =>
+		user?.savedPostIds?.includes(post._id),
+	);
 
-	const navigate = useNavigate()
+	const navigate = useNavigate();
 
 	async function onLogout() {
 		try {
@@ -70,16 +74,14 @@ export function UserDetails() {
 		}
 	}
 
-	 //console.log('userPosts:', userPosts);
+	//console.log('userPosts:', userPosts);
 	// console.log('otherUsers:', otherUsers);
 	//console.log('bookmarkedPosts:', bookmarkedPosts);
-
 
 	// here we will get them from collection
 	// const myPosts = postsCollection
 	// 	.find({ 'by._id': loggedinUser._id })
 	// 	.sort({ _id: -1 });
-
 
 	//load user on params change
 	useEffect(() => {
@@ -97,7 +99,7 @@ export function UserDetails() {
 	//socket function
 	function onUserUpdate(user) {
 		showSuccessMsg(
-			`This user ${user.fullname} just got updated from socket, new score: ${user.score}`
+			`This user ${user.fullname} just got updated from socket, new score: ${user.score}`,
 		);
 		store.dispatch({ type: 'SET_WATCHED_USER', user });
 	}
@@ -131,11 +133,9 @@ export function UserDetails() {
 			console.error('Error uploading image:', err);
 			alert('Failed to upload image. Please try again.');
 		} finally {
-
 			showSuccessMsg('Profile photo updated');
 			setIsUploading(false);
 		}
-
 	}
 
 	//remove image function
@@ -159,13 +159,16 @@ export function UserDetails() {
 			if (isFollowing) {
 				// Update logged-in user (remove from following)
 				await updateUser({
-					following: loggedInUser.following.filter(id => id !== user._id),
+					following: loggedInUser.following.filter((id) => id !== user._id),
 				});
 
 				// Update watched user (remove from followers)
-				await updateUser({
-					followers: user.followers.filter(id => id !== loggedInUser._id),
-				}, user._id);
+				await updateUser(
+					{
+						followers: user.followers.filter((id) => id !== loggedInUser._id),
+					},
+					user._id,
+				);
 
 				showSuccessMsg('You unfollowed this user');
 			} else {
@@ -175,9 +178,12 @@ export function UserDetails() {
 				});
 
 				// Update watched user (add to followers)
-				await updateUser({
-					followers: [...user.followers, loggedInUser._id],
-				}, user._id);
+				await updateUser(
+					{
+						followers: [...user.followers, loggedInUser._id],
+					},
+					user._id,
+				);
 
 				showSuccessMsg('You are now following this user');
 			}
@@ -218,12 +224,13 @@ export function UserDetails() {
 	async function handleNavigate(userId) {
 		setIsLoading(true);
 		// console.log('Navigating to user with ID:', userId);
-		navigate(`/user/${userId}`)
-		window.location.reload()
+		navigate(`/user/${userId}`);
+		window.location.reload();
 	}
 
 	return (
 		<section className="user-details">
+			<Outlet />
 			{isUploading && <LoadingSpinner message="Uploading profile photo..." />}
 			{user && (
 				<section>
@@ -263,21 +270,28 @@ export function UserDetails() {
 						<div className="profile-user-info">
 							<div className="user-handle">
 								<h5>{user.fullname}</h5>
-								<SvgIcon iconName="settingsCircle" onClick={() => setIsModalSettingOpen(true)} />
+								<SvgIcon
+									iconName="settingsCircle"
+									onClick={() => setIsModalSettingOpen(true)}
+								/>
 							</div>
 
 							<div className="user-stats">
-								<p>{userPosts.length || 0} {userPosts.length === 1 ? 'post' : 'posts'}</p>
-								<p>{user?.followers?.length || 0} {user?.followers?.length === 1 ? 'follower' : 'followers'}</p>
+								<p>
+									{userPosts.length || 0}{' '}
+									{userPosts.length === 1 ? 'post' : 'posts'}
+								</p>
+								<p>
+									{user?.followers?.length || 0}{' '}
+									{user?.followers?.length === 1 ? 'follower' : 'followers'}
+								</p>
 								<p>{user?.following?.length || 0} following</p>
 							</div>
 							<div className="user-bio">
 								<div className="bio-header">
-									<p className='bio-user-header'>{user.bio}</p>
+									<p className="bio-user-header">{user.bio}</p>
 								</div>
-
 							</div>
-
 						</div>
 					</div>
 
@@ -290,9 +304,11 @@ export function UserDetails() {
 						</section>
 					) : (
 						<section className="btns-section">
-							<button className={isFollowing ? '' : 'follow-btn'} onClick={handleFollow}>
+							<button
+								className={isFollowing ? '' : 'follow-btn'}
+								onClick={handleFollow}
+							>
 								{isFollowing ? 'Following' : 'Follow'}
-
 							</button>
 							<button className="message-btn">Message</button>
 						</section>
@@ -310,11 +326,13 @@ export function UserDetails() {
 					)}
 					<div className="suggestions-users">
 						{otherUsers.map((u) => (
-							<div className="suggestion-user" key={u._id} onClick={() => handleNavigate(u._id)}>
+							<div
+								className="suggestion-user"
+								key={u._id}
+								onClick={() => handleNavigate(u._id)}
+							>
 								<img className="suggestion-user-img" src={u.imgUrl} />
-								<h4>
-									{u.fullname}
-								</h4>
+								<h4>{u.fullname}</h4>
 							</div>
 						))}
 					</div>
@@ -325,15 +343,54 @@ export function UserDetails() {
 							onClick={() => setActiveTab('posts')}
 						>
 							<div className="tab-bar">
-								<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+								<svg
+									viewBox="0 0 24 24"
+									width="24"
+									height="24"
+									fill="currentColor"
+								>
 									<title>Posts</title>
-									<path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2px" d="M3 3H21V21H3z"></path>
-									<path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2px" d="M9.01486 3 9.01486 21"></path>
-									<path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2px" d="M14.98514 3 14.98514 21"></path>
-									<path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2px" d="M21 9.01486 3 9.01486"></path>
-									<path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2px" d="M21 14.98514 3 14.98514"></path>
+									<path
+										fill="none"
+										stroke="currentColor"
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth="2px"
+										d="M3 3H21V21H3z"
+									></path>
+									<path
+										fill="none"
+										stroke="currentColor"
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth="2px"
+										d="M9.01486 3 9.01486 21"
+									></path>
+									<path
+										fill="none"
+										stroke="currentColor"
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth="2px"
+										d="M14.98514 3 14.98514 21"
+									></path>
+									<path
+										fill="none"
+										stroke="currentColor"
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth="2px"
+										d="M21 9.01486 3 9.01486"
+									></path>
+									<path
+										fill="none"
+										stroke="currentColor"
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth="2px"
+										d="M21 14.98514 3 14.98514"
+									></path>
 								</svg>
-
 							</div>
 						</div>
 
@@ -342,11 +399,24 @@ export function UserDetails() {
 							onClick={() => setActiveTab('saved')}
 						>
 							<div className="tab-bar">
-								<svg aria-label="Saved" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24">
+								<svg
+									aria-label="Saved"
+									fill="currentColor"
+									height="24"
+									role="img"
+									viewBox="0 0 24 24"
+									width="24"
+								>
 									<title>Saved</title>
-									<polygon fill="none" points="20 21 12 13.44 4 21 4 3 20 3 20 21" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></polygon>
+									<polygon
+										fill="none"
+										points="20 21 12 13.44 4 21 4 3 20 3 20 21"
+										stroke="currentColor"
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth="2"
+									></polygon>
 								</svg>
-
 							</div>
 						</div>
 
@@ -355,22 +425,51 @@ export function UserDetails() {
 							onClick={() => setActiveTab('tagged')}
 						>
 							<div className="tab-bar">
-								<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+								<svg
+									viewBox="0 0 24 24"
+									width="24"
+									height="24"
+									fill="currentColor"
+								>
 									<title>Tagged</title>
-									<path d="M10.201 3.797 12 1.997l1.799 1.8a1.59 1.59 0 0 0 1.124.465h5.259A1.818 1.818 0 0 1 22 6.08v14.104a1.818 1.818 0 0 1-1.818 1.818H3.818A1.818 1.818 0 0 1 2 20.184V6.08a1.818 1.818 0 0 1 1.818-1.818h5.26a1.59 1.59 0 0 0 1.123-.465z" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2px"></path>
-									<path d="M18.598 22.002V21.4a3.949 3.949 0 0 0-3.948-3.949H9.495A3.949 3.949 0 0 0 5.546 21.4v.603" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2px"></path>
-									<circle cx="12.07211" cy="11.07515" r="3.55556" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2px"></circle>
+									<path
+										d="M10.201 3.797 12 1.997l1.799 1.8a1.59 1.59 0 0 0 1.124.465h5.259A1.818 1.818 0 0 1 22 6.08v14.104a1.818 1.818 0 0 1-1.818 1.818H3.818A1.818 1.818 0 0 1 2 20.184V6.08a1.818 1.818 0 0 1 1.818-1.818h5.26a1.59 1.59 0 0 0 1.123-.465z"
+										fill="none"
+										stroke="currentColor"
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth="2px"
+									></path>
+									<path
+										d="M18.598 22.002V21.4a3.949 3.949 0 0 0-3.948-3.949H9.495A3.949 3.949 0 0 0 5.546 21.4v.603"
+										fill="none"
+										stroke="currentColor"
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth="2px"
+									></path>
+									<circle
+										cx="12.07211"
+										cy="11.07515"
+										r="3.55556"
+										fill="none"
+										stroke="currentColor"
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth="2px"
+									></circle>
 								</svg>
-
 							</div>
 						</div>
 					</div>
-
 				</section>
 			)}
 
 			{/* Settings Modal */}
-			<Modal isOpen={isModalSettingOpen} onClose={() => setIsModalSettingOpen(false)}>
+			<Modal
+				isOpen={isModalSettingOpen}
+				onClose={() => setIsModalSettingOpen(false)}
+			>
 				<h3 className="modal-title settings">Settings</h3>
 
 				<div className="modal-item upload" onClick={handleCreatePost}>
@@ -381,7 +480,10 @@ export function UserDetails() {
 					Log Out
 				</div>
 
-				<div className="modal-item cancel" onClick={() => setIsModalSettingOpen(false)}>
+				<div
+					className="modal-item cancel"
+					onClick={() => setIsModalSettingOpen(false)}
+				>
 					Cancel
 				</div>
 			</Modal>
@@ -393,8 +495,12 @@ export function UserDetails() {
 
 			{/* <pre> {JSON.stringify(user, null, 2)} </pre> */}
 
-			{activeTab === 'posts' && <PostList posts={userPosts} context="user-posts" />}
-			{activeTab === 'saved' && <PostList posts={bookmarkedPosts} context="user-saved" />}
+			{activeTab === 'posts' && (
+				<PostList posts={userPosts} context="user-posts" />
+			)}
+			{activeTab === 'saved' && (
+				<PostList posts={bookmarkedPosts} context="user-saved" />
+			)}
 			{/* <footer className="login-footer">
 				<div className="footer-links">
 					<a href="#">Meta</a>

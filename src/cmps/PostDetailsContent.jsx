@@ -49,7 +49,6 @@ export function PostDetailsContent({
 		if (!commentTxt.trim()) return;
 
 		const newComment = {
-			date: new Date().toTimeString().slice(0, 5),
 			txt: commentTxt,
 			by: {
 				_id: loggedinUser._id,
@@ -208,7 +207,11 @@ export function PostDetailsContent({
 					</div>
 
 					{/* Delete Menu Modal */}
-					<Modal isOpen={showDeleteMenu} onClose={() => setShowDeleteMenu(false)} variant="menu">
+					<Modal
+						isOpen={showDeleteMenu}
+						onClose={() => setShowDeleteMenu(false)}
+						variant="menu"
+					>
 						<div className="modal-header">
 							<h3>Delete post?</h3>
 							<p>Are you sure you want to delete this post?</p>
@@ -239,21 +242,31 @@ export function PostDetailsContent({
 											</span>
 											<span className="comment-text">{comment.txt}</span>
 											<span
-												className={`comment-like ${comment.likedBy?.includes(loggedinUser._id)
-													? 'liked'
-													: ''
-													}`}
+												className={`comment-like ${
+													comment.likedBy?.includes(loggedinUser._id)
+														? 'liked'
+														: ''
+												}`}
 												onClick={(e) => handleToggleLikeComment(e, comment.id)}
 											>
-												{comment.likedBy?.includes(loggedinUser._id) ? <SvgIcon className="liked" iconName="likeFilled" height="12" fill="#ff3040" /> : <SvgIcon iconName="like" height="12" />
-												}
+												{comment.likedBy?.includes(loggedinUser._id) ? (
+													<SvgIcon
+														className="liked"
+														iconName="likeFilled"
+														height="12"
+														fill="#ff3040"
+													/>
+												) : (
+													<SvgIcon iconName="like" height="12" />
+												)}
 											</span>
 										</div>
 										{/* Guy - fixed comment meta likes count */}
 										<div className="comment-meta">
 											<span className="comment-time">{comment.date}</span>
 											<span className="comment-likes">
-												{comment?.likedBy?.length || 0} {comment?.likedBy?.length === 1 ? 'like' : 'likes'}
+												{comment?.likedBy?.length || 0}{' '}
+												{comment?.likedBy?.length === 1 ? 'like' : 'likes'}
 											</span>
 											{loggedinUser && comment.by?._id === loggedinUser._id && (
 												<SvgIcon
@@ -287,7 +300,10 @@ export function PostDetailsContent({
 						{/* Guy - Added likes count display */}
 						<div className="likes-count">
 							{post.likedBy && post.likedBy.length > 0 ? (
-								<div className="post-likes">{post?.likedBy?.length || 0} {post?.likedBy?.length === 1 ? 'like' : 'likes'}</div>
+								<div className="post-likes">
+									{post?.likedBy?.length || 0}{' '}
+									{post?.likedBy?.length === 1 ? 'like' : 'likes'}
+								</div>
 							) : (
 								'Be the first to like this'
 							)}

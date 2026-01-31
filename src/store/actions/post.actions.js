@@ -25,6 +25,7 @@ export async function loadPost(postId) {
 	try {
 		const post = await postService.getById(postId);
 		store.dispatch(getCmdSetPost(post));
+		return post;
 	} catch (err) {
 		console.log('Cannot load post', err);
 		throw err;

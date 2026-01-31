@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
 
-import { HomePage } from './pages/HomePage';
+import { ContainerPage } from './pages/ContainerPage.jsx';
 import { AboutUs, AboutTeam, AboutVision } from './pages/AboutUs';
 //import { CarIndex } from './pages/CarIndex.jsx';
 import { ReviewIndex } from './pages/ReviewIndex.jsx';
@@ -23,6 +23,7 @@ import { Search } from './cmps/Search.jsx';
 
 import { LoginSignup, Login, Signup } from './pages/LoginSignup.jsx';
 import { PostIndex } from './pages/PostIndex.jsx';
+import { PostModal } from './cmps/PostModal.jsx';
 // import { EditUser } from './cmps/EditUser.jsx';
 
 function CreatePostWrapper() {
@@ -50,17 +51,23 @@ export function RootCmp() {
 						path="/"
 						element={
 							loggedInUser ? (
-								<HomePage />
+								<ContainerPage />
 							) : (
 								<Navigate to="/auth/login" replace />
 							)
 						}
 					>
 						{/* <Route path="/" element={<HomePage />}> */}
-						<Route index element={<Feed />} />
+						<Route index element={<Feed />}></Route>
+						<Route path="post/:postId" element={<PostModal />} />
+
 						<Route path="reels" element={<ReelsIndex />} />
-						<Route path="explore" element={<PostIndex />} />
-						<Route path="user/:id" element={<UserDetails />} />
+						<Route path="explore" element={<PostIndex />}>
+							<Route path="post/:postId" element={<PostModal />} />
+						</Route>
+						<Route path="user/:id" element={<UserDetails />}>
+							<Route path="post/:postId" element={<PostModal />} />
+						</Route>
 						<Route path="chat" element={<ChatApp />} />
 						<Route path="review" element={<ReviewIndex />} />
 						<Route path="create" element={<CreatePostWrapper />} />
@@ -69,9 +76,9 @@ export function RootCmp() {
 						<Route path="setting" element={<EditUser />} />
 
 						{/* Post routes -  to catch /post/:postId from anywhere */}
-						<Route path="post/:postId" element={<Feed />} />
+						{/* <Route path="post/:postId" element={<Feed />} />
 						<Route path="explore/post/:postId" element={<PostIndex />} />
-						<Route path="user/:id/post/:postId" element={<UserDetails />} />
+						<Route path="user/:id/post/:postId" element={<UserDetails />} /> */}
 						{/* <Route path="reels/post/:postId" element={<ReelsIndex />} /> */}
 					</Route>
 

@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { Outlet, useNavigate } from 'react-router';
 import {
 	addPostLike,
 	loadPosts,
@@ -100,135 +100,140 @@ export function Feed() {
 	}
 
 	return (
-		<section className="home">
-			<section className="feed-grid-container">
-				{posts &&
-					posts.map((feedPost, index) => {
-						const isLiked = checkIsLiked(feedPost, loggedInUser);
+		<>
+			<Outlet />
+			<section className="home">
+				<section className="feed-grid-container">
+					{posts &&
+						posts.map((feedPost, index) => {
+							const isLiked = checkIsLiked(feedPost, loggedInUser);
 
-						return (
-							<article key={feedPost._id} className="post-article flex row">
-								<div className="post-header">
-									<img className="post-profile-img" src={feedPost.by.imgUrl} />
-									<h4 onClick={() => navigate(`/user/${feedPost.by._id}`)}>
-										{feedPost.by.fullname}
-									</h4>
-									<div>
-										{loggedInUser &&
-											loggedInUser.following &&
-											!loggedInUser.following.includes(feedPost.by._id) &&
-											loggedInUser._id !== feedPost.by._id && (
-												<span onClick={() => followUser(feedPost.by._id)}>
-													Follow
-												</span>
-											)}
-										<SvgIcon
-											iconName="postDots"
-											className="icon"
-											onClick={() => handleOpenMenu(feedPost, index)}
+							return (
+								<article key={feedPost._id} className="post-article flex row">
+									<div className="post-header">
+										<img
+											className="post-profile-img"
+											src={feedPost.by.imgUrl}
 										/>
+										<h4 onClick={() => navigate(`/user/${feedPost.by._id}`)}>
+											{feedPost.by.fullname}
+										</h4>
+										<div>
+											{loggedInUser &&
+												loggedInUser.following &&
+												!loggedInUser.following.includes(feedPost.by._id) &&
+												loggedInUser._id !== feedPost.by._id && (
+													<span onClick={() => followUser(feedPost.by._id)}>
+														Follow
+													</span>
+												)}
+											<SvgIcon
+												iconName="postDots"
+												className="icon"
+												onClick={() => handleOpenMenu(feedPost, index)}
+											/>
+										</div>
 									</div>
-								</div>
 
-								{/* Make image clickable to open comments */}
-								<img
-									className="post-img"
-									src={feedPost.imgUrl}
-									onClick={() => handleOpenComments(feedPost._id)}
-									style={{ cursor: 'pointer' }}
-								/>
-
-								<div className="post-actions">
-									<SvgIcon
-										iconName={isLiked ? 'likeFilled' : 'like'}
-										fill={isLiked ? '#ff3040' : 'currentColor'}
-										onClick={() => addPostLike(feedPost._id)}
-									/>
-									<span>{feedPost.likedBy.length}</span>
-
-									{/* Update comment icon to use new function */}
-									<SvgIcon
-										iconName="comment"
+									{/* Make image clickable to open comments */}
+									<img
+										className="post-img"
+										src={feedPost.imgUrl}
 										onClick={() => handleOpenComments(feedPost._id)}
 										style={{ cursor: 'pointer' }}
 									/>
-									<span>{feedPost.comments.length}</span>
 
-									<div className="bookmark-icon">
+									<div className="post-actions">
 										<SvgIcon
-											iconName={
-												loggedInUser?.savedPostIds?.includes(feedPost._id)
-													? 'bookmarkFilled'
-													: 'bookmark'
-											}
-											onClick={() => toggleBookmark(feedPost._id)}
+											iconName={isLiked ? 'likeFilled' : 'like'}
+											fill={isLiked ? '#ff3040' : 'currentColor'}
+											onClick={() => addPostLike(feedPost._id)}
 										/>
+										<span>{feedPost.likedBy.length}</span>
+
+										{/* Update comment icon to use new function */}
+										<SvgIcon
+											iconName="comment"
+											onClick={() => handleOpenComments(feedPost._id)}
+											style={{ cursor: 'pointer' }}
+										/>
+										<span>{feedPost.comments.length}</span>
+
+										<div className="bookmark-icon">
+											<SvgIcon
+												iconName={
+													loggedInUser?.savedPostIds?.includes(feedPost._id)
+														? 'bookmarkFilled'
+														: 'bookmark'
+												}
+												onClick={() => toggleBookmark(feedPost._id)}
+											/>
+										</div>
 									</div>
-								</div>
 
-								<div className="post-desc">
-									<h4 onClick={() => navigate(`/user/${feedPost.by._id}`)}>
-										{feedPost.by.fullname}: <span>{feedPost.txt}</span>
-									</h4>
-								</div>
-							</article>
-						);
-					})}
-			</section>
-			<Modal
-				isOpen={isModalOpen}
-				onClose={handleCloseModal}
-				variant={modalType}
-			>
-				{modalType === 'menu' && selectedPost && (
-					<>
-						<div
-							className="modal-item danger"
-							onClick={() => handleReportPost(selectedPost.by)}
-						>
-							Report
-						</div>
+									<div className="post-desc">
+										<h4 onClick={() => navigate(`/user/${feedPost.by._id}`)}>
+											{feedPost.by.fullname}: <span>{feedPost.txt}</span>
+										</h4>
+									</div>
+								</article>
+							);
+						})}
+				</section>
+				<Modal
+					isOpen={isModalOpen}
+					onClose={handleCloseModal}
+					variant={modalType}
+				>
+					{modalType === 'menu' && selectedPost && (
+						<>
+							<div
+								className="modal-item danger"
+								onClick={() => handleReportPost(selectedPost.by)}
+							>
+								Report
+							</div>
 
-						<div
-							className="modal-item"
-							onClick={() => {
-								handleCloseModal();
-								handleOpenComments(selectedPost._id, selectedPostIndex);
-							}}
-						>
-							Go to post
-						</div>
-						<div
-							className="modal-item"
-							onClick={async () => {
-								try {
-									await navigator.clipboard.writeText(
-										`${window.location.origin}/post/${selectedPost._id}`
-									);
-									showGeneralMsg('Link copied to clipboard');
+							<div
+								className="modal-item"
+								onClick={() => {
 									handleCloseModal();
-								} catch (err) {
-									console.error('Failed to copy link:', err);
-								}
-							}}
-						>
-							Copy link
-						</div>
-						<div
-							className="modal-item"
-							onClick={() => {
-								navigate(`/user/${selectedPost.by._id}`);
-								handleCloseModal();
-							}}
-						>
-							About this account
-						</div>
-						<div className="modal-item cancel" onClick={handleCloseModal}>
-							Cancel
-						</div>
-					</>
-				)}
-				{/* {modalType === 'comments' && post && (
+									handleOpenComments(selectedPost._id, selectedPostIndex);
+								}}
+							>
+								Go to post
+							</div>
+							<div
+								className="modal-item"
+								onClick={async () => {
+									try {
+										await navigator.clipboard.writeText(
+											`${window.location.origin}/post/${selectedPost._id}`,
+										);
+										showGeneralMsg('Link copied to clipboard');
+										handleCloseModal();
+									} catch (err) {
+										console.error('Failed to copy link:', err);
+									}
+								}}
+							>
+								Copy link
+							</div>
+							<div
+								className="modal-item"
+								onClick={() => {
+									navigate(`/user/${selectedPost.by._id}`);
+									handleCloseModal();
+								}}
+							>
+								About this account
+							</div>
+							<div className="modal-item cancel" onClick={handleCloseModal}>
+								Cancel
+							</div>
+						</>
+					)}
+					{/* {modalType === 'comments' && post && (
 					<PostDetailsContent
 						post={post}
 						// posts={posts}
@@ -236,7 +241,8 @@ export function Feed() {
 						// onNavigate={handleNavigate}
 					/>
 				)} */}
-			</Modal>
-		</section>
+				</Modal>
+			</section>
+		</>
 	);
 }
