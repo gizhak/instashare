@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 import { userService } from '../services/user/index.js';
 import '../assets/styles/cmps/Search.css';
 
-export function Search({ onClose }) {
+export function Search({ onClose, onUserSelect }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [recentSearches, setRecentSearches] = useState([]);
@@ -31,8 +31,8 @@ export function Search({ onClose }) {
             setIsLoading(true);
             const users = await userService.getUsers();
             const filtered = users.filter(user =>
-                user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                user.fullname.toLowerCase().includes(searchTerm.toLowerCase())
+                (user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    user.fullname.toLowerCase().includes(searchTerm.toLowerCase())) && user._id !== userService.getLoggedinUser()?._id
             );
             setSearchResults(filtered);
         } catch (err) {
@@ -48,9 +48,17 @@ export function Search({ onClose }) {
         setRecentSearches(updated);
         localStorage.setItem('recentSearches', JSON.stringify(updated));
 
-        // Navigate to user profile
-        navigate(`/user/${user._id}`);
-        onClose();
+        if (onUserSelect) {
+            // console.log('Selecting user from Search:', user);
+            onUserSelect(user);
+            // console.log('Closing Search after user selection');
+            // onClose();
+        } else {
+            // Navigate to user profile
+            navigate(`/user/${user._id}`);
+            onClose();
+        }
+
     };
 
     const clearSearch = () => {
