@@ -1,11 +1,11 @@
-import { Outlet, useParams, useNavigate, useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { PostDetailsContent } from './PostDetailsContent.jsx';
+import { Modal } from './Modal.jsx';
+import { useLocation, useNavigate, useParams } from 'react-router';
 import { useSelector } from 'react-redux';
-import { PostDetailsContent } from '../cmps/PostDetailsContent';
-import { loadPost } from '../store/actions/post.actions.js';
-import { Modal } from '../cmps/Modal';
+import { useEffect, useState } from 'react';
+import { loadPost } from '../store/actions/post.actions';
 
-export function HomePage() {
+export function PostModal() {
 	const { postId, id: userId } = useParams();
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -80,34 +80,26 @@ export function HomePage() {
 	}
 
 	return (
-		<section className="home">
-			<Outlet />
-
-			<Modal
-				isOpen={!!selectedPost}
-				onClose={handleCloseModal}
-				variant="comments"
-			>
-				{loading ? (
-					<div className="loading-container">
-						<div className="loading-dots">
-							<span></span>
-							<span></span>
-							<span></span>
-						</div>
+		<Modal isOpen={true} onClose={handleCloseModal} variant="comments">
+			{loading ? (
+				<div className="loading-container">
+					<div className="loading-dots">
+						<span></span>
+						<span></span>
+						<span></span>
 					</div>
-				) : (
-					selectedPost && (
-						<PostDetailsContent
-							post={selectedPost}
-							posts={contextPosts}
-							currentIndex={currentIndex}
-							onNavigate={handleNavigate}
-							onClose={handleCloseModal}
-						/>
-					)
-				)}
-			</Modal>
-		</section>
+				</div>
+			) : (
+				selectedPost && (
+					<PostDetailsContent
+						post={selectedPost}
+						posts={contextPosts}
+						currentIndex={currentIndex}
+						onNavigate={handleNavigate}
+						onClose={handleCloseModal}
+					/>
+				)
+			)}
+		</Modal>
 	);
 }
