@@ -21,6 +21,7 @@
 @import 'cmps/UserMsg';
 @import 'cmps/LoadingSpinner';
 @import 'cmps/Search';
+@import 'cmps/MessagesUser.css';
 
 @import 'cmps/car/CarIndex';
 @import 'cmps/car/CarList';

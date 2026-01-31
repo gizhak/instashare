@@ -20,6 +20,7 @@ import { AppFooter } from './cmps/AppFooter';
 import { UserMsg } from './cmps/UserMsg.jsx';
 import { CreatePost } from './cmps/CreatePost.jsx';
 import { Search } from './cmps/Search.jsx';
+import { MessagesUser } from './cmps/MessagesUser.jsx';
 
 import { LoginSignup, Login, Signup } from './pages/LoginSignup.jsx';
 import { PostIndex } from './pages/PostIndex.jsx';
@@ -35,12 +36,16 @@ export function RootCmp() {
 	const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
 
+	// Messages drawer state
+	const [isMessageOpen, setIsMessageOpen] = useState(false);
+
 	return (
 		<div className="main-container grid grid-rows-3">
 			<div className="header-container">
 				<AppHeader
 					onCreatePostClick={() => setIsCreatePostOpen(true)}
 					onSearchClick={() => setIsSearchOpen(true)}
+					onMessageClick={() => setIsMessageOpen(true)}
 				/>
 			</div>
 			<UserMsg />
@@ -88,6 +93,7 @@ export function RootCmp() {
 				<CreatePost onClose={() => setIsCreatePostOpen(false)} />
 			)}
 			{isSearchOpen && <Search onClose={() => setIsSearchOpen(false)} />}
+			{isMessageOpen && <MessagesUser onClose={() => setIsMessageOpen(false)} />}
 		</div>
 	);
 }
