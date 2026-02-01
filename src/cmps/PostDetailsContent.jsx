@@ -84,6 +84,13 @@ export function PostDetailsContent({
 		ev.stopPropagation();
 		console.log('Post ID:', post._id, 'Comment ID:', commentId);
 
+		// Authorization check: Only the comment owner can delete their comment
+		const comment = comments.find((c) => c.id === commentId);
+		if (!comment || !loggedinUser || comment.by._id !== loggedinUser._id) {
+			console.error('Unauthorized: You can only delete your own comments');
+			return;
+		}
+
 		try {
 			const updatedComments = comments.filter((c) => c.id !== commentId);
 			setComments(updatedComments);
@@ -95,6 +102,13 @@ export function PostDetailsContent({
 	}
 
 	async function handleDeletePost() {
+		// Authorization check: Only the post owner can delete the post
+		if (!loggedinUser || post.by._id !== loggedinUser._id) {
+			console.error('Unauthorized: You can only delete your own posts');
+			setShowDeleteMenu(false);
+			return;
+		}
+
 		try {
 			setIsDeleting(true);
 			await removePost(post._id);
@@ -225,9 +239,12 @@ export function PostDetailsContent({
 							/>
 							<span className="username">{currentPost.by?.fullname}</span>
 						</div>
-						<div className="more-options">
-							<SvgIcon iconName="postDots" onClick={toggleDeleteMenu} />
-						</div>
+						{/* Only show delete menu for post owner */}
+						{loggedinUser && currentPost.by?._id === loggedinUser._id && (
+							<div className="more-options">
+								<SvgIcon iconName="postDots" onClick={toggleDeleteMenu} />
+							</div>
+						)}
 					</div>
 
 					{/* Delete Menu Modal */}

@@ -106,6 +106,13 @@ export function UserDetails() {
 
 	//image upload functions
 	async function handleImageChange(ev) {
+		// Authorization check: Only the logged-in user can update their own profile photo
+		if (loggedInUser._id !== user._id) {
+			showErrorMsg('You can only update your own profile photo');
+			setIsModalOpen(false);
+			return;
+		}
+
 		setIsUploading(true);
 		// console.log('ev:', ev.target.files[0]);
 		const file = ev.target.files[0];
@@ -140,6 +147,13 @@ export function UserDetails() {
 
 	//remove image function
 	async function handleRemoveImage(ev) {
+		// Authorization check: Only the logged-in user can remove their own profile photo
+		if (loggedInUser._id !== user._id) {
+			showErrorMsg('You can only remove your own profile photo');
+			setIsModalOpen(false);
+			return;
+		}
+
 		const DEFAULT_USER_IMG =
 			'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png';
 		// window.confirm('Are you sure you want to remove your profile photo?');
