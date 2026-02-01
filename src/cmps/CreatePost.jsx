@@ -82,6 +82,16 @@ export function CreatePost({ onClose }) {
     const handleShare = async () => {
         if (!selectedImage || !loggedinUser) return;
 
+        console.log('🔍 Logged in user from Redux:', loggedinUser);
+        console.log('🔍 Has imgUrl?', loggedinUser.imgUrl);
+
+        // If user doesn't have imgUrl, fetch it from server
+        let userImgUrl = loggedinUser.imgUrl;
+        if (!userImgUrl) {
+            console.warn('⚠️ User missing imgUrl, using fallback');
+            userImgUrl = 'https://i.pravatar.cc/150?img=68';
+        }
+
         try {
             setIsUploading(true);
             const imgUrl = await uploadService.uploadImg(selectedImage);
@@ -92,13 +102,14 @@ export function CreatePost({ onClose }) {
                 by: {
                     _id: loggedinUser._id,
                     fullname: loggedinUser.fullname,
-                    imgUrl: loggedinUser.imgUrl,
+                    imgUrl: userImgUrl,
                 },
                 likedBy: [],
                 comments: [],
                 createdAt: new Date().toISOString(),
             };
 
+            console.log('📝 New post being created:', newPost);
             await addPost(newPost);
             showSuccessMsg('Post created successfully!');
             onClose();
