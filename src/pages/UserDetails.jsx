@@ -221,11 +221,8 @@ export function UserDetails() {
 	}
 
 	//navigation to other user details
-	async function handleNavigate(userId) {
-		setIsLoading(true);
-		// console.log('Navigating to user with ID:', userId);
+	function handleNavigate(userId) {
 		navigate(`/user/${userId}`);
-		window.location.reload();
 	}
 
 	return (

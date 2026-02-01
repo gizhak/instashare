@@ -5,6 +5,7 @@ import {
 	addPostLike,
 	loadPosts,
 	loadPost,
+	addPost,
 } from '../store/actions/post.actions';
 import { SvgIcon } from '../cmps/SvgIcon';
 import { Modal } from '../cmps/Modal';
@@ -30,6 +31,11 @@ export function Feed() {
 
 	const loggedInUser = userService.getLoggedinUser();
 	// console.log('loggedInUser:', loggedInUser);
+
+	console.log('Feed posts:', posts)
+	if (posts && posts.length > 0) {
+		console.log('First post by:', posts[0].by)
+	}
 
 	useEffect(() => {
 		loadPosts();
@@ -113,7 +119,8 @@ export function Feed() {
 									<div className="post-header">
 										<img
 											className="post-profile-img"
-											src={feedPost.by.imgUrl}
+											src={feedPost.by?.imgUrl}
+										// alt={feedPost.by?.fullname}
 										/>
 										<h4 onClick={() => navigate(`/user/${feedPost.by._id}`)}>
 											{feedPost.by.fullname}

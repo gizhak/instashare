@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import {
 	addPostComment,
 	deletePostComment,
@@ -17,6 +18,7 @@ export function PostDetailsContent({
 	onNavigate,
 	onClose,
 }) {
+	const navigate = useNavigate();
 	const loggedinUser = useSelector((storeState) => storeState.userModule.user);
 
 	const [commentTxt, setCommentTxt] = useState('');
@@ -93,17 +95,24 @@ export function PostDetailsContent({
 	}
 
 	async function handleDeletePost() {
-		setIsDeleting(true);
-		await removePost(post._id);
-		setShowDeleteMenu(false);
-		if (onClose) onClose();
-		window.location.reload();
+		try {
+			setIsDeleting(true);
+			await removePost(post._id);
+			setShowDeleteMenu(false);
+			if (onClose) onClose();
+			// Navigate to home instead of reload
+			navigate('/');
+		} catch (err) {
+			console.error('Failed to delete post:', err);
+			setIsDeleting(false);
+		}
 	}
 
 	function toggleDeleteMenu(ev) {
 		ev.stopPropagation();
 		setShowDeleteMenu(!showDeleteMenu);
 	}
+
 	function handlePrev(ev) {
 		ev.stopPropagation();
 		if (currentIndex > 0 && onNavigate) {
@@ -258,8 +267,8 @@ export function PostDetailsContent({
 											<span className="comment-text">{comment.txt}</span>
 											<span
 												className={`comment-like ${comment.likedBy?.includes(loggedinUser._id)
-														? 'liked'
-														: ''
+													? 'liked'
+													: ''
 													}`}
 												onClick={(e) => handleToggleLikeComment(e, comment.id)}
 											>
