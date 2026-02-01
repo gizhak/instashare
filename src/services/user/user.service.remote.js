@@ -12,6 +12,10 @@ export const userService = {
 	update,
 	getLoggedinUser,
 	saveLoggedinUser,
+	getRemovedUser,
+	saveRemovedUser,
+	getRemovedUsers,
+	reactivateUser,
 };
 
 function getUsers() {
@@ -23,18 +27,26 @@ async function getById(userId) {
 	return user;
 }
 
-function remove(userId) {
+async function remove(userId) {
+	console.log('🔴 user.service.remote.js - remove called with:', userId);
+	// Get user details before removing
+	const user = await httpService.get(`user/${userId}`);
+	if (user) {
+		saveRemovedUser(user);
+	}
 	return httpService.delete(`user/${userId}`);
 }
 
-async function update({ _id, score }) {
-	const user = await httpService.put(`user/${_id}`, { _id, score });
+async function update(user) {
+	const updatedUser = await httpService.put(`user/${user._id}`, user);
 
 	// When admin updates other user's details, do not update loggedinUser
-	const loggedinUser = getLoggedinUser(); // Might not work because its defined in the main service???
-	if (loggedinUser._id === user._id) saveLoggedinUser(user);
+	const loggedinUser = getLoggedinUser();
+	if (loggedinUser && loggedinUser._id === updatedUser._id) {
+		saveLoggedinUser(updatedUser);
+	}
 
-	return user;
+	return updatedUser;
 }
 
 async function login(userCred) {
@@ -59,6 +71,23 @@ async function logout() {
 
 function getLoggedinUser() {
 	return JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGEDIN_USER));
+}
+
+function getRemovedUser() {
+	return JSON.parse(sessionStorage.getItem('removedUser'));
+}
+
+function saveRemovedUser(user) {
+	sessionStorage.setItem('removedUser', JSON.stringify(user));
+	return user;
+}
+
+function getRemovedUsers() {
+	return httpService.get('user/removed');
+}
+
+async function reactivateUser(userId, password) {
+	return httpService.post(`user/${userId}/reactivate`, { password });
 }
 
 function saveLoggedinUser(user) {

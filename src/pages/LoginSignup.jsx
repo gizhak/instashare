@@ -36,9 +36,29 @@ export function Login() {
     }
 
     async function onRemoveUser(userId) {
-        console.log('Removing user with ID:', userId)
-        await userService.remove(userId)
-        loadUsers()
+        console.log('🔵 LoginSignup.jsx - onRemoveUser called with:', userId)
+        try {
+            // Get the user to login temporarily
+            const userToRemove = users.find(u => u._id === userId)
+            if (!userToRemove) {
+                console.error('❌ User not found')
+                return
+            }
+
+            // Login the user temporarily to have auth for delete
+            console.log('🔑 Logging in user temporarily for delete:', userToRemove.username)
+            await login({ username: userToRemove.username })
+
+            // Now remove the user
+            const result = await userService.remove(userId)
+            console.log('✅ LoginSignup.jsx - User removed successfully:', result)
+
+            // Reload users list
+            await loadUsers()
+            console.log('✅ LoginSignup.jsx - Users list reloaded')
+        } catch (err) {
+            console.error('❌ LoginSignup.jsx - Error removing user:', err)
+        }
     }
 
     return (
@@ -63,7 +83,12 @@ export function Login() {
                                     </div>
                                     <button
                                         className="remove-btn"
-                                        onClick={() => onRemoveUser(user._id)}
+                                        type="button"
+                                        onClick={(e) => {
+                                            e.preventDefault()
+                                            e.stopPropagation()
+                                            onRemoveUser(user._id)
+                                        }}
                                     >
                                         Remove
                                     </button>
@@ -179,7 +204,28 @@ export function Login() {
 
 export function Signup() {
     const [credentials, setCredentials] = useState(userService.getEmptyUser())
+    const [showRemovedUsers, setShowRemovedUsers] = useState(false)
+    const [removedUsers, setRemovedUsers] = useState([])
+    const [selectedUser, setSelectedUser] = useState(null)
+    const [password, setPassword] = useState('')
+    const [error, setError] = useState('')
+    const [attempts, setAttempts] = useState(0)
     const navigate = useNavigate()
+
+    useEffect(() => {
+        if (showRemovedUsers) {
+            loadRemovedUsers()
+        }
+    }, [showRemovedUsers])
+
+    async function loadRemovedUsers() {
+        try {
+            const users = await userService.getRemovedUsers()
+            setRemovedUsers(users)
+        } catch (err) {
+            console.error('Error loading removed users:', err)
+        }
+    }
 
     function clearState() {
         setCredentials({ username: '', password: '', fullname: '', imgUrl: '' })
@@ -203,8 +249,167 @@ export function Signup() {
         setCredentials({ ...credentials, imgUrl })
     }
 
+    function closeRestoreModal() {
+        setShowRemovedUsers(false)
+        setSelectedUser(null)
+        setPassword('')
+        setError('')
+        setAttempts(0)
+    }
+
+    async function onReactivate(ev) {
+        ev.preventDefault()
+        ev.stopPropagation()
+
+        if (!password) {
+            setError('Please enter a password')
+            return
+        }
+
+        setError('')
+
+        if (attempts >= 3) {
+            setError('Too many attempts. Please go to login page.')
+            return
+        }
+
+        try {
+            console.log('🔄 Attempting to reactivate user:', selectedUser._id)
+            const reactivatedUser = await userService.reactivateUser(selectedUser._id, password)
+            console.log('✅ User reactivated:', reactivatedUser)
+
+            // Login the reactivated user
+            await login({ username: reactivatedUser.username })
+            closeRestoreModal()
+            navigate('/')
+        } catch (err) {
+            console.error('❌ Error reactivating user:', err)
+            const newAttempts = attempts + 1
+            setAttempts(newAttempts)
+
+            if (err.response?.data?.err === 'Incorrect password') {
+                if (newAttempts >= 3) {
+                    setError('Too many failed attempts. Please use the login page.')
+                } else {
+                    setError(`Incorrect password. ${3 - newAttempts} ${3 - newAttempts === 1 ? 'attempt' : 'attempts'} remaining.`)
+                }
+            } else {
+                setError('Failed to reactivate user. Please try again.')
+            }
+
+            // Clear password field for next attempt
+            setPassword('')
+        }
+    }
+
     return (
         <div className="signup-page">
+            {/* Restore Account Modal */}
+            {showRemovedUsers && (
+                <div className="modal-overlay" onClick={closeRestoreModal}>
+                    <div className="remove-modal" onClick={(e) => e.stopPropagation()}>
+                        <button className='close-btn' onClick={closeRestoreModal}>
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em" aria-hidden="true" className="close-btn-icon">
+                                <path d="M5.707 4.293a1 1 0 1 0-1.414 1.414L10.586 12l-6.293 6.293a1 1 0 1 0 1.414 1.414L12 13.414l6.293 6.293a1 1 0 0 0 1.414-1.414L13.414 12l6.293-6.293a1 1 0 1 0-1.414-1.414L12 10.586 5.707 4.293z"></path>
+                            </svg>
+                        </button>
+
+                        {!selectedUser ? (
+                            <>
+                                <h2>Restore your account</h2>
+                                <div className="remove-users-list">
+                                    {removedUsers.length === 0 ? (
+                                        <p>No removed accounts found</p>
+                                    ) : (
+                                        removedUsers.map(user => (
+                                            <div key={user._id} className="remove-user-item">
+                                                <img src={user.imgUrl} alt={user.fullname} />
+                                                <div className="user-info">
+                                                    <span className="username">{user.fullname}</span>
+                                                    <span className="app-name">@{user.username}</span>
+                                                </div>
+                                                <button
+                                                    className="remove-btn"
+                                                    type="button"
+                                                    onClick={() => setSelectedUser(user)}
+                                                >
+                                                    Restore
+                                                </button>
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <button
+                                    type="button"
+                                    className="back-arrow-btn"
+                                    onClick={() => {
+                                        setSelectedUser(null)
+                                        setPassword('')
+                                        setError('')
+                                        setAttempts(0)
+                                    }}
+                                    style={{
+                                        position: 'absolute',
+                                        top: '15px',
+                                        left: '15px',
+                                        background: 'none',
+                                        border: 'none',
+                                        fontSize: '24px',
+                                        cursor: 'pointer',
+                                        color: '#262626'
+                                    }}
+                                >
+                                    &lt;
+                                </button>
+
+                                <div className="user-avatar" style={{ textAlign: 'center', margin: '40px 0 20px' }}>
+                                    <img src={selectedUser.imgUrl} alt={selectedUser.fullname} style={{ width: '80px', height: '80px', borderRadius: '50%' }} />
+                                    <h3 style={{ margin: '10px 0 5px' }}>{selectedUser.fullname}</h3>
+                                    <p style={{ color: '#8e8e8e', margin: '0 0 20px' }}>@{selectedUser.username}</p>
+                                </div>
+
+                                <form onSubmit={onReactivate}>
+                                    <label className="input-label">Enter your password to restore your account</label>
+                                    <input
+                                        type="password"
+                                        value={password}
+                                        placeholder="Password"
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        autoFocus
+                                        disabled={attempts >= 3}
+                                        style={{ width: '100%', padding: '10px', marginBottom: '10px' }}
+                                    />
+
+                                    {error && <p style={{ color: 'red', fontSize: '14px', marginBottom: '10px' }}>{error}</p>}
+
+                                    {attempts >= 3 ? (
+                                        <NavLink
+                                            to="/auth/login"
+                                            className="submit-btn"
+                                            style={{ display: 'block', textAlign: 'center', textDecoration: 'none', width: '100%' }}
+                                            onClick={closeRestoreModal}
+                                        >
+                                            Go to Login
+                                        </NavLink>
+                                    ) : (
+                                        <button
+                                            type="submit"
+                                            className="submit-btn"
+                                            style={{ width: '100%' }}
+                                        >
+                                            Restore Account
+                                        </button>
+                                    )}
+                                </form>
+                            </>
+                        )}
+                    </div>
+                </div>
+            )}
+
             <form className="signup-form" onSubmit={onSignup}>
                 <div className="signup-container">
                     <NavLink to="/auth/login" className="back-btn">&lt;</NavLink>
@@ -305,7 +510,14 @@ export function Signup() {
                     <button type="submit" className="submit-btn">Submit</button>
 
                     {/* Already have account */}
-                    <NavLink to="/auth/login" className="login-link">I already have an account</NavLink>
+                    <button
+                        type="button"
+                        onClick={() => setShowRemovedUsers(true)}
+                        className="login-link"
+                        style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#0095f6', width: '100%', marginTop: '15px' }}
+                    >
+                        I already have an account
+                    </button>
                 </div>
             </form>
         </div>

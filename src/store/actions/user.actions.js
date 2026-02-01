@@ -27,10 +27,12 @@ export async function loadUsers() {
 
 export async function removeUser(userId) {
 	try {
+		console.log('🟢 user.actions.js - removeUser called with:', userId);
 		await userService.remove(userId);
+		console.log('✅ user.actions.js - remove completed');
 		store.dispatch({ type: REMOVE_USER, userId });
 	} catch (err) {
-		console.log('UserActions: err in removeUser', err);
+		console.log('❌ UserActions: err in removeUser', err);
 	}
 }
 

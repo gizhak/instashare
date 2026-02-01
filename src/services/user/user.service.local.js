@@ -12,6 +12,10 @@ export const userService = {
 	update,
 	getLoggedinUser,
 	saveLoggedinUser,
+	getRemovedUser,
+	saveRemovedUser,
+	getRemovedUsers,
+	reactivateUser,
 };
 
 async function getUsers() {
@@ -26,7 +30,12 @@ async function getById(userId) {
 	return await storageService.get('user', userId);
 }
 
-function remove(userId) {
+async function remove(userId) {
+	// Get user details before removing
+	const user = await storageService.get('user', userId);
+	if (user) {
+		saveRemovedUser(user);
+	}
 	return storageService.remove('user', userId);
 }
 
@@ -78,6 +87,34 @@ async function logout() {
 
 function getLoggedinUser() {
 	return JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGEDIN_USER));
+}
+
+function getRemovedUser() {
+	return JSON.parse(sessionStorage.getItem('removedUser'));
+}
+
+function saveRemovedUser(user) {
+	sessionStorage.setItem('removedUser', JSON.stringify(user));
+	return user;
+}
+
+async function getRemovedUsers() {
+	const allUsers = await storageService.query('user');
+	return allUsers.filter(user => user.isActive === false).map(user => {
+		delete user.password;
+		return user;
+	});
+}
+
+async function reactivateUser(userId, password) {
+	const user = await storageService.get('user', userId);
+	if (!user) throw new Error('User not found');
+	if (user.password !== password) throw new Error('Incorrect password');
+
+	user.isActive = true;
+	await storageService.put('user', user);
+	delete user.password;
+	return user;
 }
 
 function saveLoggedinUser(user) {
