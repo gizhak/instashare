@@ -23,6 +23,7 @@ export function PostDetailsContent({
 	const [showDeleteMenu, setShowDeleteMenu] = useState(false);
 	const [isDeleting, setIsDeleting] = useState(false);
 	const [comments, setComments] = useState(post?.comments || []);
+	const [currentPost, setCurrentPost] = useState(post);
 	const [isLiked, setIsLiked] = useState(() => {
 		if (!loggedinUser) return false;
 		return post?.likedBy?.some((user) => user._id === loggedinUser._id);
@@ -31,6 +32,7 @@ export function PostDetailsContent({
 	// Update comments when post changes (for navigation)
 	useEffect(() => {
 		setComments(post?.comments || []);
+		setCurrentPost(post);
 		setIsLiked(() => {
 			if (!loggedinUser) return false;
 			return post?.likedBy?.some((user) => user._id === loggedinUser._id);
@@ -39,9 +41,22 @@ export function PostDetailsContent({
 
 	async function handleLike(ev) {
 		ev.stopPropagation();
-		setIsLiked(!isLiked);
-		const likedPost = await addPostLike(post._id);
-		console.log('Liked post returned:', likedPost);
+		try {
+			// Optimistically update UI
+			setIsLiked(!isLiked);
+
+			// Call the backend
+			const likedPost = await addPostLike(post._id);
+			console.log('Liked post returned:', likedPost);
+
+			// Update the current post with the new data
+			setCurrentPost(likedPost);
+			setIsLiked(likedPost?.likedBy?.some((user) => user._id === loggedinUser._id));
+		} catch (err) {
+			console.error('Failed to toggle like:', err);
+			// Revert on error
+			setIsLiked(isLiked);
+		}
 	}
 
 	async function handleAddComment(ev) {
@@ -186,7 +201,7 @@ export function PostDetailsContent({
 			<div className="post-details-modal">
 				{/* Left - Image */}
 				<div className="post-details-image">
-					<img src={post.imgUrl} alt="post" />
+					<img src={currentPost.imgUrl} alt="post" />
 				</div>
 
 				{/* Right - Info */}
@@ -196,10 +211,10 @@ export function PostDetailsContent({
 						<div className="user-info">
 							<img
 								className="user-image-post"
-								src={post.by?.imgUrl}
-								alt={post.by?.fullname}
+								src={currentPost.by?.imgUrl}
+								alt={currentPost.by?.fullname}
 							/>
-							<span className="username">{post.by?.fullname}</span>
+							<span className="username">{currentPost.by?.fullname}</span>
 						</div>
 						<div className="more-options">
 							<SvgIcon iconName="postDots" onClick={toggleDeleteMenu} />
@@ -242,11 +257,10 @@ export function PostDetailsContent({
 											</span>
 											<span className="comment-text">{comment.txt}</span>
 											<span
-												className={`comment-like ${
-													comment.likedBy?.includes(loggedinUser._id)
+												className={`comment-like ${comment.likedBy?.includes(loggedinUser._id)
 														? 'liked'
 														: ''
-												}`}
+													}`}
 												onClick={(e) => handleToggleLikeComment(e, comment.id)}
 											>
 												{comment.likedBy?.includes(loggedinUser._id) ? (
@@ -299,17 +313,17 @@ export function PostDetailsContent({
 						</div>
 						{/* Guy - Added likes count display */}
 						<div className="likes-count">
-							{post.likedBy && post.likedBy.length > 0 ? (
+							{currentPost.likedBy && currentPost.likedBy.length > 0 ? (
 								<div className="post-likes">
-									{post?.likedBy?.length || 0}{' '}
-									{post?.likedBy?.length === 1 ? 'like' : 'likes'}
+									{currentPost?.likedBy?.length || 0}{' '}
+									{currentPost?.likedBy?.length === 1 ? 'like' : 'likes'}
 								</div>
 							) : (
 								'Be the first to like this'
 							)}
 						</div>
 
-						<div className="post-date">{getTimeAgo(post.createdAt)}</div>
+						<div className="post-date">{getTimeAgo(currentPost.createdAt)}</div>
 					</div>
 
 					{/* Add Comment Form */}
