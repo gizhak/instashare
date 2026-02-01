@@ -30,11 +30,12 @@ export function Feed() {
 	const [selectedPostIndex, setSelectedPostIndex] = useState(null);
 
 	const loggedInUser = userService.getLoggedinUser();
+
 	// console.log('loggedInUser:', loggedInUser);
 
-	console.log('Feed posts:', posts)
+	console.log('Feed posts:', posts);
 	if (posts && posts.length > 0) {
-		console.log('First post by:', posts[0].by)
+		console.log('First post by:', posts[0].by);
 	}
 
 	useEffect(() => {
@@ -84,10 +85,17 @@ export function Feed() {
 	}
 
 	async function followUser(userId) {
-		const updates = {
+		const userFollowed = await userService.getById(userId);
+		await updateUser({
 			following: [...loggedInUser.following, userId],
-		};
-		await updateUser(updates);
+		});
+
+		await updateUser(
+			{
+				followers: [...userFollowed.followers, loggedInUser._id],
+			},
+			userId,
+		);
 		showSuccessMsg('You are now following this user');
 	}
 
@@ -120,7 +128,7 @@ export function Feed() {
 										<img
 											className="post-profile-img"
 											src={feedPost.by?.imgUrl}
-										// alt={feedPost.by?.fullname}
+											// alt={feedPost.by?.fullname}
 										/>
 										<h4 onClick={() => navigate(`/user/${feedPost.by._id}`)}>
 											{feedPost.by.fullname}
