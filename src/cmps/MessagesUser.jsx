@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux'
 
 import { userService } from '../services/user/index.js';
+import { messageService } from '../services/message/index.js';
 import { Search } from './Search.jsx';
 import { SearchUsers } from './SearchUsers.jsx';
 // import { send } from 'vite';
@@ -16,24 +17,35 @@ import { socketService, SOCKET_EMIT_SEND_MSG, SOCKET_EVENT_ADD_MSG, SOCKET_EMIT_
 
 
 
-export function MessagesUser({ onClose }) {
+export function MessagesUser({ onClose, unreadFrom = [], clearUnreadFrom }) {
     const [selectedUser, setSelectedUser] = useState(null);
-    // console.log('selectedUser:', selectedUser);
     const loggedInUser = useSelector(storeState => storeState.userModule.user)
-    // console.log('MessagesUser loggedInUser:', loggedInUser);
-    // console.log('talking to user:', selectedUser);
 
     const containerRef = useRef(null)
     const messagesEndRef = useRef(null)
+    const selectedUserRef = useRef(null)
 
-
-
-    {/* Chat state */ }
+    // Chat state
     const [msg, setMsg] = useState({ txt: '' });
     const [msgs, setMsgs] = useState([]);
-    const [deleteMsgId, setDeleteMsgId] = useState(null);
+    const [conversations, setConversations] = useState([]);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     const botTimeoutRef = useRef();
+
+    // Load conversations on mount
+    useEffect(() => {
+        loadConversations();
+    }, []);
+
+    async function loadConversations() {
+        try {
+            const convos = await messageService.getConversations();
+            setConversations(convos);
+        } catch (err) {
+            console.error('Failed to load conversations:', err);
+        }
+    }
 
     useEffect(() => {
         socketService.on(SOCKET_EVENT_ADD_MSG, addMsg);
@@ -42,6 +54,26 @@ export function MessagesUser({ onClose }) {
             botTimeoutRef.current && clearTimeout(botTimeoutRef.current);
         };
     }, []);
+
+    // Load chat history when user is selected
+    useEffect(() => {
+        selectedUserRef.current = selectedUser;
+        if (!selectedUser) return;
+        loadMessages();
+        // Clear unread indicator when opening chat with this user
+        if (clearUnreadFrom) {
+            clearUnreadFrom(selectedUser._id);
+        }
+    }, [selectedUser]);
+
+    async function loadMessages() {
+        try {
+            const messages = await messageService.getMessages(selectedUser._id);
+            setMsgs(messages);
+        } catch (err) {
+            console.error('Failed to load messages:', err);
+        }
+    }
 
     useEffect(() => {
         function handleClickOutside(event) {
@@ -60,14 +92,37 @@ export function MessagesUser({ onClose }) {
 
 
     function addMsg(newMsg) {
-        setMsgs((prevMsgs) => [...prevMsgs, newMsg]);
+        // Only add messages that are part of current conversation
+        const currentSelectedUser = selectedUserRef.current;
+        if (!currentSelectedUser) return;
+        const isRelevant =
+            (newMsg.fromUserId === currentSelectedUser._id) ||
+            (newMsg.toUserId === currentSelectedUser._id) ||
+            (newMsg.to === currentSelectedUser._id);
+        if (!isRelevant) return;
+
+        setMsgs((prevMsgs) => {
+            // Avoid duplicates by checking _id
+            if (newMsg._id && prevMsgs.some(m => m._id === newMsg._id)) {
+                return prevMsgs;
+            }
+            return [...prevMsgs, newMsg];
+        });
     }
 
     function sendMsg(ev) {
         console.log('Sending message to:', selectedUser);
         ev.preventDefault();
-        const from = loggedInUser?.fullname || 'Me';
-        const newMsg = { from, to: selectedUser._id, txt: msg.txt };
+        if (!msg.txt.trim()) return;
+        const newMsg = {
+            fromUserId: loggedInUser._id,
+            from: loggedInUser?.fullname || 'Me',
+            fromImgUrl: loggedInUser?.imgUrl,
+            to: selectedUser._id,
+            toFullname: selectedUser.fullname,
+            toImgUrl: selectedUser.imgUrl,
+            txt: msg.txt
+        };
         socketService.emit(SOCKET_EMIT_SEND_MSG, newMsg);
         setMsg({ txt: '' });
     }
@@ -86,6 +141,40 @@ export function MessagesUser({ onClose }) {
         setMsg((prevMsg) => ({ ...prevMsg, [name]: value }));
     }
 
+    async function handleDeleteChat() {
+        if (!selectedUser) return;
+        try {
+            await messageService.deleteConversation(selectedUser._id);
+            setMsgs([]);
+            setShowDeleteConfirm(false);
+            // Refresh conversations list
+            loadConversations();
+        } catch (err) {
+            console.error('Failed to delete conversation:', err);
+        }
+    }
+
+    function handleSelectConversation(convo) {
+        // Create a user object from conversation data
+        const user = {
+            _id: convo.otherUserId,
+            fullname: convo.otherFullname,
+            username: convo.username,
+            imgUrl: convo.imgUrl || '/img/default-user.png'
+        };
+        setSelectedUser(user);
+    }
+
+    // Auto-select user with unread messages when opening
+    useEffect(() => {
+        if (unreadFrom.length > 0 && conversations.length > 0 && !selectedUser) {
+            const unreadConvo = conversations.find(c => unreadFrom.includes(c.otherUserId));
+            if (unreadConvo) {
+                handleSelectConversation(unreadConvo);
+            }
+        }
+    }, [unreadFrom, conversations]);
+
     return (
         <div className="messages-container" ref={containerRef}>
 
@@ -98,23 +187,75 @@ export function MessagesUser({ onClose }) {
                 <div>
                     <SearchUsers onUserSelect={setSelectedUser} />
                 </div>
+
+                {/* Recent conversations */}
+                {conversations.length > 0 && (
+                    <div className="conversations-list">
+                        <h4>Recent Chats</h4>
+                        <ul>
+                            {conversations.map(convo => (
+                                <li
+                                    key={convo.otherUserId}
+                                    onClick={() => handleSelectConversation(convo)}
+                                    className={selectedUser?._id === convo.otherUserId ? 'selected' : ''}
+                                >
+                                    <img
+                                        src={convo.imgUrl || '/img/default-user.png'}
+                                        alt={convo.otherFullname}
+                                        className="convo-img"
+                                    />
+                                    <div className="convo-info">
+                                        <span className="convo-name">{convo.otherFullname}</span>
+                                        <span className="convo-preview">{convo.lastMessage?.substring(0, 20)}...</span>
+                                    </div>
+                                    {unreadFrom.includes(convo.otherUserId) && (
+                                        <span className="unread-dot"></span>
+                                    )}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
             </div>
             {/* chat area */}
             {selectedUser && (
                 <div className="chat-section">
                     <div className="chat-header">
-                        {<img src={selectedUser.imgUrl} alt={selectedUser.fullname} />} {selectedUser.fullname} (@{selectedUser.username})
+                        <div className="chat-header-info">
+                            <img src={selectedUser.imgUrl} alt={selectedUser.fullname} />
+                            <span>{selectedUser.fullname} {selectedUser.username && `(@${selectedUser.username})`}</span>
+                        </div>
+                        <button className="delete-chat-btn" onClick={() => setShowDeleteConfirm(true)}>
+                            Delete Chat
+                        </button>
                     </div>
 
+                    {/* Delete confirmation modal */}
+                    {showDeleteConfirm && (
+                        <div className="delete-confirm-modal">
+                            <div className="delete-confirm-content">
+                                <p>Are you sure you want to delete this conversation?</p>
+                                <p className="delete-warning">This action cannot be undone.</p>
+                                <div className="delete-confirm-buttons">
+                                    <button className="cancel-btn" onClick={() => setShowDeleteConfirm(false)}>Cancel</button>
+                                    <button className="confirm-delete-btn" onClick={handleDeleteChat}>Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     <ul className="chat-messages">
-                        {msgs.map((msg, idx) => (
-                            <li key={idx} className="message-item">
-                                {msg.from === loggedInUser.fullname && (
-                                    <button className='more-message-btn' onClick={() => onDeleteMessage(idx)}>...</button>
-                                )}
-                                <span className="message-text">{msg.txt}</span>
-                            </li>
-                        ))}
+                        {msgs.map((msg, idx) => {
+                            const isMyMsg = msg.fromUserId === loggedInUser._id || msg.from === loggedInUser.fullname;
+                            return (
+                                <li key={msg._id || idx} className={`message-item ${isMyMsg ? 'my-message' : 'other-message'}`}>
+                                    {isMyMsg && (
+                                        <button className='more-message-btn' onClick={() => onDeleteMessage(idx)}>...</button>
+                                    )}
+                                    <span className="message-text">{msg.txt}</span>
+                                </li>
+                            );
+                        })}
                         <div ref={messagesEndRef} />
                     </ul>
 

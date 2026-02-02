@@ -15,7 +15,7 @@ const SOCKET_EMIT_LOGIN = 'set-user-socket'
 const SOCKET_EMIT_LOGOUT = 'unset-user-socket'
 
 
-const baseUrl = (process.env.NODE_ENV === 'production') ? '' : '//localhost:3030'
+const baseUrl = import.meta.env.PROD ? '' : '//localhost:3030'
 
 export const socketService = (VITE_LOCAL === 'true')? createDummySocketService() : createSocketService()
 
@@ -30,11 +30,20 @@ function createSocketService() {
   const socketService = {
     setup() {
       socket = io(baseUrl)
+      console.log('Socket connected to:', baseUrl)
       const user = userService.getLoggedinUser()
-      if (user) this.login(user._id)
+      console.log('Socket setup - user from storage:', user)
+      if (user) {
+        console.log('Socket login with userId:', user._id)
+        this.login(user._id)
+      }
     },
     on(eventName, cb) {
-      socket.on(eventName, cb)
+      console.log('Socket registering listener for:', eventName)
+      socket.on(eventName, (data) => {
+        console.log('Socket received event:', eventName, data)
+        cb(data)
+      })
     },
     off(eventName, cb = null) {
       if (!socket) return

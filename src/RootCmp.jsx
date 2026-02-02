@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
+import { socketService, SOCKET_EVENT_ADD_MSG } from './services/socket.service';
 
 import { ContainerPage } from './pages/ContainerPage.jsx';
 import { AboutUs, AboutTeam, AboutVision } from './pages/AboutUs';
@@ -39,6 +40,37 @@ export function RootCmp() {
 
 	// Messages drawer state
 	const [isMessageOpen, setIsMessageOpen] = useState(false);
+	const [hasNewMessage, setHasNewMessage] = useState(false);
+	const [unreadFrom, setUnreadFrom] = useState([]); // Array of userIds with unread messages
+
+	// Listen for new messages when chat is closed
+	useEffect(() => {
+		function onNewMessage(msg) {
+			console.log('RootCmp received message:', msg);
+			// Only show notification if chat is closed and message is for us
+			if (!isMessageOpen && msg.toUserId === loggedInUser?._id) {
+				setHasNewMessage(true);
+				// Track who sent the unread message
+				setUnreadFrom(prev => {
+					if (!prev.includes(msg.fromUserId)) {
+						return [...prev, msg.fromUserId];
+					}
+					return prev;
+				});
+			}
+		}
+		socketService.on(SOCKET_EVENT_ADD_MSG, onNewMessage);
+		return () => socketService.off(SOCKET_EVENT_ADD_MSG, onNewMessage);
+	}, [isMessageOpen, loggedInUser]);
+
+	function handleMessageClick() {
+		setIsMessageOpen(true);
+		setHasNewMessage(false);
+	}
+
+	function clearUnreadFrom(userId) {
+		setUnreadFrom(prev => prev.filter(id => id !== userId));
+	}
 
 	return (
 		<div className="main-container grid grid-rows-3">
@@ -46,7 +78,8 @@ export function RootCmp() {
 				<AppHeader
 					onCreatePostClick={() => setIsCreatePostOpen(true)}
 					onSearchClick={() => setIsSearchOpen(true)}
-					onMessageClick={() => setIsMessageOpen(true)}
+					onMessageClick={handleMessageClick}
+					hasNewMessage={hasNewMessage}
 				/>
 			</div>
 			<UserMsg />
@@ -100,7 +133,7 @@ export function RootCmp() {
 				<CreatePost onClose={() => setIsCreatePostOpen(false)} />
 			)}
 			{isSearchOpen && <Search onClose={() => setIsSearchOpen(false)} />}
-			{isMessageOpen && <MessagesUser onClose={() => setIsMessageOpen(false)} />}
+			{isMessageOpen && <MessagesUser onClose={() => setIsMessageOpen(false)} unreadFrom={unreadFrom} clearUnreadFrom={clearUnreadFrom} />}
 		</div>
 	);
 }
