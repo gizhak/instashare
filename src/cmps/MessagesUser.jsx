@@ -13,7 +13,7 @@ import { SearchUsers } from './SearchUsers.jsx';
 // import React, { useState, useEffect, useRef } from 'react'
 
 
-import { socketService, SOCKET_EMIT_SEND_MSG, SOCKET_EVENT_ADD_MSG, SOCKET_EMIT_SET_TOPIC, SOCKET_EVENT_REVIEW_REMOVED } from '../services/socket.service'
+import { socketService, SOCKET_EMIT_SEND_MSG, SOCKET_EVENT_ADD_MSG, SOCKET_EMIT_SET_TOPIC, SOCKET_EMIT_DELETE_MSG, SOCKET_EVENT_MSG_DELETED } from '../services/socket.service'
 
 
 
@@ -49,8 +49,10 @@ export function MessagesUser({ onClose, unreadFrom = [], clearUnreadFrom }) {
 
     useEffect(() => {
         socketService.on(SOCKET_EVENT_ADD_MSG, addMsg);
+        socketService.on(SOCKET_EVENT_MSG_DELETED, handleMsgDeleted);
         return () => {
             socketService.off(SOCKET_EVENT_ADD_MSG, addMsg);
+            socketService.off(SOCKET_EVENT_MSG_DELETED, handleMsgDeleted);
             botTimeoutRef.current && clearTimeout(botTimeoutRef.current);
         };
     }, []);
@@ -94,12 +96,25 @@ export function MessagesUser({ onClose, unreadFrom = [], clearUnreadFrom }) {
     function addMsg(newMsg) {
         // Only add messages that are part of current conversation
         const currentSelectedUser = selectedUserRef.current;
-        if (!currentSelectedUser) return;
+        if (!currentSelectedUser) {
+            // No chat open, just reload conversations to show new message indicator
+            loadConversations();
+            return;
+        }
+
+        // Check if this message is part of the current conversation
+        // Message is relevant if it's between the logged-in user and the selected user
         const isRelevant =
-            (newMsg.fromUserId === currentSelectedUser._id) ||
-            (newMsg.toUserId === currentSelectedUser._id) ||
-            (newMsg.to === currentSelectedUser._id);
-        if (!isRelevant) return;
+            (newMsg.fromUserId === currentSelectedUser._id && newMsg.toUserId === loggedInUser._id) ||
+            (newMsg.fromUserId === loggedInUser._id && newMsg.toUserId === currentSelectedUser._id) ||
+            (newMsg.toUserId === currentSelectedUser._id && newMsg.fromUserId === loggedInUser._id) ||
+            (newMsg.toUserId === loggedInUser._id && newMsg.fromUserId === currentSelectedUser._id);
+        
+        if (!isRelevant) {
+            // Message is for a different conversation, just reload conversations list
+            loadConversations();
+            return;
+        }
 
         setMsgs((prevMsgs) => {
             // Avoid duplicates by checking _id
@@ -108,6 +123,14 @@ export function MessagesUser({ onClose, unreadFrom = [], clearUnreadFrom }) {
             }
             return [...prevMsgs, newMsg];
         });
+        
+        // Also reload conversations to update "last message" in the list
+        loadConversations();
+    }
+
+    function handleMsgDeleted({ messageId }) {
+        console.log('Message deleted:', messageId);
+        setMsgs((prevMsgs) => prevMsgs.filter(m => m._id !== messageId));
     }
 
     function sendMsg(ev) {
@@ -129,11 +152,21 @@ export function MessagesUser({ onClose, unreadFrom = [], clearUnreadFrom }) {
 
     function onDeleteMessage(idx) {
         console.log('Deleting message at index:', idx);
+        const messageToDelete = msgs[idx];
+        if (!messageToDelete || !messageToDelete._id) {
+            console.error('Cannot delete message - no ID found');
+            return;
+        }
+        
+        // Remove locally
         const updatedMsgs = msgs.filter((_, i) => i !== idx);
         setMsgs(updatedMsgs);
 
-        socketService.emit(SOCKET_EVENT_REVIEW_REMOVED, { idx, to: selectedUser._id });
-
+        // Notify other user via socket
+        socketService.emit(SOCKET_EMIT_DELETE_MSG, { 
+            messageId: messageToDelete._id, 
+            toUserId: selectedUser._id 
+        });
     }
 
     function handleFormChange(ev) {
@@ -155,6 +188,7 @@ export function MessagesUser({ onClose, unreadFrom = [], clearUnreadFrom }) {
     }
 
     function handleSelectConversation(convo) {
+        console.log('handleSelectConversation with:', convo);
         // Create a user object from conversation data
         const user = {
             _id: convo.otherUserId,
@@ -162,6 +196,7 @@ export function MessagesUser({ onClose, unreadFrom = [], clearUnreadFrom }) {
             username: convo.username,
             imgUrl: convo.imgUrl || '/img/default-user.png'
         };
+        console.log('Setting selectedUser to:', user);
         setSelectedUser(user);
     }
 

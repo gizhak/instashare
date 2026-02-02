@@ -7,11 +7,11 @@ export const messageService = {
 };
 
 async function getMessages(otherUserId) {
-	return httpService.get(`message/${otherUserId}`);
+	return httpService.get(`message/${otherUserId}?_t=${Date.now()}`);
 }
 
 async function getConversations() {
-	return httpService.get('message/conversations');
+	return httpService.get(`message/conversations?_t=${Date.now()}`);
 }
 
 async function deleteConversation(otherUserId) {
