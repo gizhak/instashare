@@ -19,6 +19,7 @@ import { socketService, SOCKET_EMIT_SEND_MSG, SOCKET_EVENT_ADD_MSG, SOCKET_EMIT_
 
 export function MessagesUser({ onClose, unreadFrom = [], clearUnreadFrom }) {
     const [selectedUser, setSelectedUser] = useState(null);
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
     const loggedInUser = useSelector(storeState => storeState.userModule.user)
 
     const containerRef = useRef(null)
@@ -32,6 +33,13 @@ export function MessagesUser({ onClose, unreadFrom = [], clearUnreadFrom }) {
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     const botTimeoutRef = useRef();
+
+    // Check if mobile on resize
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth <= 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     // Load conversations on mount
     useEffect(() => {
@@ -109,7 +117,7 @@ export function MessagesUser({ onClose, unreadFrom = [], clearUnreadFrom }) {
             (newMsg.fromUserId === loggedInUser._id && newMsg.toUserId === currentSelectedUser._id) ||
             (newMsg.toUserId === currentSelectedUser._id && newMsg.fromUserId === loggedInUser._id) ||
             (newMsg.toUserId === loggedInUser._id && newMsg.fromUserId === currentSelectedUser._id);
-        
+
         if (!isRelevant) {
             // Message is for a different conversation, just reload conversations list
             loadConversations();
@@ -123,7 +131,7 @@ export function MessagesUser({ onClose, unreadFrom = [], clearUnreadFrom }) {
             }
             return [...prevMsgs, newMsg];
         });
-        
+
         // Also reload conversations to update "last message" in the list
         loadConversations();
     }
@@ -157,15 +165,15 @@ export function MessagesUser({ onClose, unreadFrom = [], clearUnreadFrom }) {
             console.error('Cannot delete message - no ID found');
             return;
         }
-        
+
         // Remove locally
         const updatedMsgs = msgs.filter((_, i) => i !== idx);
         setMsgs(updatedMsgs);
 
         // Notify other user via socket
-        socketService.emit(SOCKET_EMIT_DELETE_MSG, { 
-            messageId: messageToDelete._id, 
-            toUserId: selectedUser._id 
+        socketService.emit(SOCKET_EMIT_DELETE_MSG, {
+            messageId: messageToDelete._id,
+            toUserId: selectedUser._id
         });
     }
 
@@ -200,6 +208,10 @@ export function MessagesUser({ onClose, unreadFrom = [], clearUnreadFrom }) {
         setSelectedUser(user);
     }
 
+    function handleBackToList() {
+        setSelectedUser(null);
+    }
+
     // Auto-select user with unread messages when opening
     useEffect(() => {
         if (unreadFrom.length > 0 && conversations.length > 0 && !selectedUser) {
@@ -214,7 +226,7 @@ export function MessagesUser({ onClose, unreadFrom = [], clearUnreadFrom }) {
         <div className="messages-container" ref={containerRef}>
 
             {/* search user */}
-            <div className="select-users-container">
+            <div className={`select-users-container ${isMobile && selectedUser ? 'hide-on-mobile' : ''}`}>
                 <div className="logged-in-user-profile">
                     <img src={loggedInUser.imgUrl} alt={loggedInUser.fullname} />
                     <p>{loggedInUser.fullname}</p>
@@ -254,9 +266,14 @@ export function MessagesUser({ onClose, unreadFrom = [], clearUnreadFrom }) {
             </div>
             {/* chat area */}
             {selectedUser && (
-                <div className="chat-section">
+                <div className={`chat-section ${selectedUser ? 'has-selected-user' : ''}`}>
                     <div className="chat-header">
                         <div className="chat-header-info">
+                            {isMobile && (
+                                <button className="back-button-mobile" onClick={handleBackToList}>
+                                    ←
+                                </button>
+                            )}
                             <img src={selectedUser.imgUrl} alt={selectedUser.fullname} />
                             <span>{selectedUser.fullname} {selectedUser.username && `(@${selectedUser.username})`}</span>
                         </div>
@@ -303,6 +320,8 @@ export function MessagesUser({ onClose, unreadFrom = [], clearUnreadFrom }) {
                             onChange={handleFormChange}
                             placeholder="Message..."
                             autoComplete='off'
+                            inputMode="text"
+                            enterKeyHint="send"
                         />
                         <button type="submit">Send</button>
                     </form>
