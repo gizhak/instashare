@@ -356,3 +356,20 @@
         display: none;
     }
 }
+
+/* Message notification dot */
+.icon-wrapper {
+    position: relative;
+    display: inline-flex;
+}
+
+.notification-dot {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 10px;
+    height: 10px;
+    background-color: #ff3040;
+    border-radius: 50%;
+    border: 2px solid var(--inst-background);
+}

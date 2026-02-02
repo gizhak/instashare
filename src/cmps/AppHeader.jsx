@@ -9,7 +9,7 @@ import { useState } from 'react';
 // Icons
 import { FaInstagram } from "react-icons/fa6";
 
-export function AppHeader({ onCreatePostClick, onSearchClick, onMessageClick }) {
+export function AppHeader({ onCreatePostClick, onSearchClick, onMessageClick, hasNewMessage }) {
 	const user = useSelector((storeState) => storeState.userModule.user);
 	const navigate = useNavigate();
 
@@ -93,10 +93,13 @@ export function AppHeader({ onCreatePostClick, onSearchClick, onMessageClick }) 
 						<span className="text">Reels</span>
 					</div>
 				</NavLink>
-				<div onClick={() => { onMessageClick(); closeMoreMenu(); }}>
+				<div onClick={() => { onMessageClick(); closeMoreMenu(); }} className="message-nav-wrapper">
 					<div className="nav-item">
-						<svg aria-label="Messages" className="icon" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Messages</title>
-							<path d="M13.973 20.046 21.77 6.928C22.8 5.195 21.55 3 19.535 3H4.466C2.138 3 .984 5.825 2.646 7.456l4.842 4.752 1.723 7.121c.548 2.266 3.571 2.721 4.762.717Z" fill="none" stroke="currentColor" strokeLinejoin="round" strokeWidth="2"></path><line fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" x1="7.488" x2="15.515" y1="12.208" y2="7.641"></line></svg>
+						<div className="icon-wrapper">
+							<svg aria-label="Messages" className="icon" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Messages</title>
+								<path d="M13.973 20.046 21.77 6.928C22.8 5.195 21.55 3 19.535 3H4.466C2.138 3 .984 5.825 2.646 7.456l4.842 4.752 1.723 7.121c.548 2.266 3.571 2.721 4.762.717Z" fill="none" stroke="currentColor" strokeLinejoin="round" strokeWidth="2"></path><line fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" x1="7.488" x2="15.515" y1="12.208" y2="7.641"></line></svg>
+							{hasNewMessage && <span className="notification-dot"></span>}
+						</div>
 						<span className="text">Messages</span>
 					</div>
 				</div>
