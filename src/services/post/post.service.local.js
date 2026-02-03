@@ -25,7 +25,7 @@ async function query(filterBy = { txt: '', likesCount: 0 }) {
 	if (txt) {
 		const regex = new RegExp(filterBy.txt, 'i');
 		posts = posts.filter(
-			(post) => regex.test(post.txt) || regex.test(post.description)
+			(post) => regex.test(post.txt) || regex.test(post.description),
 		);
 	}
 	if (likesCount) {
@@ -34,12 +34,12 @@ async function query(filterBy = { txt: '', likesCount: 0 }) {
 	if (sortField === 'txt') {
 		posts.sort(
 			(post1, post2) =>
-				post1[sortField].localeCompare(post2[sortField]) * +sortDir
+				post1[sortField].localeCompare(post2[sortField]) * +sortDir,
 		);
 	}
 	if (sortField === 'likesCount') {
 		posts.sort(
-			(post1, post2) => (post1[sortField] - post2[sortField]) * +sortDir
+			(post1, post2) => (post1[sortField] - post2[sortField]) * +sortDir,
 		);
 	}
 
@@ -53,7 +53,7 @@ async function query(filterBy = { txt: '', likesCount: 0 }) {
 			comments,
 			likedBy,
 			tags,
-		})
+		}),
 	);
 	return posts;
 }
@@ -98,7 +98,7 @@ async function addPostComment(postId, txt) {
 
 	const comment = {
 		id: makeId(),
-		date: new Date().toTimeString().slice(0, 5),
+		createdAt: new Date(),
 		by: userService.getLoggedinUser(),
 		txt,
 		likedBy: [],
@@ -284,7 +284,9 @@ export function _createPosts() {
 				comments: [],
 				likedBy: [],
 				tags: ['adventure', 'lake'],
-				createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
+				createdAt: new Date(
+					Date.now() - 14 * 24 * 60 * 60 * 1000,
+				).toISOString(),
 			},
 			{
 				_id: 's207',
@@ -300,7 +302,9 @@ export function _createPosts() {
 				comments: [],
 				likedBy: [],
 				tags: ['reflection', 'nature'],
-				createdAt: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString(),
+				createdAt: new Date(
+					Date.now() - 45 * 24 * 60 * 60 * 1000,
+				).toISOString(),
 			},
 			{
 				_id: 's208',
@@ -316,7 +320,9 @@ export function _createPosts() {
 				comments: [],
 				likedBy: [],
 				tags: ['goldenhour', 'travel'],
-				createdAt: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString(),
+				createdAt: new Date(
+					Date.now() - 90 * 24 * 60 * 60 * 1000,
+				).toISOString(),
 			},
 		];
 		localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultPosts));

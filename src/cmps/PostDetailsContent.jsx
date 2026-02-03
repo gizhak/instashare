@@ -37,7 +37,8 @@ export function PostDetailsContent({
 		setCurrentPost(post);
 		setIsLiked(() => {
 			if (!loggedinUser) return false;
-			return post?.likedBy?.some((user) => user._id === loggedinUser._id);
+			// FIX: likedBy now contains user IDs (strings), not user objects
+			return post?.likedBy?.some((userId) => userId === loggedinUser._id);
 		});
 	}, [post, loggedinUser]);
 
@@ -53,7 +54,9 @@ export function PostDetailsContent({
 
 			// Update the current post with the new data
 			setCurrentPost(likedPost);
-			setIsLiked(likedPost?.likedBy?.some((user) => user._id === loggedinUser._id));
+			setIsLiked(
+				likedPost?.likedBy?.some((user) => user._id === loggedinUser._id),
+			);
 		} catch (err) {
 			console.error('Failed to toggle like:', err);
 			// Revert on error
@@ -171,8 +174,11 @@ export function PostDetailsContent({
 		if (!createdAt) return '';
 
 		const now = new Date();
+
 		const postDate = new Date(createdAt);
+
 		const diffInMs = now - postDate;
+
 		const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
 		const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
 		const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
@@ -272,6 +278,14 @@ export function PostDetailsContent({
 
 					{/* Comments Section  */}
 					<div className="post-details-comments">
+						<div className="comment-item">
+							<img
+								src={currentPost.by?.imgUrl}
+								alt={currentPost.by?.fullname}
+							/>
+							<span className="username">{currentPost.by?.fullname}</span>
+							<span className="desc">{currentPost.txt}</span>
+						</div>
 						{comments.length > 0 ? (
 							comments.map((comment, idx) => (
 								<div key={comment.id || idx} className="comment-item">
@@ -283,10 +297,11 @@ export function PostDetailsContent({
 											</span>
 											<span className="comment-text">{comment.txt}</span>
 											<span
-												className={`comment-like ${comment.likedBy?.includes(loggedinUser._id)
-													? 'liked'
-													: ''
-													}`}
+												className={`comment-like ${
+													comment.likedBy?.includes(loggedinUser._id)
+														? 'liked'
+														: ''
+												}`}
 												onClick={(e) => handleToggleLikeComment(e, comment.id)}
 											>
 												{comment.likedBy?.includes(loggedinUser._id) ? (
@@ -303,7 +318,9 @@ export function PostDetailsContent({
 										</div>
 										{/* Guy - fixed comment meta likes count */}
 										<div className="comment-meta">
-											<span className="comment-time">{comment.date}</span>
+											<span className="comment-time">
+												{getTimeAgo(comment.createdAt)}
+											</span>
 											<span className="comment-likes">
 												{comment?.likedBy?.length || 0}{' '}
 												{comment?.likedBy?.length === 1 ? 'like' : 'likes'}

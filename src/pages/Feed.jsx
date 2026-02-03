@@ -119,7 +119,7 @@ export function Feed() {
 			<section className="home">
 				<section className="feed-grid-container">
 					{posts &&
-						posts.map((feedPost, index) => {
+						[...posts].reverse().map((feedPost, index) => {
 							const isLiked = checkIsLiked(feedPost, loggedInUser);
 
 							return (

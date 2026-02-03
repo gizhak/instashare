@@ -41,7 +41,7 @@ async function addPostComment(postId, txt) {
 
 async function deletePostComment(postId, commentId) {
 	const response = await httpService.delete(
-		`post/${postId}/comment/${commentId}`
+		`post/${postId}/comment/${commentId}`,
 	);
 	return response;
 }
@@ -53,7 +53,7 @@ async function togglePostLike(postId) {
 async function toggleLikeComment(postId, commentId, userId) {
 	const response = await httpService.put(
 		`post/${postId}/comment/${commentId}/like`,
-		{ userId }
+		{ userId },
 	);
 	return response;
 }
