@@ -411,7 +411,8 @@
     }
 
     .chat-section {
-        height: 100vh;
+        margin-top: 10px;
+        height: 95vh;
         display: flex;
         flex-direction: column;
         position: relative;
