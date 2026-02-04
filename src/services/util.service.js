@@ -88,7 +88,15 @@ export function loadFromStorage(key) {
 }
 
 export function checkIsLiked(post, loggedInUser) {
-	return (
-		loggedInUser && post?.likedBy?.some((user) => user._id === loggedInUser._id)
-	);
+	if (!loggedInUser || !post?.likedBy) return false;
+
+	// Support both string IDs and user objects
+	return post.likedBy.some((item) => {
+		// If item is a string (userId)
+		if (typeof item === 'string') {
+			return item === loggedInUser._id;
+		}
+		// If item is an object (user)
+		return item._id === loggedInUser._id;
+	});
 }

@@ -23,13 +23,12 @@ import { usePostNavigation } from '../customHooks/usePostNavigation.js';
 export function Feed() {
 	const posts = useSelector((storeState) => storeState.postModule.posts);
 	const post = useSelector((storeState) => storeState.postModule.post);
+	const loggedInUser = useSelector((storeState) => storeState.userModule.user);
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [modalType, setModalType] = useState('menu');
 	const [selectedPost, setSelectedPost] = useState(null);
 	const [selectedPostIndex, setSelectedPostIndex] = useState(null);
-
-	const loggedInUser = userService.getLoggedinUser();
 
 	// console.log('loggedInUser:', loggedInUser);
 
@@ -128,7 +127,7 @@ export function Feed() {
 										<img
 											className="post-profile-img"
 											src={feedPost.by?.imgUrl}
-											// alt={feedPost.by?.fullname}
+										// alt={feedPost.by?.fullname}
 										/>
 										<h4 onClick={() => navigate(`/user/${feedPost.by._id}`)}>
 											{feedPost.by.fullname}
