@@ -438,7 +438,7 @@
         background: var(--inst-background);
         border-top: 1px solid var(--inst-border);
         padding: 10px 15px !important;
-        margin-bottom: 50px;
+        margin-bottom: 60px;
         z-index: 100;
     }
 
