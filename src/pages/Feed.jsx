@@ -20,6 +20,11 @@ import { updateUser } from '../store/actions/user.actions';
 // import { PostDetailsContent } from '../cmps/PostDetailsContent.jsx';
 import { usePostNavigation } from '../customHooks/usePostNavigation.js';
 
+import { socketService } from '../services/socket.service.js';
+import { store } from '../store/store.js';
+import { updatePostInStore } from '../store/actions/post.actions.js';
+import { use } from 'react';
+
 export function Feed() {
 	const posts = useSelector((storeState) => storeState.postModule.posts);
 	const post = useSelector((storeState) => storeState.postModule.post);
@@ -39,6 +44,21 @@ export function Feed() {
 
 	useEffect(() => {
 		loadPosts();
+	}, []);
+
+	useEffect(() => {
+
+		socketService.on('post-liked-updated', (updatedPost) => {
+
+			console.log('Received post-liked-updated event:', updatedPost);
+
+			updatePostInStore(updatedPost);
+		})
+
+		return () => {
+			socketService.off('post-liked-updated');
+		}
+
 	}, []);
 
 	// console.log('posts:', posts);

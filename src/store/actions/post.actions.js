@@ -114,6 +114,11 @@ export async function toggleLikeComment(postId, commentId, userId) {
 	}
 }
 
+export function updatePostInStore(post) {
+	store.dispatch(getCmdUpdatePost(post));
+}
+
+
 // Command Creators:
 function getCmdSetPosts(posts) {
 	return {
