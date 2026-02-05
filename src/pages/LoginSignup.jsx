@@ -365,10 +365,13 @@ export function Signup() {
                                     &lt;
                                 </button>
 
-                                <div className="user-avatar" style={{ textAlign: 'center', margin: '40px 0 20px' }}>
-                                    <img src={selectedUser.imgUrl} alt={selectedUser.fullname} style={{ width: '80px', height: '80px', borderRadius: '50%' }} />
-                                    <h3 style={{ margin: '10px 0 5px' }}>{selectedUser.fullname}</h3>
-                                    <p style={{ color: '#8e8e8e', margin: '0 0 20px' }}>@{selectedUser.username}</p>
+                                <div className="user-avatar" >
+                                    <img src={selectedUser.imgUrl} alt={selectedUser.fullname} />
+                                    <div>
+                                        <h3 >{selectedUser.fullname}</h3>
+                                        <p >@{selectedUser.username}</p>
+                                    </div>
+
                                 </div>
 
                                 <form onSubmit={onReactivate}>
@@ -412,14 +415,19 @@ export function Signup() {
 
             <form className="signup-form" onSubmit={onSignup}>
                 <div className="signup-container">
-                    <NavLink to="/auth/login" className="back-btn">&lt;</NavLink>
 
-                    <div className="meta-logo-signup">
-                        <span className="meta-text">ⵔ Meta</span>
+                    <div className="signup-header">
+
+                        <NavLink to="/auth/login" className="back-btn">&lt;</NavLink>
+
+                        <div className="meta-logo-signup">
+                            <span className="meta-text">ⵔ Meta</span>
+                        </div>
+
+                        <h2>Get started on InstaShare</h2>
+                        <p className="subtitle">Sign up to see photos and videos from your friends.</p>
                     </div>
 
-                    <h2>Get started on InstaShare</h2>
-                    <p className="subtitle">Sign up to see photos and videos from your friends.</p>
 
                     {/* Mobile or Email */}
                     <label className="input-label">Mobile number or email</label>
@@ -506,18 +514,20 @@ export function Signup() {
                         By tapping Submit, you agree to create an account and to InstaShare's <a href="#">Terms</a>, <a href="#">Privacy Policy</a> and <a href="#">Cookies Policy</a>.
                     </p>
 
-                    {/* Submit Button */}
-                    <button type="submit" className="submit-btn">Submit</button>
 
-                    {/* Already have account */}
-                    <button
-                        type="button"
-                        onClick={() => setShowRemovedUsers(true)}
-                        className="login-link"
-                        style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#0095f6', width: '100%', marginTop: '15px' }}
-                    >
-                        I already have an account
-                    </button>
+                    <div className="form-actions">
+                        {/* Submit Button */}
+                        <button type="submit" className="submit-btn">Submit</button>
+                        {/* Already have account */}
+                        <button
+                            type="button"
+                            onClick={() => setShowRemovedUsers(true)}
+                            className="login-link"
+                            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#0095f6', width: '100%', marginTop: '15px' }}
+                        >
+                            I already have an account
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
