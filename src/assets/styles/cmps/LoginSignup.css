@@ -238,14 +238,29 @@
 
 /* Remove Modal */
 .remove-modal {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	/* justify-content: center; */
 	background-color: #152127;
 	border-radius: 20px;
 	padding: 24px;
 	width: min(90%, 600px);
-	position: relative;
+	overflow: hidden;
+
+	/* position: relative; */
+
+	/* .user-avatar {
+		flex-direction: row;
+		width: 80px;
+		height: 80px;
+		border-radius: 50%;
+		object-fit: cover;
+		margin-bottom: 1em;
+	} */
 
 	.close-btn {
-		position: absolute;
+		/* position: absolute; */
 		width: 32px;
 		height: 32px;
 		top: 16px;
@@ -272,6 +287,84 @@
 		/* text-align: center; */
 	}
 
+	.user-avatar {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		gap: 16px;
+		margin-bottom: 2em;
+		/* width: 100px; */
+		/* height: 100px; */
+		/* border-radius: 50%; */
+		object-fit: cover;
+
+		img {
+			width: 80px;
+			height: 80px;
+			border-radius: 50%;
+			object-fit: cover;
+		}
+
+		div {
+			flex-direction: column;
+			text-align: center;
+			margin-top: 10px;
+
+			h3 {
+				font-size: 1.2rem;
+				font-weight: 600;
+				color: var(--inst-text);
+				margin: 0;
+			}
+
+			p {
+				color: #8e8e8e;
+				margin: 0 0 10px;
+			}
+		}
+	}
+
+	form {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		gap: 12px;
+
+		input {
+			width: 25vw !important;
+			padding: 14px;
+			background-color: transparent;
+			border: 1px solid rgba(255, 255, 255, 0.2);
+			border-radius: 12px;
+			color: var(--inst-text);
+			font-size: 1rem;
+		}
+
+		button {
+			width: 25vw !important;
+			padding: 5px;
+			/* background-color: #0095F6; */
+			border: none;
+			border-radius: 30px;
+			color: var(--inst-text);
+			font-size: 1rem;
+			/* font-weight: 600; */
+			cursor: pointer;
+			transition: background-color 0.2s;
+
+			&:hover {
+				/* background-color: #1877F2; */
+				font-weight: 600;
+				transition: font-weight 0.8s;
+			}
+		}
+
+	}
+
+
 }
 
 
@@ -279,6 +372,7 @@
 .remove-users-list {
 	display: flex;
 	flex-direction: column;
+	width: 30vw;
 	/* gap: 12px; */
 	margin-bottom: 1.5em;
 	border-radius: 20px;
@@ -402,6 +496,8 @@
 
 /* Back button */
 .signup-container .back-btn {
+	margin-top: 70px;
+	margin-left: 30px;
 	color: var(--inst-text);
 	font-size: 1.3rem;
 	text-decoration: none;
@@ -524,6 +620,12 @@ input:hover {
 }
 
 /* Legal text */
+
+.signup-header {
+	margin-top: 2.5em;
+}
+
+
 .signup-container .legal-text {
 	font-size: 0.75rem;
 	color: rgba(255, 255, 255, 0.5);
@@ -537,6 +639,19 @@ input:hover {
 }
 
 /* Submit button */
+.signup-container .form-actions {
+	display: flex;
+	justify-content: center !important;
+	justify-self: center !important;
+	align-items: center !important;
+	flex-direction: column;
+	gap: 0.5em;
+
+	width: 100%;
+	align-items: center;
+
+}
+
 .signup-container .submit-btn {
 	width: 100%;
 	padding: 14px;
@@ -697,19 +812,58 @@ input:hover {
 
 	.signup-container {
 		max-width: 100%;
-
-
+		margin-top: 80px;
 	}
 
-	/* .app-header.full {
-		z-index: -1;
-	} */
+	.remove-users-list {
+		width: 80vw;
+	}
+
+	.remove-modal {
+		width: 90vw;
+
+		form {
+			width: 100%;
+
+			label {
+				font-size: 0.8rem;
+			}
+
+			input {
+				width: 100% !important;
+				padding: 12px;
+				font-size: 0.9rem;
+			}
+
+			button {
+				width: 100% !important;
+			}
+		}
+	}
+
+	.back-btn {
+		margin-top: 70px !important;
+		margin-left: 0px !important;
+	}
+
+	.signup-page {
+		padding: 1em;
+		padding: 20px;
+	}
+
+	.form-actions {
+		display: flex;
+		justify-self: center;
+		align-items: center;
+		flex-direction: column;
+		gap: 0 !important;
+
+
+		.login-link {
+			padding-top: 0 !important;
+			width: 80vw !important;
+		}
+	}
+
+
 }
-
-
-/* @media (max-width: 768px) {
-	
-
-
-
-} */
