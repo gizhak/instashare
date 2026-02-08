@@ -272,7 +272,7 @@
 	}
 
 	/* הסתר: Notifications, Create, more-nav-items */
-	.app-header nav > :nth-child(n + 6):not(.user-link) {
+	.app-header nav> :nth-child(n + 6):not(.user-link) {
 		display: none;
 	}
 
@@ -284,7 +284,7 @@
 		justify-content: space-around;
 		align-items: center;
 		gap: 0;
-		margin-left: 50px;
+		/* margin-left: 50px; */
 		padding: 0;
 		flex: none;
 		background-color: transparent;
@@ -382,6 +382,7 @@
 	.nav-bar {
 		&nav {
 			margin-left: 0;
+
 			div.nav-item {
 				position: relative;
 				display: flex;
@@ -399,6 +400,7 @@
 				text-decoration: none;
 			}
 		}
+
 		.nav-item {
 			position: relative;
 			display: flex;
